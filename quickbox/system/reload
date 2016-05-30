@@ -1,14 +1,14 @@
 #!/bin/bash
 #
-# [Quick Box]
+# [Quick Box Reload script]
 #
-# GitHub:   https://github.com/JMSDOnline/QuickBox
-# Author:   Jason Matthews
-# URL:      https://jmsolodesigns.com
+# GitHub:   https://github.com/Swizards/QuickBox
+# Author:   QuickBox | Swizards
+# URL:      https://plaza.quickbox.io/
 #
 OUTTO=/dev/null
-export USER=`id -un`
-killall -u $USER irssi >>"${OUTTO}" 2>&1
-killall -u $USER rtorrent >>"${OUTTO}" 2>&1
-killall -U $USER main >>"${OUTTO}" 2>&1
+export USER=$(id -un)
+pkill -u $USER irssi >/dev/null 2>&1
+pkill -u $USER rtorrent >/dev/null 2>&1
+killall -u $USER main >/dev/null 2>&1
 rm -rf ~/.sessions/rtorrent.lock
