@@ -17,6 +17,7 @@
 OUTTO=/root/quick-box.log
 HOSTNAME1=$(hostname -s)
 PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+EMAIL=$(cat /srv/rutorrent/home/db/masteremail.txt)
 local_setup=/root/quickbox_setup/
 
 
@@ -69,7 +70,7 @@ function _installCSF() {
   www: root
   ftp: root
   abuse: root
-  root: EMAIL" > /etc/aliases
+  root: ${EMAIL}" > /etc/aliases
   newaliases >>"${OUTTO}" 2>&1;
 }
 
