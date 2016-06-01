@@ -14,17 +14,11 @@
 #   including (via compiler) GPL-licensed code must also be made available
 #   under the GPL along with build & install instructions.
 #
-function _string() { perl -le 'print map {(a..z,A..Z,0..9)[rand 62] } 0..pop' 15 ; }
-Reth0=$(ifconfig | grep -m 1 "Link encap" | sed 's/[ \t].*//;/^\(lo\|\)$/d' | awk '{ print $1 '});
-IFACE=$(echo -n "${Reth0}");
-function _setinterface {
 
-	sed -i "s/INETFACE/${IFACE}/g" /srv/rutorrent/home/widgets/stat.php;
-	sed -i "s/INETFACE/${IFACE}/g" /srv/rutorrent/home/widgets/data.php;
-	sed -i "s/INETFACE/${IFACE}/g" /srv/rutorrent/home/widgets/config.php;
-	sed -i "s/INETFACE/${IFACE}/g" /srv/rutorrent/home/inc/config.php;
+ADAPT=$(cat /srv/rutorrent/home/db/interface.txt);
 
-}
-Reth0=$(ifconfig | grep -m 1 "Link encap" | sed 's/[ \t].*//;/^\(lo\|\)$/d' | awk '{ print $1 '});
-IFACE=$(echo -n "${Reth0}");
-_setinterface
+
+sed -i "s/INETFACE/${ADAPT}/g" /srv/rutorrent/home/widgets/stat.php;
+sed -i "s/INETFACE/${ADAPT}/g" /srv/rutorrent/home/widgets/data.php;
+sed -i "s/INETFACE/${ADAPT}/g" /srv/rutorrent/home/widgets/config.php;
+sed -i "s/INETFACE/${ADAPT}/g" /srv/rutorrent/home/inc/config.php;
