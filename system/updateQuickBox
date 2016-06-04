@@ -86,7 +86,7 @@ function _updatesyscommands() {
   chmod +x $(find /usr/local/bin/quickbox -type f) >>"${OUTTO}" 2>&1;
   if [[ -f /usr/bin/reload ]]; then rm /usr/bin/reload;fi
   cp ${usrbin}quickbox/system/reload /usr/bin/reload
-
+  chmod +x /usr/bin/reload
 }
 
 function _updateskel() {
@@ -174,7 +174,7 @@ local_dashboard=/root/quickbox_dashboard/
 
 Reth0=$(ifconfig | grep -m 1 "Link encap" | sed 's/[ \t].*//;/^\(lo\|\)$/d' | awk '{ print $1 '});
 IFACE=$(echo -n "${Reth0}");
-MASTER=$(cat /srv/rutorrent/home/db/master.txt)
+MASTER=$(cat /etc/apache2/master.txt)
 rtorrent=/srv/rutorrent/
 usrbin=/usr/local/bin/
 
