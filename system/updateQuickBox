@@ -148,7 +148,7 @@ function _fin() {
   echo;echo
   echo -e " ${black}${on_green}    [quickbox] Seddbox & GUI Update Completed !   ${normal} "
   echo;echo
-
+}
 
 spinner() {
     local pid=$1
