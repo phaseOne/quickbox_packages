@@ -1,0 +1,133 @@
+#!/bin/bash
+#
+# [Quick Box :: EcoSystem Update Script]
+#
+# GitHub:   https://github.com/QuickBox/quickbox_packages
+# Author:   QuickBox.io
+# URL:      https://plaza.quickbox.io
+#
+# QuickBox Copyright (C) 2016 Swizards.net
+# Licensed under GNU General Public License v3.0 GPL-3 (in short)
+#
+#   You may copy, distribute and modify the software as long as you track
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
+#   under the GPL along with build & install instructions.
+#
+#################################################################################
+function _string() { perl -le 'print map {(a..z,A..Z,0..9)[rand 62] } 0..pop' 15 ; }
+
+function _logcheck() {
+  OUTTO=/root/quickbox.update.$PPID.log
+}
+
+# check if root function (2)
+function _checkroot() {
+  if [[ $EUID != 0 ]]; then
+    echo 'This script must be run with root privileges.'
+    echo 'Exiting...'
+    exit 1
+  fi
+  echo "${green}Congrats! You're running as root. We will now run the update${normal} ... "
+  echo
+}
+
+function _downloadrepos() {
+  git clone https://github.com/QuickBox/quickbox_setup quickbox_setup >>"${OUTTO}" 2>&1;
+  git clone https://github.com/QuickBox/quickbox_rutorrent quickbox_rutorrent >>"${OUTTO}" 2>&1;
+  git clone https://github.com/QuickBox/quickbox_rutorrent-plugins quickbox_rutorrent-plugins >>"${OUTTO}" 2>&1;
+  git clone https://github.com/QuickBox/quickbox_packages quickbox_packages >>"${OUTTO}" 2>&1;
+  git clone https://github.com/QuickBox/quickbox_dashboard quickbox_dashboard >>"${OUTTO}" 2>&1;
+}
+
+function _updatesyscommands() {
+  cd /usr/local/bin
+  for x in installplugin-* removeplugin-* installpackage-* removepackage-*; do
+    rm $x >>"${OUTTO}" 2>&1
+  done
+
+  if [[ -d ${usrbin}quickbox ]]; then rm -r ${usrbin}quickbox;fi
+  mkdir -p ${usrbin}quickbox
+  cp -r ${local_packages}/. ${usrbin}quickbox
+  dos2unix $(find /usr/local/bin/quickbox -type f) >>"${OUTTO}" 2>&1;
+  chmod +x $(find /usr/local/bin/quickbox -type f) >>"${OUTTO}" 2>&1;
+  if [[ -f /usr/bin/reload ]]; then rm /usr/bin/reload;fi
+  cp ${usrbin}quickbox/system/reload /usr/bin/reload
+
+}
+
+function _updateskel() {
+  if [[ -d /etc/skel ]]; then rm -r /etc/skel;fi
+  mkdir /etc/skel
+  cp -r ${local_setup}templates/skel/. /etc/skel
+}
+
+function _updaterutorrent() {
+  cd /srv
+  if [[ -d ${rtorrent} ]]; then rm -rf rutorrent;fi
+  mkdir rutorrent
+  cp -R ${local_rutorrent}/. rutorrent
+}
+
+# function to install dashboard (23)
+function _updatedashboard() {
+  cd ${rtorrent}
+  if [[ -d ${rtorrent}home ]]; then rm -rf home;fi
+  cd && mkdir -p ${rtorrent}home
+  cp -R ${local_dashboard}/. ${rtorrent}home
+}
+
+function _updatemasterdb() {
+  if [[ -f /etc/apache2/master.txt ]]; then cp ${rtorrent}home/db/master.txt;fi
+  printf "${IFACE}" > ${rtorrent}home/db/interface.txt
+}
+
+function _updatesudo() {
+  rm /etc/sudoers
+  cp ${local_setup}templates/sudoers.template /etc/sudoers
+    awk -v username=${MASTER} '/^root/ && !x {print username    " ALL=(ALL:ALL) NOPASSWD: ALL"; x=1} 1' /etc/sudoers > /tmp/sudoers;mv /tmp/sudoers /etc
+    echo -n "${username}" > /etc/apache2/master.txt
+  cd
+}
+
+function _updatecronfile() {
+  cp ${local_setup}templates/startup.template /home/${MASTER}/.startup
+}
+
+function _updateboot() {
+  echo "*/1 * * * * root bash /usr/local/bin/quickbox/system/set_interface" > /etc/cron.d/set_interface
+}
+
+# adjust permissions function (9)
+function _perms() {
+  chgrp -R www-data /srv/rutorrent/*
+  chmod -R g+rw /srv/rutorrent/*
+  sh -c 'find /srv/rutorrent/* -type d -print0 | sudo xargs -0 chmod g+s'
+}
+
+
+local_setup=/root/quickbox_setup/
+local_rutorrent=/root/quickbox_rutorrent/
+local_rutorrent-plugins=/root/quickbox_rutorrent-plugins
+local_packages=/root/quickbox_packages/
+local_dashboard=/root/quickbox_dashboard/
+
+Reth0=$(ifconfig | grep -m 1 "Link encap" | sed 's/[ \t].*//;/^\(lo\|\)$/d' | awk '{ print $1 '});
+IFACE=$(echo -n "${Reth0}");
+MASTER=$(cat /srv/rutorrent/home/db/master.txt)
+rtorrent=/srv/rutorrent/
+usrbin=/usr/local/bin/
+
+# QuickBox Update STRUCTURE
+_logcheck
+_checkroot
+_downloadrepos
+_updatesyscommands
+_updateskel
+_updaterutorrent
+_updatedashboard
+_updatemasterdb
+_updatesudo
+_updatecronfile
+_updateboot
+_perms
