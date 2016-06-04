@@ -118,7 +118,7 @@ function _updatedashboard() {
 }
 
 function _updatemasterdb() {
-  if [[ -f /etc/apache2/master.txt ]]; then cp ${rtorrent}home/db/master.txt;fi
+  if [[ -f /etc/apache2/master.txt ]]; then cp /etc/apache2/master.txt ${rtorrent}home/db/master.txt;fi
   printf "${IFACE}" > ${rtorrent}home/db/interface.txt
 }
 
