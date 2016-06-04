@@ -132,7 +132,6 @@ function _updatedashboard() {
   else
     cd ${rutorrent}home && git pull
   fi
-  }
 }
 
 function _updatemasterdb() {
