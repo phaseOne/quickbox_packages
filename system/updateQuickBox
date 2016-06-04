@@ -42,7 +42,7 @@ function _checkroot() {
     echo 'Exiting...'
     exit 1
   fi
-  echo -e "${green}Congrats! You're running as root. We will now run the update${normal} ... "
+  echo -ne "${green}Congrats! You're running as root. We will now run the update${normal} ... "
   echo
 }
 
