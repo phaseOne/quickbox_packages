@@ -73,9 +73,11 @@ function _downloadrepos() {
 
 function _updatesyscommands() {
   cd /usr/local/bin
-  for x in installplugin-* removeplugin-* installpackage-* removepackage-*; do
-    rm $x >>"${OUTTO}" 2>&1
-  done
+  if [[ ${qbversion} == "v22" ]]; then
+    for x in installplugin-* removeplugin-* installpackage-* removepackage-*; do
+      rm $x >>"${OUTTO}" 2>&1
+    done
+  fi
 
   if [[ -d ${usrbin}quickbox ]]; then rm -r ${usrbin}quickbox;fi
   mkdir -p ${usrbin}quickbox
