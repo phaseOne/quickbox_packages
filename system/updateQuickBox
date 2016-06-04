@@ -210,22 +210,22 @@ echo "${bold}${magenta}QuickBox will now update, this may take between${normal}"
 echo "${bold}${magenta}5 and 15 minutes depending on your systems specs${normal}"
 echo ""
 _bashrc
-echo -n "Sending update output to /root/quickbox.update.${cyan}$PPID${normal}.log ... ";_logcheck
+echo -n "Sending update output to /root/quickbox.update.${cyan}$PPID${normal}.log ... ";_logcheck;echo
 _checkroot
 _askversion
 _askcontinue
-echo -n "Pulling QuickBox Ecosystem ... ";_downloadrepos
-echo -n "Updating QuickBox System Commands & Packages ... ";_updatesyscommands
-echo -n "Updating the useradd skeleton directories ... ";_updateskel
-echo -n "Updating the rutorrent directory ... ";_updaterutorrent
-echo -n "Updating the QuickBox Dashboard ... ";_updatedashboard
+echo -n "Pulling QuickBox Ecosystem ... ";_downloadrepos;echo
+echo -n "Updating QuickBox System Commands & Packages ... ";_updatesyscommands;echo
+echo -n "Updating the useradd skeleton directories ... ";_updateskel;echo
+echo -n "Updating the rutorrent directory ... ";_updaterutorrent;echo
+echo -n "Updating the QuickBox Dashboard ... ";_updatedashboard;echo
 if [[ ${qbversion} == "v22" ]]; then
-  echo -n "Setting up and updating Master DB files ... ";_updatemasterdb
+  echo -n "Setting up and updating Master DB files ... ";_updatemasterdb;echo
 fi
-echo -n "Updating the QuickBox Sudoers template ... ";_updatesudo
-echo -n "Updating ${MASTER}'s .startup cronfile... ";_updatecronfile
+echo -n "Updating the QuickBox Sudoers template ... ";_updatesudo;echo
+echo -n "Updating ${MASTER}'s .startup cronfile... ";_updatecronfile;echo
 if [[ ${qbversion} == "v22" ]]; then
-  echo -n "Updating QuickBox crons for boot ... ";_updateboot
+  echo -n "Updating QuickBox crons for boot ... ";_updateboot;echo
 fi
-echo -n "Adjusting permissions ... ";_perms
+echo -n "Adjusting permissions ... ";_perms;echo
 _fin
