@@ -64,29 +64,34 @@ function _askcontinue() {
 }
 
 function _downloadrepos() {
-  git clone https://github.com/QuickBox/quickbox_setup /root/quickbox_setup >> /dev/null 2>&1
-  git clone https://github.com/QuickBox/quickbox_rutorrent /root/quickbox_rutorrent >> /dev/null 2>&1
-  git clone https://github.com/QuickBox/quickbox_rutorrent-plugins /root/quickbox_rutorrent-plugins >> /dev/null 2>&1
-  git clone https://github.com/QuickBox/quickbox_packages /root/quickbox_packages >> /dev/null 2>&1
-  git clone https://github.com/QuickBox/quickbox_dashboard /root/quickbox_dashboard >> /dev/null 2>&1
+  if [[ ${qbversion} == "v22" ]]; then
+    git clone https://github.com/QuickBox/quickbox_setup /root/quickbox_setup >> /dev/null 2>&1
+    git clone https://github.com/QuickBox/quickbox_rutorrent /root/quickbox_rutorrent >> /dev/null 2>&1
+    git clone https://github.com/QuickBox/quickbox_rutorrent-plugins /root/quickbox_rutorrent-plugins >> /dev/null 2>&1
+    git clone https://github.com/QuickBox/quickbox_packages /root/quickbox_packages >> /dev/null 2>&1
+    git clone https://github.com/QuickBox/quickbox_dashboard /root/quickbox_dashboard >> /dev/null 2>&1
+  else
+    cd ${local_setup} && git pull; cd ${local_rutorrent} && git pull; cd ${local_rplugins} && git pull; cd ${local_packages} && git pull; cd ${local_dashboard} && git pull
+  fi
 }
 
 function _updatesyscommands() {
-  cd /usr/local/bin
+  cd ${usrbin}
   if [[ ${qbversion} == "v22" ]]; then
     for x in installplugin-* removeplugin-* installpackage-* removepackage-*; do
       rm $x >>"${OUTTO}" 2>&1
     done
+    if [[ -d ${usrbin}quickbox ]]; then rm -r ${usrbin}quickbox;fi
+    mkdir -p ${usrbin}quickbox
+    cp -r ${local_packages}/. ${usrbin}quickbox
+    dos2unix $(find /usr/local/bin/quickbox -type f) >>"${OUTTO}" 2>&1;
+    chmod +x $(find /usr/local/bin/quickbox -type f) >>"${OUTTO}" 2>&1;
+    if [[ -f /usr/bin/reload ]]; then rm /usr/bin/reload;fi
+    cp ${usrbin}quickbox/system/reload /usr/bin/reload
+    chmod +x /usr/bin/reload
+  else
+    cd ${usrbin}quickbox && git pull
   fi
-
-  if [[ -d ${usrbin}quickbox ]]; then rm -r ${usrbin}quickbox;fi
-  mkdir -p ${usrbin}quickbox
-  cp -r ${local_packages}/. ${usrbin}quickbox
-  dos2unix $(find /usr/local/bin/quickbox -type f) >>"${OUTTO}" 2>&1;
-  chmod +x $(find /usr/local/bin/quickbox -type f) >>"${OUTTO}" 2>&1;
-  if [[ -f /usr/bin/reload ]]; then rm /usr/bin/reload;fi
-  cp ${usrbin}quickbox/system/reload /usr/bin/reload
-  chmod +x /usr/bin/reload
 }
 
 function _updateskel() {
@@ -97,24 +102,35 @@ function _updateskel() {
 
 function _updaterutorrent() {
   cd /srv
-  #if [[ -d ${rtorrent} ]]; then rm -rf rutorrent;fi
-  #mkdir rutorrent
-  cp -R ${local_rutorrent}/. rutorrent
+  if [[ ${qbversion} == "v22" ]]; then
+    #if [[ -d ${rtorrent} ]]; then rm -rf rutorrent;fi
+    #mkdir rutorrent
+    cp -R ${local_rutorrent}/. rutorrent
+  else
+    cd ${rutorrent} && git pull
+  fi
 }
 
 function _updaterutorrent-plugins() {
   cd ${rtorrent}
-  #if [[ -d ${rtorrent}plugins ]]; then rm -rf plugins;fi
-  #mkdir plugins
-  cp -R ${local_rplugins}/. plugins
+  if [[ ${qbversion} == "v22" ]]; then
+    #if [[ -d ${rtorrent}plugins ]]; then rm -rf plugins;fi
+    #mkdir plugins
+    cp -R ${local_rplugins}/. plugins
+  else
+    cd ${rutorrent}plugins && git pull
+  fi
 }
 
 # function to install dashboard (23)
 function _updatedashboard() {
   cd ${rtorrent}
-  if [[ -d ${rtorrent}home ]]; then rm -rf home;fi
-  cd && mkdir -p ${rtorrent}home
-  cp -R ${local_dashboard}/. ${rtorrent}home
+  if [[ ${qbversion} == "v22" ]]; then
+    if [[ -d ${rtorrent}home ]]; then rm -rf home;fi
+    cd && mkdir -p ${rtorrent}home
+    cp -R ${local_dashboard}/. ${rtorrent}home
+  else
+    cd ${rutorrent}home && git pull
 }
 
 function _updatemasterdb() {
@@ -126,7 +142,6 @@ function _updatesudo() {
   rm /etc/sudoers
   cp ${local_setup}templates/sudoers.template /etc/sudoers
     awk -v username=${MASTER} '/^root/ && !x {print username    " ALL=(ALL:ALL) NOPASSWD: ALL"; x=1} 1' /etc/sudoers > /tmp/sudoers;mv /tmp/sudoers /etc
-    echo -n "${username}" > /etc/apache2/master.txt
   cd
 }
 
@@ -168,13 +183,18 @@ spinner() {
 
 local_setup=/root/quickbox_setup/
 local_rutorrent=/root/quickbox_rutorrent/
-local_rplugins=/root/quickbox_rutorrent-plugins
+local_rplugins=/root/quickbox_rutorrent-plugins/
 local_packages=/root/quickbox_packages/
 local_dashboard=/root/quickbox_dashboard/
 
 Reth0=$(ifconfig | grep -m 1 "Link encap" | sed 's/[ \t].*//;/^\(lo\|\)$/d' | awk '{ print $1 '});
 IFACE=$(echo -n "${Reth0}");
-MASTER=$(cat /etc/apache2/master.txt)
+OK=$(echo -e "[ ${bold}${green}DONE${normal} ]")
+if [[ ${qbversion} == "v22" ]]; then
+  MASTER=$(cat /etc/apache2/master.txt)
+else
+  MASTER=$(cat /srv/rutorrent/home/db/master.txt)
+fi
 rtorrent=/srv/rutorrent/
 usrbin=/usr/local/bin/
 
@@ -194,9 +214,13 @@ echo -n "Updating QuickBox System Commands & Packages ... ";_updatesyscommands &
 echo -n "Updating the useradd skeleton directories ... ";_updateskel & spinner $!;echo
 echo -n "Updating the rutorrent directory ... ";_updaterutorrent & spinner $!;echo
 echo -n "Updating the QuickBox Dashboard ... ";_updatedashboard & spinner $!;echo
-echo -n "Setting up and updating Master DB files ... ";_updatemasterdb & spinner $!;echo
+if [[ ${qbversion} == "v22" ]]; then
+  echo -n "Setting up and updating Master DB files ... ";_updatemasterdb & spinner $!;echo
+fi
 echo -n "Updating the QuickBox Sudoers template ... ";_updatesudo & spinner $!;echo
 echo -n "Updating ${MASTER}'s .startup cronfile... ";_updatecronfile & spinner $!;echo
-echo -n "Updating QuickBox crons for boot ... ";_updateboot & spinner $!;echo
+if [[ ${qbversion} == "v22" ]]; then
+  echo -n "Updating QuickBox crons for boot ... ";_updateboot & spinner $!;echo
+fi
 echo -n "Adjusting permissions ... ";_perms & spinner $!;echo
 _fin
