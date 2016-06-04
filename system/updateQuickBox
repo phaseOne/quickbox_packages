@@ -28,7 +28,7 @@ function _string() { perl -le 'print map {(a..z,A..Z,0..9)[rand 62] } 0..pop' 15
 #################################################################################
 
 function _bashrc() {
-  cp ${local_setup}templates/bashrc.template ~/.bashrc
+  cp ${local_setup}templates/bashrc.template /root/.bashrc
 }
 
 function _logcheck() {
@@ -160,6 +160,7 @@ function _updateboot() {
 
 # adjust permissions function (9)
 function _perms() {
+  chown -R www-data /srv/rutorrent/*
   chgrp -R www-data /srv/rutorrent/*
   chmod -R g+rw /srv/rutorrent/*
   sh -c 'find /srv/rutorrent/* -type d -print0 | sudo xargs -0 chmod g+s'
@@ -209,12 +210,12 @@ echo ""
 echo "${bold}${magenta}QuickBox will now update, this may take between${normal}"
 echo "${bold}${magenta}5 and 15 minutes depending on your systems specs${normal}"
 echo ""
-_bashrc
 echo -n "Sending update output to /root/quickbox.update.${cyan}$PPID${normal}.log ... ";_logcheck;echo
 _checkroot
 _askversion
 _askcontinue
 echo -n "Pulling QuickBox Ecosystem ... ";_downloadrepos;echo
+_bashrc
 echo -n "Updating QuickBox System Commands & Packages ... ";_updatesyscommands;echo
 echo -n "Updating the useradd skeleton directories ... ";_updateskel;echo
 echo -n "Updating the rutorrent directory ... ";_updaterutorrent;echo
