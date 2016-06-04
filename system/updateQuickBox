@@ -199,8 +199,8 @@ usrbin=/usr/local/bin/
 # QuickBox Update STRUCTURE
 echo
 echo ""
-echo "${bold}${magenta}QuickBox will now update, this may take between${normal}"
-echo "${bold}${magenta}5 and 15 minutes depending on your systems specs${normal}"
+echo "${bold}${magenta}QuickBox will now update, this will only take${normal}"
+echo "${bold}${magenta}a few short seconds.${normal}"
 echo ""
 echo -n "Sending update output to /root/quickbox.update.${cyan}$PPID${normal}.log ... ";_logcheck;echo
 _checkroot
