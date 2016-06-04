@@ -49,7 +49,7 @@ function _checkroot() {
 function _askversion() {
   echo -e "${bold}${yellow}1)${normal} versions under 2.3${normal}"
   echo -e "${bold}${yellow}2)${normal} versions above 2.3${normal}"
-  echo -ne "${bold}${yellow}What version of QuickBox are you updating from?${normal} [${green}1${normal}] or [2]${green}1${normal}: "; read version
+  echo -ne "${bold}${yellow}What version of QuickBox are you updating from?${normal} [${green}1${normal}] or [2] : "; read version
   case $version in
     1 | "") qbversion=v22  ;;
     2) qbversion=v23  ;;
