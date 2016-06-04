@@ -71,7 +71,11 @@ function _downloadrepos() {
     git clone https://github.com/QuickBox/quickbox_packages /root/quickbox_packages >> /dev/null 2>&1
     git clone https://github.com/QuickBox/quickbox_dashboard /root/quickbox_dashboard >> /dev/null 2>&1
   else
-    cd ${local_setup} && git pull; cd ${local_rutorrent} && git pull; cd ${local_rplugins} && git pull; cd ${local_packages} && git pull; cd ${local_dashboard} && git pull
+    echo -n "quickbox_setup" && cd ${local_setup} && git pull; 
+    echo -n "quickbox_rutorrent" && cd ${local_rutorrent} && git pull;
+    echo -n "quickbox_rutorrent-plugins" && cd ${local_rplugins} && git pull;
+    echo -n "quickbox_packages" && cd ${local_packages} && git pull;
+    echo -n "quickbox_dashboard" && cd ${local_dashboard} && git pull
   fi
 }
 
@@ -206,22 +210,22 @@ echo "${bold}${magenta}QuickBox will now update, this may take between${normal}"
 echo "${bold}${magenta}5 and 15 minutes depending on your systems specs${normal}"
 echo ""
 _bashrc
-echo -n "Sending update output to /root/quickbox.update.${cyan}$PPID${normal}.log ... ";_logcheck & spinner $!;echo
+echo -n "Sending update output to /root/quickbox.update.${cyan}$PPID${normal}.log ... ";_logcheck
 _checkroot
 _askversion
 _askcontinue
-echo -n "Pulling QuickBox Ecosystem ... ";_downloadrepos & spinner $!;echo
-echo -n "Updating QuickBox System Commands & Packages ... ";_updatesyscommands & spinner $!;echo
-echo -n "Updating the useradd skeleton directories ... ";_updateskel & spinner $!;echo
-echo -n "Updating the rutorrent directory ... ";_updaterutorrent & spinner $!;echo
-echo -n "Updating the QuickBox Dashboard ... ";_updatedashboard & spinner $!;echo
+echo -n "Pulling QuickBox Ecosystem ... ";_downloadrepos
+echo -n "Updating QuickBox System Commands & Packages ... ";_updatesyscommands
+echo -n "Updating the useradd skeleton directories ... ";_updateskel
+echo -n "Updating the rutorrent directory ... ";_updaterutorrent
+echo -n "Updating the QuickBox Dashboard ... ";_updatedashboard
 if [[ ${qbversion} == "v22" ]]; then
-  echo -n "Setting up and updating Master DB files ... ";_updatemasterdb & spinner $!;echo
+  echo -n "Setting up and updating Master DB files ... ";_updatemasterdb
 fi
-echo -n "Updating the QuickBox Sudoers template ... ";_updatesudo & spinner $!;echo
-echo -n "Updating ${MASTER}'s .startup cronfile... ";_updatecronfile & spinner $!;echo
+echo -n "Updating the QuickBox Sudoers template ... ";_updatesudo
+echo -n "Updating ${MASTER}'s .startup cronfile... ";_updatecronfile
 if [[ ${qbversion} == "v22" ]]; then
-  echo -n "Updating QuickBox crons for boot ... ";_updateboot & spinner $!;echo
+  echo -n "Updating QuickBox crons for boot ... ";_updateboot
 fi
-echo -n "Adjusting permissions ... ";_perms & spinner $!;echo
+echo -n "Adjusting permissions ... ";_perms
 _fin
