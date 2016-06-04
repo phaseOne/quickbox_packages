@@ -145,9 +145,13 @@ function _updatemasterdb() {
 
 function _updatesudo() {
   rm /etc/sudoers
-  cp ${local_setup}templates/sudoers.template /etc/sudoers
-    awk -v username="${MASTER}" '/^root/ && !x {print username    " ALL=(ALL:ALL) NOPASSWD: ALL"; x=1} 1' /etc/sudoers > /tmp/sudoers;mv /tmp/sudoers /etc
-  cd
+  if [[ ${qbversion} == "v22" ]]; then
+    cp ${local_setup}templates/sudoers.template /etc/sudoers
+    awk -v username="${M1}" '/^root/ && !x {print username    " ALL=(ALL:ALL) NOPASSWD: ALL"; x=1} 1' /etc/sudoers > /tmp/sudoers;mv /tmp/sudoers /etc
+  else
+    cp ${local_setup}templates/sudoers.template /etc/sudoers
+    awk -v username="${A1}" '/^root/ && !x {print username    " ALL=(ALL:ALL) NOPASSWD: ALL"; x=1} 1' /etc/sudoers > /tmp/sudoers;mv /tmp/sudoers /etc
+  fi
 }
 
 function _updatecronfile() {
@@ -172,20 +176,7 @@ function _fin() {
   echo;echo
 }
 
-spinner() {
-    local pid=$1
-    local delay=0.25
-    local spinstr='|/-\'
-    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
-        local temp=${spinstr#?}
-        printf " [${bold}${yellow}%c${normal}]  " "$spinstr"
-        local spinstr=$temp${spinstr%"$temp"}
-        sleep $delay
-        printf "\b\b\b\b\b\b"
-    done
-    printf "    \b\b\b\b"
-    echo -ne "${OK}"
-}
+
 
 local_setup=/root/quickbox_setup/
 local_rutorrent=/root/quickbox_rutorrent/
@@ -196,11 +187,8 @@ local_dashboard=/root/quickbox_dashboard/
 Reth0=$(ifconfig | grep -m 1 "Link encap" | sed 's/[ \t].*//;/^\(lo\|\)$/d' | awk '{ print $1 '});
 IFACE=$(echo -n "${Reth0}");
 OK=$(echo -e "[ ${bold}${green}DONE${normal} ]")
-if [[ ${qbversion} == "v22" ]]; then
-  MASTER=$(cat /etc/apache2/master.txt)
-else
-  MASTER=$(cat /srv/rutorrent/home/db/master.txt)
-fi
+M1=$(cat /etc/apache2/master.txt)
+A1=$(cat /srv/rutorrent/home/db/master.txt)
 rtorrent=/srv/rutorrent/
 usrbin=/usr/local/bin/
 
