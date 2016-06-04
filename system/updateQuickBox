@@ -183,7 +183,7 @@ echo "${bold}${magenta}QuickBox will now update, this may take between${normal}"
 echo "${bold}${magenta}5 and 15 minutes depending on your systems specs${normal}"
 echo ""
 _bashrc
-echo -n "Sending update output to /root/quickbox.update.$PPID.log ... ";_logcheck & spinner $!;echo
+echo -n "Sending update output to /root/quickbox.update.${cyan}$PPID${normal}.log ... ";_logcheck & spinner $!;echo
 _checkroot
 _askversion
 _askcontinue
