@@ -42,7 +42,7 @@ function _checkroot() {
     echo 'Exiting...'
     exit 1
   fi
-  echo "${green}Congrats! You're running as root. We will now run the update${normal} ... "
+  echo -e "${green}Congrats! You're running as root. We will now run the update${normal} ... "
   echo
 }
 
@@ -71,7 +71,7 @@ function _downloadrepos() {
     git clone https://github.com/QuickBox/quickbox_packages /root/quickbox_packages >> /dev/null 2>&1
     git clone https://github.com/QuickBox/quickbox_dashboard /root/quickbox_dashboard >> /dev/null 2>&1
   else
-    echo -n "quickbox_setup" && cd ${local_setup} && git pull; 
+    echo -n "quickbox_setup" && cd ${local_setup} && git pull;
     echo -n "quickbox_rutorrent" && cd ${local_rutorrent} && git pull;
     echo -n "quickbox_rutorrent-plugins" && cd ${local_rplugins} && git pull;
     echo -n "quickbox_packages" && cd ${local_packages} && git pull;
