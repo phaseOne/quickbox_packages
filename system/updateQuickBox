@@ -131,6 +131,7 @@ function _updatedashboard() {
     cp -R ${local_dashboard}/. ${rtorrent}home
   else
     cd ${rutorrent}home && git pull
+  }
 }
 
 function _updatemasterdb() {
