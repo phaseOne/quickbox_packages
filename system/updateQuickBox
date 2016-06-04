@@ -198,5 +198,5 @@ echo -n "Setting up and updating Master DB files ... ";_updatemasterdb & spinner
 echo -n "Updating the QuickBox Sudoers template ... ";_updatesudo & spinner $!;echo
 echo -n "Updating ${MASTER}'s .startup cronfile... ";_updatecronfile & spinner $!;echo
 echo -n "Updating QuickBox crons for boot ... ";_updateboot & spinner $!;echo
-echo -n "Adjusting permissions ... "_perms & spinner $!;echo
+echo -n "Adjusting permissions ... ";_perms & spinner $!;echo
 _fin
