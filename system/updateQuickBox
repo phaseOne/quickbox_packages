@@ -64,11 +64,11 @@ function _askcontinue() {
 }
 
 function _downloadrepos() {
-  git clone https://github.com/QuickBox/quickbox_setup quickbox_setup >> /dev/null 2>&1
-  git clone https://github.com/QuickBox/quickbox_rutorrent quickbox_rutorrent >> /dev/null 2>&1
-  git clone https://github.com/QuickBox/quickbox_rutorrent-plugins quickbox_rutorrent-plugins >> /dev/null 2>&1
-  git clone https://github.com/QuickBox/quickbox_packages quickbox_packages >> /dev/null 2>&1
-  git clone https://github.com/QuickBox/quickbox_dashboard quickbox_dashboard >> /dev/null 2>&1
+  git clone https://github.com/QuickBox/quickbox_setup /root/quickbox_setup >> /dev/null 2>&1
+  git clone https://github.com/QuickBox/quickbox_rutorrent /root/quickbox_rutorrent >> /dev/null 2>&1
+  git clone https://github.com/QuickBox/quickbox_rutorrent-plugins /root/quickbox_rutorrent-plugins >> /dev/null 2>&1
+  git clone https://github.com/QuickBox/quickbox_packages /root/quickbox_packages >> /dev/null 2>&1
+  git clone https://github.com/QuickBox/quickbox_dashboard /root/quickbox_dashboard >> /dev/null 2>&1
 }
 
 function _updatesyscommands() {
