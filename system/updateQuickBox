@@ -27,10 +27,6 @@ sub_title=${bold}${yellow}; repo_title=${black}${on_green}; message_title=${whit
 function _string() { perl -le 'print map {(a..z,A..Z,0..9)[rand 62] } 0..pop' 15 ; }
 #################################################################################
 
-function _bashrc() {
-  cp ${local_setup}templates/bashrc.template /root/.bashrc
-}
-
 function _logcheck() {
   OUTTO=/root/quickbox.update.$PPID.log
 }
@@ -43,7 +39,7 @@ function _checkroot() {
     exit 1
   fi
   echo -ne "${green}Congrats! You're running as root. We will now run the update${normal} ... "
-  echo
+  echo;echo
 }
 
 function _askversion() {
@@ -77,6 +73,10 @@ function _downloadrepos() {
     echo -n "quickbox_packages" && cd ${local_packages} && git pull;
     echo -n "quickbox_dashboard" && cd ${local_dashboard} && git pull
   fi
+}
+
+function _bashrc() {
+  cp ${local_setup}templates/bashrc.template /root/.bashrc
 }
 
 function _updatesyscommands() {
@@ -180,7 +180,7 @@ function _fin() {
   echo;echo
 }
 
-
+clear
 
 local_setup=/root/quickbox_setup/
 local_rutorrent=/root/quickbox_rutorrent/
@@ -191,8 +191,8 @@ local_dashboard=/root/quickbox_dashboard/
 Reth0=$(ifconfig | grep -m 1 "Link encap" | sed 's/[ \t].*//;/^\(lo\|\)$/d' | awk '{ print $1 '});
 IFACE=$(echo -n "${Reth0}");
 OK=$(echo -e "[ ${bold}${green}DONE${normal} ]")
-M1=$(cat /etc/apache2/master.txt)
-A1=$(cat /srv/rutorrent/home/db/master.txt)
+M1=$(cat /etc/apache2/master.txt) >> /dev/null 2>&1
+A1=$(cat /srv/rutorrent/home/db/master.txt) >> /dev/null 2>&1
 rtorrent=/srv/rutorrent/
 usrbin=/usr/local/bin/
 
