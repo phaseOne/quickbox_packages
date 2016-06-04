@@ -17,7 +17,7 @@
 
 function _installplugin-ratio() {
   rutorrent="/srv/rutorrent/";
-  PLUGINVAULT="/etc/quickbox/rutorrent/plugins/"; cd "${rutorrent}plugins"
+  PLUGINVAULT="/root/quickbox_rutorrent-plugins/"; cd "${rutorrent}plugins"
   PLUGIN="ratio"
     for i in $PLUGIN; do
       cp -R "${PLUGINVAULT}$i" .
