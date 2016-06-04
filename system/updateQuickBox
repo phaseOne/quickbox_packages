@@ -64,9 +64,16 @@ function _updateskel() {
 
 function _updaterutorrent() {
   cd /srv
-  if [[ -d ${rtorrent} ]]; then rm -rf rutorrent;fi
-  mkdir rutorrent
+  #if [[ -d ${rtorrent} ]]; then rm -rf rutorrent;fi
+  #mkdir rutorrent
   cp -R ${local_rutorrent}/. rutorrent
+}
+
+function _updaterutorrent-plugins() {
+  cd ${rtorrent}
+  #if [[ -d ${rtorrent}plugins ]]; then rm -rf plugins;fi
+  #mkdir plugins
+  cp -R ${local_rplugins}/. plugins
 }
 
 # function to install dashboard (23)
@@ -108,7 +115,7 @@ function _perms() {
 
 local_setup=/root/quickbox_setup/
 local_rutorrent=/root/quickbox_rutorrent/
-local_rutorrent-plugins=/root/quickbox_rutorrent-plugins
+local_rplugins=/root/quickbox_rutorrent-plugins
 local_packages=/root/quickbox_packages/
 local_dashboard=/root/quickbox_dashboard/
 
