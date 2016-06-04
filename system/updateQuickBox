@@ -155,7 +155,11 @@ function _updatesudo() {
 }
 
 function _updatecronfile() {
-  cp ${local_setup}templates/startup.template /home/"${MASTER}"/.startup
+  if [[ ${qbversion} == "v22" ]]; then
+    cp ${local_setup}templates/startup.template /home/"${M1}"/.startup
+  else
+    cp ${local_setup}templates/startup.template /home/"${A1}"/.startup
+  fi
 }
 
 function _updateboot() {
@@ -212,7 +216,11 @@ if [[ ${qbversion} == "v22" ]]; then
   echo -n "Setting up and updating Master DB files ... ";_updatemasterdb;echo
 fi
 echo -n "Updating the QuickBox Sudoers template ... ";_updatesudo;echo
-echo -n "Updating ${MASTER}'s .startup cronfile... ";_updatecronfile;echo
+if [[ ${qbversion} == "v22" ]]; then
+  echo -n "Updating ${M1}'s .startup cronfile... ";_updatecronfile;echo
+else
+  echo -n "Updating ${A1}'s .startup cronfile... ";_updatecronfile;echo
+fi
 if [[ ${qbversion} == "v22" ]]; then
   echo -n "Updating QuickBox crons for boot ... ";_updateboot;echo
 fi
