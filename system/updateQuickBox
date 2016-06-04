@@ -55,7 +55,6 @@ function _askversion() {
     2) qbversion=v23  ;;
     *) qbversion=v22 ;;
   esac
-  echo "Updating from ${green}$qbversion${normal}"
 }
 
 function _askcontinue() {
