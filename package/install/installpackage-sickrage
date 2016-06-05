@@ -14,9 +14,9 @@
 #   including (via compiler) GPL-licensed code must also be made available
 #   under the GPL along with build & install instructions.
 #
-MASTER=$(cat /etc/apache2/master.txt)
+MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 OUTTO="/root/quick-box.log"
-sickrage="/usr/local/bin/quickbox/package/install/sickrage"
+sickrage="/root/quickbox_setup/templates/sickrage.template"
 
 function _installSickRage() {
   sudo git clone https://github.com/SickRage/SickRage.git  /home/"${MASTER}"/.sickrage
@@ -24,7 +24,7 @@ function _installSickRage() {
   chown "${MASTER}":"${MASTER}" -R /home/"${MASTER}"/.sickrage
   cd /home/"${MASTER}"/.sickrage/runscripts
   cd /etc/init.d/
-  ${sickrage}
+  cp ${sickrage} /etc/init.d/sickrage
   sudo chmod +x /etc/init.d/sickrage
 
 echo -e "SR_HOME=/home/${MASTER}/.sickrage/
