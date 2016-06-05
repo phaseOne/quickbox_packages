@@ -43,7 +43,7 @@ function _installRapidleech4() {
   service apache2 reload
 }
 function _installRapidleech5() {
-    echo "Plex Install Complete!" >>"${OUTTO}" 2>&1;
+    echo "Rapidleech Install Complete!" >>"${OUTTO}" 2>&1;
     sleep 5
     echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
     sleep 5
