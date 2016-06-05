@@ -24,7 +24,7 @@ function _installSickRage() {
   chown "${MASTER}":"${MASTER}" -R /home/"${MASTER}"/.sickrage
   cd /home/"${MASTER}"/.sickrage/runscripts
   cd /etc/init.d/
-  cp ${sickrage} sickrage
+  cp ${sickrage} /etc/init.d/sickrage
   sudo chmod +x /etc/init.d/sickrage
 
 echo -e "SR_HOME=/home/${MASTER}/.sickrage/
