@@ -55,7 +55,7 @@ function _installPlex7() {
     /etc/init.d/apache2 reload
 }
 function _installPlex8() {
-    echo "" > /srv/rutorrent/home/db/output.log
+    printf "" > /srv/rutorrent/home/db/output.log
 }
 function _installPlex9() {
     exit
