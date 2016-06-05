@@ -104,6 +104,10 @@ function _updateskel() {
   cp -r ${local_setup}templates/skel/. /etc/skel
 }
 
+function _installdir() {
+  if [[ -d /install ]]; then cd else mkdir /install;fi
+}
+
 function _updaterutorrent() {
   cd /srv
   if [[ ${qbversion} == "v22" ]]; then
@@ -210,6 +214,7 @@ echo -n "Pulling QuickBox Ecosystem ... ";_downloadrepos;echo
 _bashrc
 echo -n "Updating QuickBox System Commands & Packages ... ";_updatesyscommands;echo
 echo -n "Updating the useradd skeleton directories ... ";_updateskel;echo
+echo -n "Looking for install directory for .lock files ... ";_installdir;echo
 echo -n "Updating the rutorrent directory ... ";_updaterutorrent;echo
 echo -n "Updating the QuickBox Dashboard ... ";_updatedashboard;echo
 if [[ ${qbversion} == "v22" ]]; then
