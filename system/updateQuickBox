@@ -105,7 +105,7 @@ function _updateskel() {
 }
 
 function _installdir() {
-  if [[ -d /install ]]; then cd else mkdir /install;fi
+  if [[ -d /install ]]; then cd / else mkdir /install;fi
 }
 
 function _updaterutorrent() {
