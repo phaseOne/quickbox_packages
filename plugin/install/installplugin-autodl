@@ -17,14 +17,14 @@
 #
 OUTTO=/srv/rutorrent/home/db/output.log
 
-function _installplugin-autodl1() {
+function _installplugin-autodl() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
   echo "Accessing autodl-irssi in the plugin vault ... " >>"${OUTTO}" 2>&1;
   PLUGINVAULT="/root/quickbox_rutorrent-plugins"; cd "${rutorrent}plugins"
   sleep 5
 
-  echo "Installing autodl plugin ... " >>"${OUTTO}" 2>&1;
+  echo "Installing autodl-irssi plugin ... " >>"${OUTTO}" 2>&1;
   PLUGIN="autodl-irssi"
     for i in $PLUGIN; do
       cp -R "${PLUGINVAULT}$i" .
@@ -43,4 +43,4 @@ function _installplugin-autodl1() {
   exit
 }
 
-_installplugin-autodl1
+_installplugin-autodl
