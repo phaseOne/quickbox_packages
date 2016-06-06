@@ -20,12 +20,12 @@ OUTTO=/srv/rutorrent/home/db/output.log
 function _installplugin-autodl() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
-  echo "Accessing autodl-irssi in the plugin vault ... " >>"${OUTTO}" 2>&1;
+  echo "Accessing autodl in the plugin vault ... " >>"${OUTTO}" 2>&1;
   PLUGINVAULT="/root/quickbox_rutorrent-plugins"; cd "${rutorrent}plugins"
   sleep 5
 
-  echo "Installing autodl-irssi plugin ... " >>"${OUTTO}" 2>&1;
-  PLUGIN="autodl-irssi"
+  echo "Installing autodl plugin ... " >>"${OUTTO}" 2>&1;
+  PLUGIN="autodl"
     for i in $PLUGIN; do
       cp -R "${PLUGINVAULT}$i" .
     done
@@ -33,7 +33,7 @@ function _installplugin-autodl() {
 
   echo "Adjusting permissions ... " >>"${OUTTO}" 2>&1;
   chown -R www-data: ${rutorrent}plugins/$PLUGIN
-  echo "Autodl-irssi Plugin Install Complete!" >>"${OUTTO}" 2>&1;
+  echo "Autodl Plugin Install Complete!" >>"${OUTTO}" 2>&1;
   sleep 5
 
   echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
