@@ -1,10 +1,11 @@
 #!/bin/bash
 #
-# [Quick Box :: Install autodl plugin]
+# [Quick Box :: Install autodl-irssi plugin]
 #
-# GitHub:   https://github.com/JMSDOnline/QuickBox
-# Author:   Swizards.net
-# URL:      https://swizards.net
+# GitHub _ packages:   https://github.com/QuickBox/quickbox_packages
+# GitHub _ plugins:    https://github.com/QuickBox/quickbox_rutorrent-plugins
+# Author:   QuickBox.IO | JMSolo
+# URL:      https://plaza.quickbox.io
 #
 # QuickBox Copyright (C) 2016 Swizards.net
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
@@ -14,16 +15,32 @@
 #   including (via compiler) GPL-licensed code must also be made available
 #   under the GPL along with build & install instructions.
 #
+OUTTO=/srv/rutorrent/home/db/output.log
 
-function _installplugin-autodl() {
+function _installplugin-autodl1() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
+  echo "Accessing autodl-irssi in the plugin vault ... " >>"${OUTTO}" 2>&1;
   PLUGINVAULT="/root/quickbox_rutorrent-plugins"; cd "${rutorrent}plugins"
+  sleep 5
+
+  echo "Installing autodl plugin ... " >>"${OUTTO}" 2>&1;
   PLUGIN="autodl-irssi"
     for i in $PLUGIN; do
       cp -R "${PLUGINVAULT}$i" .
     done
+  sleep 5
+
+  echo "Adjusting permissions ... " >>"${OUTTO}" 2>&1;
   chown -R www-data: ${rutorrent}plugins/$PLUGIN
+  echo "Autodl-irssi Plugin Install Complete!" >>"${OUTTO}" 2>&1;
+  sleep 5
+
+  echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
+  sleep 5
+
+  printf "" > /srv/rutorrent/home/db/output.log
+  exit
 }
 
-_installplugin-autodl
+_installplugin-autodl1
