@@ -17,7 +17,7 @@
 #
 OUTTO=/srv/rutorrent/home/db/output.log
 
-function _removeplugin-source() {
+function _removeplugin-stream() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
   echo "Uninstalling the stream plugin ... " >>"${OUTTO}" 2>&1;
