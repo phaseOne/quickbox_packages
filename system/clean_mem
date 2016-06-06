@@ -15,5 +15,21 @@
 #   under the GPL along with build & install instructions.
 #
 #################################################################################
+OUTTO=/srv/rutorrent/home/db/output.log
 
-echo 1 > /proc/sys/vm/drop_caches
+function _cleanmemcache() {
+  echo "Cleaning system memory cache ... " >>"${OUTTO}" 2>&1;
+  echo 1 > /proc/sys/vm/drop_caches
+  sleep 5
+  
+  echo "System memory cache cleared!" >>"${OUTTO}" 2>&1;
+  sleep 2
+
+  echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
+  sleep 5
+
+  printf "" > /srv/rutorrent/home/db/output.log
+  exit
+}
+
+_cleanmemcache

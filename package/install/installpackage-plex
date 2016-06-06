@@ -2,7 +2,7 @@
 #
 # [Quick Box :: Install plexmediaserver package]
 #
-# GitHub:   https://github.com/Swizards/QuickBox
+# GitHub:   https://github.com/QuickBox/quickbox_packages
 # Author:   QuickBox.IO | JMSolo
 # URL:      https://plaza.quickbox.io
 #
@@ -14,25 +14,59 @@
 #   including (via compiler) GPL-licensed code must also be made available
 #   under the GPL along with build & install instructions.
 #
-OUTTO="/root/quick-box.log"
+OUTTO="/srv/rutorrent/home/db/output.log"
 HOSTNAME1=$(hostname -s)
 PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
 
-function _installPlex() {
+function _installPlex1() {
     echo -ne "ServerName ${HOSTNAME1}" | sudo tee /etc/apache2/conf-available/fqdn.conf
-    sudo a2enconf fqdn >>"${OUTTO}" 2>&1
+    sudo a2enconf fqdn >> /dev/null 2>&1
+    echo
+}
+function _installPlex2() {
     touch /etc/apache2/sites-enabled/plex.conf
     chown www-data: /etc/apache2/sites-enabled/plex.conf
+}
+function _installPlex3() {
     wget -O - http://shell.ninthgate.se/packages/shell.ninthgate.se.gpg.key | apt-key add -
     echo "deb http://www.deb-multimedia.org wheezy main non-free" > /etc/apt/sources.list.d/deb-multimedia.list
     echo "deb http://shell.ninthgate.se/packages/debian wheezy main" > /etc/apt/sources.list.d/plexmediaserver.list
+    echo
+}
+function _installPlex4() {
     apt-get -y update
+    echo
+}
+function _installPlex5() {
     apt-get install deb-multimedia-keyring -y
     apt-get -y install plexmediaserver
+    echo
+}
+function _installPlex6() {
     service plexmediaserver restart
     touch /install/.plex.lock
+    echo
+}
+function _installPlex7() {
+    echo "Plex Install Complete!" >>"${OUTTO}" 2>&1;
+    sleep 5
+    echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
+    sleep 5
     /etc/init.d/apache2 reload
 }
+function _installPlex8() {
+    printf "" > /srv/rutorrent/home/db/output.log
+}
+function _installPlex9() {
+    exit
+}
 
-
-_installPlex
+echo "Setting up hostname for plex ... " >>"${OUTTO}" 2>&1;_installPlex1
+echo "Setting up plex apache configuration ... " >>"${OUTTO}" 2>&1;_installPlex2
+echo "Installing plex keys and sources ... " >>"${OUTTO}" 2>&1;_installPlex3
+echo "Updating system ... " >>"${OUTTO}" 2>&1;_installPlex4
+echo "Installing plex ... " >>"${OUTTO}" 2>&1;_installPlex5
+echo "Starting plex ... " >>"${OUTTO}" 2>&1;_installPlex6
+_installPlex7
+_installPlex8
+_installPlex9

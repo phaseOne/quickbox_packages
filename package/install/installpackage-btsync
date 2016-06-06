@@ -2,9 +2,9 @@
 #
 # [Quick Box :: Install BTSync package]
 #
-# GitHub:   https://github.com/Swizards/QuickBox
-# Author:   Swizards.net
-# URL:      https://swizards.net
+# GitHub:   https://github.com/QuickBox/quickbox_packages
+# Author:   QuickBox.IO | JMSolo
+# URL:      https://plaza.quickbox.io
 #
 # QuickBox Copyright (C) 2016 Swizards.net
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
@@ -16,25 +16,55 @@
 #
 MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 BTSYNCIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
-OUTTO=/root/quick-box.log
+OUTTO=/srv/rutorrent/home/db/output.log
 local_setup=/root/quickbox_setup/
 
-function _installBTSync() {
+function _installBTSync1() {
   sudo sh -c 'echo "deb http://linux-packages.getsync.com/btsync/deb btsync non-free" > /etc/apt/sources.list.d/btsync.list'
   wget -qO - http://linux-packages.getsync.com/btsync/key.asc | sudo apt-key add - >/dev/null 2>&1
-  sudo apt-get update >>"${OUTTO}" 2>&1
-  sudo apt-get install btsync >>"${OUTTO}" 2>&1
-  cd && mkdir /home/${MASTER}/sync_folder
+}
+function _installBTSync2() {
+  sudo apt-get update
+}
+function _installBTSync3() {
+  sudo apt-get install btsync
+}
+function _installBTSync4() {
+  cd && mkdir /home/"${MASTER}"/sync_folder
   sudo chown ${MASTER}:btsync /home/${MASTER}/sync_folder
   sudo chmod 2775 /home/${MASTER}/sync_folder
   sudo usermod -a -G btsync ${MASTER}
+}
+function _installBTSync5() {
   sudo sed -i 's/BTSYNC=/BTSYNC=yes/g' /home/${MASTER}/.startup
   cp -r ${local_setup}templates/btsync/config.json.template /etc/btsync/config.json
   cp -r ${local_setup}templates/btsync/user_config.json.template /etc/btsync/user_config.json
   sudo sed -i "s/BTSGUIP/$BTSYNCIP/g" /etc/btsync/config.json
   sudo sed -i "s/BTSGUIP/$BTSYNCIP/g" /etc/btsync/user_config.json
+}
+function _installBTSync6() {
   touch /install/.btsync.lock
   sudo service btsync start
 }
+function _installBTSync7() {
+  echo "BTSync Install Complete!" >>"${OUTTO}" 2>&1;
+  sleep 5
+  echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
+  sleep 5
+}
+function _installBTSync8() {
+    printf "" > /srv/rutorrent/home/db/output.log
+}
+function _installBTSync9() {
+    exit
+}
 
-_installBTSync
+echo "Installing btsync keys and sources ... " >>"${OUTTO}" 2>&1;_installBTSync1
+echo "Updating system ... " >>"${OUTTO}" 2>&1;_installBTSync2
+echo "Installing btsync ... " >>"${OUTTO}" 2>&1;_installBTSync3
+echo "Setting up btsync permissions ... " >>"${OUTTO}" 2>&1;_installBTSync4
+echo "Setting up btsync configurations ... " >>"${OUTTO}" 2>&1;_installBTSync5
+echo "Starting btsync ... " >>"${OUTTO}" 2>&1;_installBTSync6
+_installBTSync7
+_installBTSync8
+_installBTSync9

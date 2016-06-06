@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# [Quick Box :: Remove edit plugin]
+# [Quick Box :: Install autodl-irssi plugin]
 #
 # GitHub _ packages:   https://github.com/QuickBox/quickbox_packages
 # GitHub _ plugins:    https://github.com/QuickBox/quickbox_rutorrent-plugins
@@ -17,17 +17,23 @@
 #
 OUTTO=/srv/rutorrent/home/db/output.log
 
-function _removeplugin-edit() {
+function _installplugin-autodlirssi() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
-  echo "Uninstalling the edit plugin ... " >>"${OUTTO}" 2>&1;
-  PLUGIN="edit"
+  echo "Accessing autodl_irssi in the plugin vault ... " >>"${OUTTO}" 2>&1;
+  PLUGINVAULT="/root/quickbox_rutorrent-plugins"; cd "${rutorrent}plugins"
+  sleep 5
+
+  echo "Installing autodl_irssi plugin ... " >>"${OUTTO}" 2>&1;
+  PLUGIN="autodl_irssi"
     for i in $PLUGIN; do
-      rm -rf "${rutorrent}plugins/$i"
+      cp -R "${PLUGINVAULT}$i" .
     done
   sleep 5
 
-  echo "Edit Plugin Uninstall Complete!" >>"${OUTTO}" 2>&1;
+  echo "Adjusting permissions ... " >>"${OUTTO}" 2>&1;
+  chown -R www-data: ${rutorrent}plugins/$PLUGIN
+  echo "Autodl_irssi Plugin Install Complete!" >>"${OUTTO}" 2>&1;
   sleep 5
 
   echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
@@ -37,4 +43,4 @@ function _removeplugin-edit() {
   exit
 }
 
-_removeplugin-edit
+_installplugin-autodlirssi

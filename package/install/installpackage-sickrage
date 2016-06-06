@@ -2,9 +2,9 @@
 #
 # [Quick Box :: Install SickRage package]
 #
-# GitHub:   https://github.com/Swizards/QuickBox
-# Author:   QuickBox.io
-# URL:      https://plaza.quickbox.io/
+# GitHub:   https://github.com/QuickBox/quickbox_packages
+# Author:   QuickBox.IO | JMSolo
+# URL:      https://plaza.quickbox.io
 #
 # QuickBox Copyright (C) 2016 Swizards.net
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
@@ -15,16 +15,20 @@
 #   under the GPL along with build & install instructions.
 #
 MASTER=$(cat /srv/rutorrent/home/db/master.txt)
-OUTTO="/root/quick-box.log"
-sickrage="/root/quickbox_setup/templates/sickrage.template"
+OUTTO=/srv/rutorrent/home/db/output.log
+local_setup=/root/quickbox_setup/
 
-function _installSickRage() {
+function _installSickRage1() {
   sudo git clone https://github.com/SickRage/SickRage.git  /home/"${MASTER}"/.sickrage
+}
+function _installSickRage2() {
   touch /install/.sickrage.lock
   chown "${MASTER}":"${MASTER}" -R /home/"${MASTER}"/.sickrage
+}
+function _installSickRage3() {
   cd /home/"${MASTER}"/.sickrage/runscripts
   cd /etc/init.d/
-  cp ${sickrage} /etc/init.d/sickrage
+  cp ${local_setup}templates/sickrage.template /etc/init.d/sickrage
   sudo chmod +x /etc/init.d/sickrage
 
 echo -e "SR_HOME=/home/${MASTER}/.sickrage/
@@ -32,8 +36,28 @@ SR_DATA=/home/${MASTER}/.sickrage/
 SR_USER=${MASTER}" > /etc/default/sickrage
 
   update-rc.d sickrage defaults
+}
+function _installSickRage4() {
   sudo service sickrage start
-
 }
 
-_installSickRage
+function _installSickRage5() {
+  echo "SickRage Install Complete!" >>"${OUTTO}" 2>&1;
+  sleep 5
+  echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
+  sleep 5
+}
+function _installSickRage6() {
+  printf "" > /srv/rutorrent/home/db/output.log
+}
+function _installSickRage7() {
+  exit
+}
+
+echo "Installing sickrage ... " >>"${OUTTO}" 2>&1;_installSickRage1
+echo "Setting up sickrage permissions ... " >>"${OUTTO}" 2>&1;_installSickRage2
+echo "Setting up sickrage configurations ... " >>"${OUTTO}" 2>&1;_installSickRage3
+echo "Starting sickrage ... " >>"${OUTTO}" 2>&1;_installSickRage4
+_installSickRage5
+_installSickRage6
+_installSickRage7
