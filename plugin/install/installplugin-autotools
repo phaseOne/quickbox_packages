@@ -20,7 +20,7 @@ OUTTO=/srv/rutorrent/home/db/output.log
 function _installplugin-autotools() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
-  echo "Accessing autodl in the plugin vault ... " >>"${OUTTO}" 2>&1;
+  echo "Accessing autotools in the plugin vault ... " >>"${OUTTO}" 2>&1;
   PLUGINVAULT="/root/quickbox_rutorrent-plugins/"; cd "${rutorrent}plugins"
   sleep 5
 
@@ -38,7 +38,7 @@ function _installplugin-autotools() {
 
   echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
   sleep 5
-  
+
   printf "" > /srv/rutorrent/home/db/output.log
   exit
 }
