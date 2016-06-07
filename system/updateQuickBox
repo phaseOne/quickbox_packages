@@ -207,7 +207,7 @@ IFACE=$(echo -n "${Reth0}");
 OK=$(echo -e "[ ${bold}${green}DONE${normal} ]")
 M1=$(cat /etc/apache2/master.txt) >> /dev/null 2>&1
 A1=$(cat /srv/rutorrent/home/db/master.txt) >> /dev/null 2>&1
-rtorrent=/srv/rutorrent/
+rutorrent=/srv/rutorrent/
 usrbin=/usr/local/bin/
 
 # QuickBox Update STRUCTURE
