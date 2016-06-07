@@ -221,7 +221,7 @@ _checkroot
 _askversion
 _askcontinue
 if [[ ${qbversion} == "v23" ]]; then
-  echo -n "Setting up git stash for saved changes ... "_setstash
+  echo -n "Setting up git stash for saved changes ... ";_setstash;echo
 fi
 echo -n "Pulling QuickBox Ecosystem ... ";_downloadrepos;echo
 _bashrc
