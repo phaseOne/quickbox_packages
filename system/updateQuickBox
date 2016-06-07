@@ -59,6 +59,11 @@ function _askcontinue() {
   echo
 }
 
+function _setstash() {
+  git config --global user.email "root@localhost"
+  git config --global user.name "quickbox"
+}
+
 function _downloadrepos() {
   if [[ ${qbversion} == "v22" ]]; then
     git clone https://github.com/QuickBox/quickbox_setup /root/quickbox_setup >> /dev/null 2>&1
@@ -210,6 +215,9 @@ echo -n "Sending update output to /root/quickbox.update.${cyan}$PPID${normal}.lo
 _checkroot
 _askversion
 _askcontinue
+if [[ ${qbversion} == "v23" ]]; then
+  echo -n "Setting up git stash for saved changes ... "_setstash
+fi
 echo -n "Pulling QuickBox Ecosystem ... ";_downloadrepos;echo
 _bashrc
 echo -n "Updating QuickBox System Commands & Packages ... ";_updatesyscommands;echo
