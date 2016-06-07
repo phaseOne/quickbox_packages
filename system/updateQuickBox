@@ -93,7 +93,6 @@ function _updatesyscommands() {
     if [[ -d ${usrbin}quickbox ]]; then rm -r ${usrbin}quickbox;fi
     mkdir -p ${usrbin}quickbox
     cp -r ${local_packages}/. ${usrbin}quickbox
-    dos2unix $(find /usr/local/bin/quickbox -type f) >>"${OUTTO}" 2>&1;
     chmod +x $(find /usr/local/bin/quickbox -type f) >>"${OUTTO}" 2>&1;
     if [[ -f /usr/bin/reload ]]; then rm /usr/bin/reload;fi
     cp ${usrbin}quickbox/system/reload /usr/bin/reload
