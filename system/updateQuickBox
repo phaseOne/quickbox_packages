@@ -180,6 +180,12 @@ function _perms() {
   chgrp -R www-data /srv/rutorrent/*
   chmod -R g+rw /srv/rutorrent/*
   sh -c 'find /srv/rutorrent/* -type d -print0 | sudo xargs -0 chmod g+s'
+  chmod +x /etc/cron.d/set_interface
+  if [[ ${qbversion} == "v22" ]]; then
+    chmod +x /home/"${M1}"/.startup
+  else
+    chmod +x /home/"${A1}"/.startup
+  fi
 }
 
 function _fin() {
