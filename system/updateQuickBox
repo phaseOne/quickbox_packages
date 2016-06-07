@@ -116,7 +116,7 @@ function _installdir() {
 function _updaterutorrent() {
   cd /srv
   if [[ ${qbversion} == "v22" ]]; then
-    #if [[ -d ${rtorrent} ]]; then rm -rf rutorrent;fi
+    #if [[ -d ${rutorrent} ]]; then rm -rf rutorrent;fi
     #mkdir rutorrent
     cp -R ${local_rutorrent}/. rutorrent
   else
@@ -125,9 +125,9 @@ function _updaterutorrent() {
 }
 
 function _updaterutorrent-plugins() {
-  cd ${rtorrent}
+  cd ${rutorrent}
   if [[ ${qbversion} == "v22" ]]; then
-    #if [[ -d ${rtorrent}plugins ]]; then rm -rf plugins;fi
+    #if [[ -d ${rutorrent}plugins ]]; then rm -rf plugins;fi
     #mkdir plugins
     cp -R ${local_rplugins}/. plugins
   else
@@ -139,8 +139,8 @@ function _updaterutorrent-plugins() {
 function _updatedashboard() {
   cd ${rutorrent}
   if [[ ${qbversion} == "v22" ]]; then
-    if [[ -d ${rtorrent}home ]]; then rm -rf home;fi
-    cd && mkdir -p ${rtorrent}home
+    if [[ -d ${rutorrent}home ]]; then rm -rf home;fi
+    cd && mkdir -p ${rutorrent}home
     cp -R ${local_dashboard}. ${rutorrent}home
   else
     cd ${rutorrent}home && git stash &&  git pull
@@ -148,8 +148,8 @@ function _updatedashboard() {
 }
 
 function _updatemasterdb() {
-  if [[ -f /etc/apache2/master.txt ]]; then cp /etc/apache2/master.txt ${rtorrent}home/db/master.txt;fi
-  printf "${IFACE}" > ${rtorrent}home/db/interface.txt
+  if [[ -f /etc/apache2/master.txt ]]; then cp /etc/apache2/master.txt ${rutorrent}home/db/master.txt;fi
+  printf "${IFACE}" > ${rutorrent}home/db/interface.txt
 }
 
 function _updatesudo() {
