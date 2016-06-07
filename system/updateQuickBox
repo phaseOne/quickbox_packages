@@ -137,11 +137,11 @@ function _updaterutorrent-plugins() {
 
 # function to install dashboard (23)
 function _updatedashboard() {
-  cd ${rtorrent}
+  cd ${rutorrent}
   if [[ ${qbversion} == "v22" ]]; then
     if [[ -d ${rtorrent}home ]]; then rm -rf home;fi
     cd && mkdir -p ${rtorrent}home
-    cp -R ${local_dashboard}/. ${rtorrent}home
+    cp -R ${local_dashboard}. ${rutorrent}home
   else
     cd ${rutorrent}home && git stash &&  git pull
   fi
