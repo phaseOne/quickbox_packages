@@ -72,11 +72,12 @@ function _downloadrepos() {
     git clone https://github.com/QuickBox/quickbox_packages /root/quickbox_packages >> /dev/null 2>&1
     git clone https://github.com/QuickBox/quickbox_dashboard /root/quickbox_dashboard >> /dev/null 2>&1
   else
-    echo -n "quickbox_setup" && cd ${local_setup} && git pull;
-    echo -n "quickbox_rutorrent" && cd ${local_rutorrent} && git pull;
-    echo -n "quickbox_rutorrent-plugins" && cd ${local_rplugins} && git pull;
-    echo -n "quickbox_packages" && cd ${local_packages} && git pull;
-    echo -n "quickbox_dashboard" && cd ${local_dashboard} && git pull
+    echo
+    echo -n "quickbox_setup             :: " && cd ${local_setup} && git pull
+    echo -n "quickbox_rutorrent         :: " && cd ${local_rutorrent} && git pull
+    echo -n "quickbox_rutorrent-plugins :: " && cd ${local_rplugins} && git pull
+    echo -n "quickbox_packages          :: " && cd ${local_packages} && git pull
+    echo -n "quickbox_dashboard         :: " && cd ${local_dashboard} && git pull
   fi
 }
 
@@ -98,7 +99,7 @@ function _updatesyscommands() {
     cp ${usrbin}quickbox/system/reload /usr/bin/reload
     chmod +x /usr/bin/reload
   else
-    cd ${usrbin}quickbox && git pull
+    cd ${usrbin}quickbox && git stash &&  git pull
   fi
 }
 
@@ -119,7 +120,7 @@ function _updaterutorrent() {
     #mkdir rutorrent
     cp -R ${local_rutorrent}/. rutorrent
   else
-    cd ${rutorrent} && git pull
+    cd ${rutorrent} && git stash &&  git pull
   fi
 }
 
@@ -130,7 +131,7 @@ function _updaterutorrent-plugins() {
     #mkdir plugins
     cp -R ${local_rplugins}/. plugins
   else
-    cd ${rutorrent}plugins && git pull
+    cd ${rutorrent}plugins && git stash &&  git pull
   fi
 }
 
@@ -142,7 +143,7 @@ function _updatedashboard() {
     cd && mkdir -p ${rtorrent}home
     cp -R ${local_dashboard}/. ${rtorrent}home
   else
-    cd ${rutorrent}home && git pull
+    cd ${rutorrent}home && git stash &&  git pull
   fi
 }
 
