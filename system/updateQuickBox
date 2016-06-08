@@ -129,7 +129,7 @@ usrbin=/usr/local/bin/
 
 # QuickBox Update STRUCTURE
 _logcheck
-echo -n "Setting up git stash for saved changes ... " >>"${OUTTO}" 2>&1;_setstash
+#echo -n "Setting up git stash for saved changes ... " >>"${OUTTO}" 2>&1;_setstash
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
 echo -n "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands
