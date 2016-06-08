@@ -23,6 +23,13 @@ function _logcheck() {
   OUTTO=/srv/rutorrent/home/db/output.log
 }
 
+if [[ -d /root/quickbox_* ]]; then
+    rm -r /root/quickbox_*
+    git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
+  elif [[ -d /root/QuickBox ]]; then
+    cd /root/
+fi
+
 function _downloadrepos() {
   echo >>"${OUTTO}" 2>&1;
   echo -n "quickbox_setup              :: " >>"${OUTTO}" 2>&1; \
