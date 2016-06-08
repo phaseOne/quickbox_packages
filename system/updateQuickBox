@@ -43,8 +43,8 @@ function _checkroot() {
 }
 
 function _askversion() {
-  echo -e "${bold}${yellow}1)${normal} versions under 2.3${normal}"
-  echo -e "${bold}${yellow}2)${normal} versions above 2.3${normal}"
+  echo -e "${bold}${yellow}1)${normal} versions < 2.3${normal}"
+  echo -e "${bold}${yellow}2)${normal} versions > 2.3${normal}"
   echo -ne "${bold}${yellow}What version of QuickBox are you updating from?${normal} [${green}1${normal}] or [2] : "; read version
   case $version in
     1 | "") qbversion=v22  ;;
@@ -66,18 +66,14 @@ function _setstash() {
 
 function _downloadrepos() {
   if [[ ${qbversion} == "v22" ]]; then
-    git clone https://github.com/QuickBox/quickbox_setup /root/quickbox_setup >> /dev/null 2>&1
-    git clone https://github.com/QuickBox/quickbox_rutorrent /root/quickbox_rutorrent >> /dev/null 2>&1
-    git clone https://github.com/QuickBox/quickbox_rutorrent-plugins /root/quickbox_rutorrent-plugins >> /dev/null 2>&1
-    git clone https://github.com/QuickBox/quickbox_packages /root/quickbox_packages >> /dev/null 2>&1
-    git clone https://github.com/QuickBox/quickbox_dashboard /root/quickbox_dashboard >> /dev/null 2>&1
+    git clone --recursive https://github.com/QuickBox/QuickBox QuickBox >> /dev/null 2>&1
   else
     echo
-    echo -n "quickbox_setup             :: " && cd ${local_setup} && git pull
-    echo -n "quickbox_rutorrent         :: " && cd ${local_rutorrent} && git pull
-    echo -n "quickbox_rutorrent-plugins :: " && cd ${local_rplugins} && git pull
-    echo -n "quickbox_packages          :: " && cd ${local_packages} && git pull
-    echo -n "quickbox_dashboard         :: " && cd ${local_dashboard} && git pull
+    echo -n "quickbox_setup              :: " && cd ${local_setup} && git pull
+    echo -n "quickbox_rutorrent          :: " && cd ${local_rutorrent} && git pull
+    echo -n "quickbox_rutorrent-plugins  :: " && cd ${local_rplugins} && git pull
+    echo -n "quickbox_packages           :: " && cd ${local_packages} && git pull
+    echo -n "quickbox_dashboard          :: " && cd ${local_dashboard} && git pull
   fi
 }
 
@@ -93,7 +89,7 @@ function _updatesyscommands() {
     done
     if [[ -d ${usrbin}quickbox ]]; then rm -r ${usrbin}quickbox;fi
     mkdir -p ${usrbin}quickbox
-    cp -r ${local_packages}/. ${usrbin}quickbox
+    cp -r ${local_packages}. ${usrbin}quickbox
     chmod +x $(find /usr/local/bin/quickbox -type f) >>"${OUTTO}" 2>&1;
     if [[ -f /usr/bin/reload ]]; then rm /usr/bin/reload;fi
     cp ${usrbin}quickbox/system/reload /usr/bin/reload
@@ -118,7 +114,7 @@ function _updaterutorrent() {
   if [[ ${qbversion} == "v22" ]]; then
     #if [[ -d ${rutorrent} ]]; then rm -rf rutorrent;fi
     #mkdir rutorrent
-    cp -R ${local_rutorrent}/. rutorrent
+    cp -R ${local_rutorrent}. rutorrent
   else
     cd ${rutorrent} && git stash &&  git pull
   fi
@@ -129,7 +125,7 @@ function _updaterutorrent-plugins() {
   if [[ ${qbversion} == "v22" ]]; then
     #if [[ -d ${rutorrent}plugins ]]; then rm -rf plugins;fi
     #mkdir plugins
-    cp -R ${local_rplugins}/. plugins
+    cp -R ${local_rplugins}. plugins
   else
     cd ${rutorrent}plugins && git stash &&  git pull
   fi
@@ -197,11 +193,11 @@ function _fin() {
 
 clear
 
-local_setup=/root/quickbox_setup/
-local_rutorrent=/root/quickbox_rutorrent/
-local_rplugins=/root/quickbox_rutorrent-plugins/
-local_packages=/root/quickbox_packages/
-local_dashboard=/root/quickbox_dashboard/
+local_setup=/root/QuickBox/setup/
+local_packages=/root/QuickBox/packages/
+local_rutorrent=/root/QuickBox/rutorrent/
+local_rplugins=/root/QuickBox/rtplugins/
+local_dashboard=/root/QuickBox/dashboard/
 
 Reth0=$(ifconfig | grep -m 1 "Link encap" | sed 's/[ \t].*//;/^\(lo\|\)$/d' | awk '{ print $1 '});
 IFACE=$(echo -n "${Reth0}");
