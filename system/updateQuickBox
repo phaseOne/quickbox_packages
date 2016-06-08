@@ -2,9 +2,10 @@
 #
 # [Quick Box :: EcoSystem Update Script]
 #
-# GitHub:   https://github.com/QuickBox/quickbox_packages
-# Author:   QuickBox.io
-# URL:      https://plaza.quickbox.io
+# GitHub  :   https://github.com/QuickBox/quickbox_packages
+# Local   :   ~/QuickBox/packages
+# Author  :   QuickBox.io
+# URL     :   https://plaza.quickbox.io
 #
 # QuickBox Copyright (C) 2016 Swizards.net
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
@@ -24,20 +25,20 @@ function _logcheck() {
 
 function _downloadrepos() {
   echo >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_setup              :: " >>"${OUTTO}" 2>&1;
-    cd ${local_setup} && git checkout master
+  echo -n "quickbox_setup              :: " >>"${OUTTO}" 2>&1; \
+    cd ${local_setup} && git checkout master \
     git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_rutorrent          :: " >>"${OUTTO}" 2>&1;
-    cd ${local_rutorrent} && git checkout master
+  echo -n "quickbox_rutorrent          :: " >>"${OUTTO}" 2>&1; \
+    cd ${local_rutorrent} && git checkout master \
     git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_rutorrent-plugins  :: " >>"${OUTTO}" 2>&1;
-    cd ${local_rplugins} && git checkout master
+  echo -n "quickbox_rutorrent-plugins  :: " >>"${OUTTO}" 2>&1; \
+    cd ${local_rplugins} && git checkout master \
     git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_packages           :: " >>"${OUTTO}" 2>&1;
-    cd ${local_packages} && git checkout master
+  echo -n "quickbox_packages           :: " >>"${OUTTO}" 2>&1; \
+    cd ${local_packages} && git checkout master \
     git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
-    cd ${local_dashboard} && git checkout master
+  echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1; \
+    cd ${local_dashboard} && git checkout master \
     git pull >>"${OUTTO}" 2>&1;
 }
 
