@@ -26,8 +26,6 @@ function _logcheck() {
 if [[ -d /root/quickbox_* ]]; then
     rm -r /root/quickbox_*
     git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
-  elif [[ -d /root/QuickBox ]]; then
-    cd /root/
 fi
 
 function _downloadrepos() {
