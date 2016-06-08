@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# [Quick Box :: Install BTSync package]
+# [Quick Box :: Clean output.log database function]
 #
 # GitHub:   https://github.com/QuickBox/quickbox_packages
 # Author:   QuickBox.IO | JMSolo
@@ -15,4 +15,4 @@
 #   under the GPL along with build & install instructions.
 #
 
-  printf "" > /srv/rutorrent/home/db/output.log
+printf "" > /srv/rutorrent/home/db/output.log
