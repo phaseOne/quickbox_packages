@@ -23,9 +23,10 @@ function _logcheck() {
   OUTTO=/srv/rutorrent/home/db/output.log
 }
 
-if [[ -d /root/quickbox_* ]]; then
-    rm -r /root/quickbox_*
-    git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
+if [[ -d /root/QuickBox ]]; then
+  find -type d -name "quickbox_*" -exec rm -rf {} \;
+else
+	git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
 fi
 
 function _downloadrepos() {
