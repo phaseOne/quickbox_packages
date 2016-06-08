@@ -35,20 +35,20 @@ function _downloadrepos() {
   cd /root/QuickBox
   git pull >>"${OUTTO}" 2>&1;
   echo
-  echo -n "quickbox_setup              :: " >>"${OUTTO}" 2>&1; \
-    cd ${local_setup} && git checkout master \
+  echo -n "quickbox_setup              :: " >>"${OUTTO}" 2>&1;
+    cd ${local_setup} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_rutorrent          :: " >>"${OUTTO}" 2>&1; \
-    cd ${local_rutorrent} && git checkout master \
+  echo -n "quickbox_rutorrent          :: " >>"${OUTTO}" 2>&1;
+    cd ${local_rutorrent} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_rutorrent-plugins  :: " >>"${OUTTO}" 2>&1; \
-    cd ${local_rplugins} && git checkout master \
+  echo -n "quickbox_rutorrent-plugins  :: " >>"${OUTTO}" 2>&1;
+    cd ${local_rplugins} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_packages           :: " >>"${OUTTO}" 2>&1; \
-    cd ${local_packages} && git checkout master \
+  echo -n "quickbox_packages           :: " >>"${OUTTO}" 2>&1;
+    cd ${local_packages} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1; \
-    cd ${local_dashboard} && git checkout master \
+  echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
+    cd ${local_dashboard} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
 }
 
@@ -135,12 +135,12 @@ _logcheck
 #echo -n "Setting up git stash for saved changes ... " >>"${OUTTO}" 2>&1;_setstash
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
-echo -n "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands
-echo -n "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel
+echo -n "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
+echo -n "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
 #echo -n "Looking for install directory for .lock files ... " >>"${OUTTO}" 2>&1;_installdir
-echo -n "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent
-echo -n "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard
-echo -n "Updating the QuickBox Sudoers template ... " >>"${OUTTO}" 2>&1;_updatesudo
-echo -n "Updating ${A1}'s .startup cronfile... " >>"${OUTTO}" 2>&1;_updatecronfile
-echo -n "Adjusting permissions ... " >>"${OUTTO}" 2>&1;_perms
+echo -n "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent;echo
+echo -n "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard;echo
+echo -n "Updating the QuickBox Sudoers template ... " >>"${OUTTO}" 2>&1;_updatesudo;echo
+echo -n "Updating ${A1}'s .startup cronfile... " >>"${OUTTO}" 2>&1;_updatecronfile;echo
+echo -n "Adjusting permissions ... " >>"${OUTTO}" 2>&1;_perms;echo
 _fin
