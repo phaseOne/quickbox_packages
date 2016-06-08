@@ -32,6 +32,9 @@ fi
 
 function _downloadrepos() {
   echo >>"${OUTTO}" 2>&1;
+  cd /root/QuickBox
+  git pull >>"${OUTTO}" 2>&1;
+  echo
   echo -n "quickbox_setup              :: " >>"${OUTTO}" 2>&1; \
     cd ${local_setup} && git checkout master \
     git pull >>"${OUTTO}" 2>&1;
@@ -106,14 +109,14 @@ function _fin() {
   echo
   echo "[QuickBox] Seddbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
   sleep 5
-  echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
-  sleep 5
-  printf "" > /srv/rutorrent/home/db/output.log
+
+  echo >>"${OUTTO}" 2>&1;
+  echo >>"${OUTTO}" 2>&1;
+  echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
 
   exit
 }
 
-clear
 
 local_setup=/root/QuickBox/setup/
 local_packages=/root/QuickBox/packages/
