@@ -107,7 +107,7 @@ function _perms() {
 
 function _fin() {
   echo
-  echo "[QuickBox] Seddbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
+  echo "[QuickBox] Seedbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
   sleep 5
 
   echo >>"${OUTTO}" 2>&1;
@@ -132,15 +132,13 @@ usrbin=/usr/local/bin/
 
 # QuickBox Update STRUCTURE
 _logcheck
-#echo -n "Setting up git stash for saved changes ... " >>"${OUTTO}" 2>&1;_setstash
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
-echo -n "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
-echo -n "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
-#echo -n "Looking for install directory for .lock files ... " >>"${OUTTO}" 2>&1;_installdir
-echo -n "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent;echo
-echo -n "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard;echo
-echo -n "Updating the QuickBox Sudoers template ... " >>"${OUTTO}" 2>&1;_updatesudo;echo
-echo -n "Updating ${A1}'s .startup cronfile... " >>"${OUTTO}" 2>&1;_updatecronfile;echo
-echo -n "Adjusting permissions ... " >>"${OUTTO}" 2>&1;_perms;echo
+echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
+echo "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
+echo "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent;echo
+echo "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard;echo
+echo "Updating the QuickBox Sudoers template ... " >>"${OUTTO}" 2>&1;_updatesudo;echo
+echo "Updating ${A1}'s .startup cronfile... " >>"${OUTTO}" 2>&1;_updatecronfile;echo
+echo "Adjusting permissions ... " >>"${OUTTO}" 2>&1;_perms;echo
 _fin
