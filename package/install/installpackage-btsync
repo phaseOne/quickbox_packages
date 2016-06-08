@@ -17,7 +17,7 @@
 MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 BTSYNCIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
 OUTTO=/srv/rutorrent/home/db/output.log
-local_setup=/root/quickbox_setup/
+local_setup=/root/QuickBox/setup/
 
 function _installBTSync1() {
   sudo sh -c 'echo "deb http://linux-packages.getsync.com/btsync/deb btsync non-free" > /etc/apt/sources.list.d/btsync.list'
@@ -49,14 +49,12 @@ function _installBTSync6() {
 function _installBTSync7() {
   echo "BTSync Install Complete!" >>"${OUTTO}" 2>&1;
   sleep 5
-  echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
-  sleep 5
+  echo >>"${OUTTO}" 2>&1;
+  echo >>"${OUTTO}" 2>&1;
+  echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
 }
 function _installBTSync8() {
-    printf "" > /srv/rutorrent/home/db/output.log
-}
-function _installBTSync9() {
-    exit
+  exit
 }
 
 echo "Installing btsync keys and sources ... " >>"${OUTTO}" 2>&1;_installBTSync1
@@ -67,4 +65,3 @@ echo "Setting up btsync configurations ... " >>"${OUTTO}" 2>&1;_installBTSync5
 echo "Starting btsync ... " >>"${OUTTO}" 2>&1;_installBTSync6
 _installBTSync7
 _installBTSync8
-_installBTSync9
