@@ -24,11 +24,21 @@ function _logcheck() {
 
 function _downloadrepos() {
   echo >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_setup              :: " >>"${OUTTO}" 2>&1; && cd ${local_setup} && git checkout master && git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_rutorrent          :: " >>"${OUTTO}" 2>&1; && cd ${local_rutorrent} && git checkout master && git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_rutorrent-plugins  :: " >>"${OUTTO}" 2>&1; && cd ${local_rplugins} && git checkout master && git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_packages           :: " >>"${OUTTO}" 2>&1; && cd ${local_packages} && git checkout master && git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1; && cd ${local_dashboard} && git checkout master && git pull >>"${OUTTO}" 2>&1;
+  echo -n "quickbox_setup              :: " >>"${OUTTO}" 2>&1; \
+    cd ${local_setup} && git checkout master \
+    git pull >>"${OUTTO}" 2>&1;
+  echo -n "quickbox_rutorrent          :: " >>"${OUTTO}" 2>&1; \
+    cd ${local_rutorrent} && git checkout master \
+    git pull >>"${OUTTO}" 2>&1;
+  echo -n "quickbox_rutorrent-plugins  :: " >>"${OUTTO}" 2>&1; \
+    cd ${local_rplugins} && git checkout master \
+    git pull >>"${OUTTO}" 2>&1;
+  echo -n "quickbox_packages           :: " >>"${OUTTO}" 2>&1; \
+    cd ${local_packages} && git checkout master \
+    git pull >>"${OUTTO}" 2>&1;
+  echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1; \
+    cd ${local_dashboard} && git checkout master \
+    git pull >>"${OUTTO}" 2>&1;
 }
 
 function _bashrc() {
