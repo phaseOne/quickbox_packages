@@ -2,8 +2,12 @@
 #
 # [Quick Box :: Remove create plugin]
 #
-# GitHub _ packages:   https://github.com/QuickBox/quickbox_packages
-# GitHub _ plugins:    https://github.com/QuickBox/quickbox_rutorrent-plugins
+# GITHUB REPOS
+# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# GitHub _ plugins   :   https://github.com/QuickBox/quickbox_rutorrent-plugins
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Local _ plugins    :   ~/QuickBox/rtplugins
 # Author:   QuickBox.IO | JMSolo
 # URL:      https://plaza.quickbox.io
 #
@@ -28,13 +32,13 @@ function _removeplugin-create() {
   sleep 5
 
   echo "Create Plugin Uninstall Complete!" >>"${OUTTO}" 2>&1;
+  
   sleep 5
+  echo >>"${OUTTO}" 2>&1;
+  echo >>"${OUTTO}" 2>&1;
+  echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
 
-  echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
-  sleep 5
-
-  printf "" > /srv/rutorrent/home/db/output.log
-  exit
+    exit
 }
 
 _removeplugin-create

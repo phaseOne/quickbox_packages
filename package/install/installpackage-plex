@@ -50,16 +50,15 @@ function _installPlex6() {
 function _installPlex7() {
     echo "Plex Install Complete!" >>"${OUTTO}" 2>&1;
     sleep 5
-    echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
-    sleep 5
+    echo >>"${OUTTO}" 2>&1;
+    echo >>"${OUTTO}" 2>&1;
+    echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
     /etc/init.d/apache2 reload
 }
 function _installPlex8() {
-    printf "" > /srv/rutorrent/home/db/output.log
-}
-function _installPlex9() {
     exit
 }
+
 
 echo "Setting up hostname for plex ... " >>"${OUTTO}" 2>&1;_installPlex1
 echo "Setting up plex apache configuration ... " >>"${OUTTO}" 2>&1;_installPlex2
@@ -69,4 +68,3 @@ echo "Installing plex ... " >>"${OUTTO}" 2>&1;_installPlex5
 echo "Starting plex ... " >>"${OUTTO}" 2>&1;_installPlex6
 _installPlex7
 _installPlex8
-_installPlex9

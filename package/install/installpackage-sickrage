@@ -16,7 +16,7 @@
 #
 MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 OUTTO=/srv/rutorrent/home/db/output.log
-local_setup=/root/quickbox_setup/
+local_setup=/root/QuickBox/setup/
 
 function _installSickRage1() {
   sudo git clone https://github.com/SickRage/SickRage.git  /home/"${MASTER}"/.sickrage
@@ -44,13 +44,11 @@ function _installSickRage4() {
 function _installSickRage5() {
   echo "SickRage Install Complete!" >>"${OUTTO}" 2>&1;
   sleep 5
-  echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
-  sleep 5
+  echo >>"${OUTTO}" 2>&1;
+  echo >>"${OUTTO}" 2>&1;
+  echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
 }
 function _installSickRage6() {
-  printf "" > /srv/rutorrent/home/db/output.log
-}
-function _installSickRage7() {
   exit
 }
 
@@ -60,4 +58,3 @@ echo "Setting up sickrage configurations ... " >>"${OUTTO}" 2>&1;_installSickRag
 echo "Starting sickrage ... " >>"${OUTTO}" 2>&1;_installSickRage4
 _installSickRage5
 _installSickRage6
-_installSickRage7
