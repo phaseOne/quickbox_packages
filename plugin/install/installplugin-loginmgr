@@ -25,7 +25,7 @@ function _installplugin-loginmgr() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
   echo "Accessing loginmgr in the plugin vault ... " >>"${OUTTO}" 2>&1;
-  PLUGINVAULT="/root/QuickBox/plugins/"; cd "${rutorrent}plugins"
+  PLUGINVAULT="/root/QuickBox/rtplugins/"; cd "${rutorrent}plugins"
   sleep 5
 
   echo "Installing loginmgr plugin ... " >>"${OUTTO}" 2>&1;
