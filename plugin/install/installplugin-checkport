@@ -25,7 +25,7 @@ function _installplugin-checkport() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
   echo "Accessing check_port in the plugin vault ... " >>"${OUTTO}" 2>&1;
-  PLUGINVAULT="/root/quickbox_rutorrent-plugins/"; cd "${rutorrent}plugins"
+  PLUGINVAULT="/root/QuickBox/plugins/"; cd "${rutorrent}plugins"
   sleep 5
 
   echo "Installing checkport plugin ... " >>"${OUTTO}" 2>&1;
