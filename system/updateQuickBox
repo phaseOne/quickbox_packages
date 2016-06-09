@@ -23,11 +23,14 @@ function _logcheck() {
   OUTTO=/srv/rutorrent/home/db/output.log
 }
 
+function _directorycheck() {
+cd /root
 if [[ -d /root/QuickBox ]]; then
   find -type d -name "quickbox_*" -exec rm -rf {} \;
 else
-	git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
+  git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
 fi
+}
 
 function _downloadrepos() {
   echo >>"${OUTTO}" 2>&1;
@@ -131,6 +134,7 @@ usrbin=/usr/local/bin/
 
 # QuickBox Update STRUCTURE
 _logcheck
+_directorycheck
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
