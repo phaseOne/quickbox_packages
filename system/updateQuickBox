@@ -24,10 +24,15 @@ function _logcheck() {
 }
 
 function _directorycheck() {
-cd /root
 if [[ -d /root/QuickBox ]]; then
+  cd /root
   find -type d -name "quickbox_*" -exec rm -rf {} \;
+  cd /usr/local/bin/quickbox/
+  find -type d -name ".git" -exec rm -rf {} \;
+  cd /srv/rutorrent/
+  find -type d -name ".git*" -exec rm -rf {} \;
 else
+  cd /root
   git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
 fi
 }
