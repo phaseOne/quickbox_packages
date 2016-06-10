@@ -110,6 +110,7 @@ function _perms() {
   sh -c 'find /srv/rutorrent/* -type d -print0 | sudo xargs -0 chmod g+s'
   chmod +x /etc/cron.d/set_interface
   chmod +x /home/"${A1}"/.startup
+  chmod +x $(find /usr/local/bin/quickbox -type f)
 }
 
 function _fin() {
