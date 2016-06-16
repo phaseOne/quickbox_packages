@@ -114,6 +114,7 @@ function _perms() {
 }
 
 function _fin() {
+  source ~/.bashrc >> /dev/null 2>&1
   echo
   echo "[QuickBox] Seedbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
   sleep 5
