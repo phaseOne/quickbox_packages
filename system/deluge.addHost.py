@@ -10,4 +10,4 @@ import hashlib
 import sys
 import time
 
-hashlib.sha1(str(time.time())).hexdigest()
+print hashlib.sha1(str(time.time())).hexdigest()
