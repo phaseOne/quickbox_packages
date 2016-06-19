@@ -19,7 +19,8 @@ OUTTO="/root/quick-box.log"
 local_setup=/root/QuickBox/setup/
 
 function _removeDeluge() {
-  pkill -f deluge
+  killall deluged
+  killall deluge-web
   cp "${local_setup}"templates/startup.template /home/"${username}"/.startup
     sleep 5
   sudo rm /install/.deluge.lock
