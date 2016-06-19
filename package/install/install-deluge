@@ -1,0 +1,72 @@
+#!/bin/bash
+#
+# [Quick Box :: Install Deluge package]
+#
+# GitHub:   https://github.com/QuickBox/quickbox_packages
+# Author:   QuickBox.IO | liara
+# URL:      https://plaza.quickbox.io
+#
+# QuickBox Copyright (C) 2016
+# Licensed under GNU General Public License v3.0 GPL-3 (in short)
+#
+#   You may copy, distribute and modify the software as long as you track
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
+#   under the GPL along with build & install instructions.
+#
+username=$(cat /srv/rutorrent/home/db/master.txt)
+udb=$(cat /root/$username.info.db)
+ip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+OUTTO=/srv/rutorrent/home/db/output.log
+local_setup=/root/QuickBox/setup/
+
+function _installDeluge1() {
+  apt-get -q -y update
+  apt-get -q -y install deluged deluge-web
+}
+function _installDeluge2() {
+  n=$RANDOM
+  DPORT=$((n%59000+10024))
+  DWPORT=$(shuf -i 10001-11000 -n 1)
+  mkdir -p /home/"${username}"/.config/deluge/
+  chmod 755 /home/"${username}"/.config
+  chmod 755 /home/"${username}"/.config/deluge
+  cp "${local_setup}"templates/core.conf.template /home/"${username}"/.config/deluge/core.conf
+  cp "${local_setup}"templates/web.conf.template /home/"${username}"/.config/deluge/web.conf
+  sed -i "s/USERNAME/${username}/g" /home/"${username}"/.config/deluge/core.conf
+  sed -i "s/DPORT/${DPORT}/g"/home/"${username}"/.config/deluge/core.conf
+  sed -i "s/XX/${ip}/g" /home/"${username}"/.config/deluge/core.conf
+  sed -i "s/DWPORT/${DWPORT}/g" /home/"${username}"/.config/deluge/web.conf
+  echo "${udb}:10" > /home/"${username}"/.config/deluge/auth
+  chown -R "${username}.${username}" /home/"${username}"/.config/
+  mkdir /home/"${username}"/dwatch
+  chown "${username}": /home/"${username}"/dwatch
+  mkdir -p /home/"${username}"/torrents/deluge
+}
+function _installDeluge3() {
+  chown "${username}": /home/"${username}"/torrents/deluge
+  touch /install/.deluge.lock
+}
+function _installDeluge4() {
+  cp "${local_setup}"templates/startup.template /home/"${username}"/.startup
+  sed -i '/RTORRENT_CLIENT=yes/a DELUGEWEB_CLIENT=yes' /home/"${username}"/.startup
+  sed -i '/RTORRENT_CLIENT=yes/a DELUGED_CLIENT=yes' /home/"${username}"/.startup
+}
+
+function _installDeluge5() {
+  echo "Deluge Install Complete!" >>"${OUTTO}" 2>&1;
+  sleep 5
+  echo >>"${OUTTO}" 2>&1;
+  echo >>"${OUTTO}" 2>&1;
+  echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
+}
+function _installDeluge6() {
+  exit
+}
+
+echo "Installing deluge ... " >>"${OUTTO}" 2>&1;_installSickDeluge1
+echo "Setting up deluge configurations ... " >>"${OUTTO}" 2>&1;_installDeluge2
+echo "Setting up deluge permissions ... " >>"${OUTTO}" 2>&1;_installDeluge3
+echo "Setting up cronfile and starting deluge ... " >>"${OUTTO}" 2>&1;_installDeluge4
+_installDeluge5
+_installDeluge6
