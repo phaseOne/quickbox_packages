@@ -27,24 +27,36 @@ function _installDeluge1() {
 function _installDeluge2() {
   n=$RANDOM
   DPORT=$((n%59000+10024))
+  DWSALT=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+  DWP=$(python ${local_packages}/system/deluge.Userpass.py ${passwd} ${DWSALT})
+  DUDID=$(python ${local_packages}/system/deluge.addHost.py)
+  # -- Secondary awk command -- #
+  #DPORT=$(awk -v min=59000 -v max=69024 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
   DWPORT=$(shuf -i 10001-11000 -n 1)
-  mkdir -p /home/"${username}"/.config/deluge/
-  chmod 755 /home/"${username}"/.config
-  chmod 755 /home/"${username}"/.config/deluge
-  cp "${local_setup}"templates/core.conf.template /home/"${username}"/.config/deluge/core.conf
-  cp "${local_setup}"templates/web.conf.template /home/"${username}"/.config/deluge/web.conf
-  sed -i "s/USERNAME/${username}/g" /home/"${username}"/.config/deluge/core.conf
-  sed -i "s/DPORT/${DPORT}/g"/home/"${username}"/.config/deluge/core.conf
-  sed -i "s/XX/${ip}/g" /home/"${username}"/.config/deluge/core.conf
-  sed -i "s/DWPORT/${DWPORT}/g" /home/"${username}"/.config/deluge/web.conf
-  echo "${udb}:10" > /home/"${username}"/.config/deluge/auth
-  chown -R "${username}.${username}" /home/"${username}"/.config/
-  mkdir /home/"${username}"/dwatch
-  chown "${username}": /home/"${username}"/dwatch
-  mkdir -p /home/"${username}"/torrents/deluge
+  mkdir -p /home/${username}/.config/deluge/
+  chmod 755 /home/${username}/.config
+  chmod 755 /home/${username}/.config/deluge
+  cp ${local_setup}templates/core.conf.template /home/${username}/.config/deluge/core.conf
+  cp ${local_setup}templates/web.conf.template /home/${username}/.config/deluge/web.conf
+  cp ${local_setup}templates/hostlist.conf.1.2.template /home/${username}/.config/deluge/hostlist.conf.1.2
+  sed -i "s/USERNAME/${username}/g" /home/${username}/.config/deluge/core.conf
+  sed -i "s/DPORT/${DPORT}/g" /home/${username}/.config/deluge/core.conf
+  sed -i "s/XX/${ip}/g" /home/${username}/.config/deluge/core.conf
+  sed -i "s/DWPORT/${DWPORT}/g" /home/${username}/.config/deluge/web.conf
+  sed -i "s/DWSALT/${DWSALT}/g" /home/${username}/.config/deluge/web.conf
+  sed -i "s/DWP/${DWP}/g" /home/${username}/.config/deluge/web.conf
+  sed -i "s/DUDID/${DUDID}/g" /home/${username}/.config/deluge/hostlist.conf.1.2
+  sed -i "s/DPORT/${DPORT}/g" /home/${username}/.config/deluge/hostlist.conf.1.2
+  sed -i "s/USERNAME/${username}/g" /home/${username}/.config/deluge/hostlist.conf.1.2
+  sed -i "s/PASSWD/${passwd}/g" /home/${username}/.config/deluge/hostlist.conf.1.2
+  echo "${udb}:10" > /home/${username}/.config/deluge/auth
 }
 function _installDeluge3() {
-  chown "${username}": /home/"${username}"/torrents/deluge
+  chown -R ${username}.${username} /home/${username}/.config/
+  mkdir /home/${username}/dwatch
+  chown ${username}: /home/${username}/dwatch
+  mkdir -p /home/${username}/torrents/deluge
+  chown ${username}: /home/${username}/torrents/deluge
   touch /install/.deluge.lock
 }
 function _installDeluge4() {
