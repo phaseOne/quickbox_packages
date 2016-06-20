@@ -27,10 +27,6 @@ function _directorycheck() {
 if [[ -d /root/QuickBox ]]; then
   cd /root
   find -type d -name "quickbox_*" -exec rm -rf {} \;
-  cd /usr/local/bin/quickbox/
-  find -type d -name ".git" -exec rm -rf {} \;
-  cd /srv/rutorrent/
-  find -type d -name ".git*" -exec rm -rf {} \;
 else
   cd /root
   git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
@@ -89,7 +85,8 @@ function _updaterutorrent-plugins() {
 # function to install dashboard (23)
 function _updatedashboard() {
   cd ${rutorrent}
-  cp -R ${local_dashboard}. ${rutorrent}home
+  rsync -aP --exclude=disk_*.php ${local_dashboard}* ${rutorrent}home
+  #cp -R ${local_dashboard}. ${rutorrent}home
 }
 
 function _updatesudo() {
@@ -104,9 +101,9 @@ function _updatecronfile() {
 
 # adjust permissions function (9)
 function _perms() {
-  chown -R www-data /srv/rutorrent/*
-  chgrp -R www-data /srv/rutorrent/*
-  chmod -R g+rw /srv/rutorrent/*
+  chown -R www-data ${rutorrent}*
+  chgrp -R www-data ${rutorrent}*
+  chmod -R g+rw ${rutorrent}*
   sh -c 'find /srv/rutorrent/* -type d -print0 | sudo xargs -0 chmod g+s'
   chmod +x /etc/cron.d/set_interface
   chmod +x /home/"${A1}"/.startup
