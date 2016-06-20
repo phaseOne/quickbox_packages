@@ -1,0 +1,86 @@
+#!/bin/bash
+#
+# [Quick Box :: Install Sonarr-NzbDrone package]
+#
+# GitHub:   https://github.com/QuickBox/quickbox_packages
+# Author:   QuickBox.IO | JMSolo
+# URL:      https://plaza.quickbox.io
+#
+# QuickBox Copyright (C) 2016
+# Licensed under GNU General Public License v3.0 GPL-3 (in short)
+#
+#   You may copy, distribute and modify the software as long as you track
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
+#   under the GPL along with build & install instructions.
+#
+#################################################################################
+function _string() { perl -le 'print map {(a..z,A..Z,0..9)[rand 62] } 0..pop' 15 ; }
+#################################################################################
+
+OUTTO=/srv/rutorrent/home/db/output.log
+local_setup=/root/QuickBox/setup/
+local_packages=/root/QuickBox/packages/
+username=$(cat /srv/rutorrent/home/db/master.txt)
+
+
+function _installSonarr1() {
+  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+  echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+}
+
+function _installSonarr2() {
+  sudo apt-get install apt-transport-https -y
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FDA5DFFC
+  echo "deb https://apt.sonarr.tv/ master main" | sudo tee -a /etc/apt/sources.list.d/sonarr.list
+}
+
+function _installSonarr3() {
+  sudo apt-get -y update
+}
+
+function _installSonarr4() {
+  sudo apt-get install nzbdrone -y
+  sleep 5
+  sudo rm /etc/apt/sources.list.d/sonarr.list
+}
+
+function _installSonarr5() {
+  sudo chown -R "${username}":"${username}" /opt/NzbDrone
+  sleep 2
+}
+
+function _installSonarr6() {
+  cp "${local_setup}"templates/sonarr.template /etc/init.d/sonarr
+  sed -i "s/USERNAME/${username}/g" /etc/init.d/sonarr
+  sudo chmod +x /etc/init.d/sonarr
+  sleep 2
+}
+
+function _installSonarr7() {
+  sudo update-rc.d sonarr defaults
+  sleep 2
+}
+
+function _installSonarr8() {
+  echo "Sonarr Install Complete!" >>"${OUTTO}" 2>&1;
+  sleep 5
+  echo >>"${OUTTO}" 2>&1;
+  echo >>"${OUTTO}" 2>&1;
+  echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
+}
+function _installSonarr9() {
+  exit
+}
+
+
+
+echo "Installing latest mono source repository ... " >>"${OUTTO}" 2>&1;_installSonarr1
+echo "Adding source repositories for Sonarr-Nzbdrone ... " >>"${OUTTO}" 2>&1;_installSonarr2
+echo "Updating your system with new sources ... " >>"${OUTTO}" 2>&1;_installSonarr3
+echo "Installing Sonarr-Nzbdrone ... " >>"${OUTTO}" 2>&1;_installSonarr4
+echo "Setting permissions to ${username} ... " >>"${OUTTO}" 2>&1;_installSonarr5
+echo "Setting up Sonarr as a service ... " >>"${OUTTO}" 2>&1;_installSonarr6
+echo "Setting Sonarr to fire on boot ... " >>"${OUTTO}" 2>&1;_installSonarr7
+_installSonarr8
+_installSonarr9
