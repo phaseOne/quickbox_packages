@@ -75,7 +75,7 @@ function _installDeluge6() {
   exit
 }
 
-echo "Installing deluge ... " >>"${OUTTO}" 2>&1;_installSickDeluge1
+echo "Installing deluge ... " >>"${OUTTO}" 2>&1;_installDeluge1
 echo "Setting up deluge configurations ... " >>"${OUTTO}" 2>&1;_installDeluge2
 echo "Setting up deluge permissions ... " >>"${OUTTO}" 2>&1;_installDeluge3
 echo "Setting up cronfile and starting deluge ... " >>"${OUTTO}" 2>&1;_installDeluge4
