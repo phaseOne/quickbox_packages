@@ -15,7 +15,7 @@
 #   under the GPL along with build & install instructions.
 #
 username=$(cat /srv/rutorrent/home/db/master.txt)
-udb=$(cat /root/$username.info.db)
+passwd=$(cat /root/${username}.info | cut -d ":" -f 3 | cut -d "@" -f 1)
 ip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
 OUTTO=/srv/rutorrent/home/db/output.log
 local_setup=/root/QuickBox/setup/
@@ -33,6 +33,8 @@ function _installDeluge1() {
 }
 function _installDeluge2() {
   mkdir -p /home/${username}/.config/deluge/
+  printf "${username}:${passwd}" > /root/${username}.info.db
+  udb=$(cat /root/$username.info.db)
   chmod 755 /home/${username}/.config
   chmod 755 /home/${username}/.config/deluge
   cp ${local_setup}templates/core.conf.template /home/${username}/.config/deluge/core.conf
