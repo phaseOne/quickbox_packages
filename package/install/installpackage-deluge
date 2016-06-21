@@ -67,8 +67,8 @@ function _installDeluge3() {
 }
 function _installDeluge4() {
   cp "${local_setup}"templates/startup.template /home/"${username}"/.startup
-  sed -i 's/DELUGEWEB_CLIENT=yes/DELUGEWEB_CLIENT=yes/g' /home/"${username}"/.startup
-  sed -i 's/DELUGED_CLIENT=yes/DELUGED_CLIENT=yes/g' /home/"${username}"/.startup
+  sed -i 's/DELUGEWEB_CLIENT=no/DELUGEWEB_CLIENT=yes/g' /home/"${username}"/.startup
+  sed -i 's/DELUGED_CLIENT=no/DELUGED_CLIENT=yes/g' /home/"${username}"/.startup
 }
 
 function _installDeluge5() {
