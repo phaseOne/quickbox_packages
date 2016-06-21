@@ -46,6 +46,7 @@ function _x2go() {
 		apt-get -qq -y --force-yes install iceweasel >/dev/null 2>&1
 		echo ${ok}
 }
+
 OUTTO=/srv/rutorrent/home/db/output.log
 distribution=$(lsb_release -is)
 release=$(lsb_release -cs)
@@ -58,6 +59,10 @@ echo >>"${OUTTO}" 2>&1;
 echo >>"${OUTTO}" 2>&1;
 echo -n "Installing X2go ... " >>"${OUTTO}" 2>&1; _x2go
 touch /install/.x2go.lock
+echo >>"${OUTTO}" 2>&1;
+echo >>"${OUTTO}" 2>&1;
+echo "X2go Install Complete!" >>"${OUTTO}" 2>&1;
+sleep 5
 echo >>"${OUTTO}" 2>&1;
 echo >>"${OUTTO}" 2>&1;
 echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
