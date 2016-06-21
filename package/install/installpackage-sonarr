@@ -65,13 +65,18 @@ function _installSonarr7() {
 }
 
 function _installSonarr8() {
+  sudo service sonarr start
+  sleep 2
+}
+
+function _installSonarr9() {
   echo "Sonarr Install Complete!" >>"${OUTTO}" 2>&1;
   sleep 5
   echo >>"${OUTTO}" 2>&1;
   echo >>"${OUTTO}" 2>&1;
   echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
 }
-function _installSonarr9() {
+function _installSonarr10() {
   exit
 }
 
@@ -84,5 +89,6 @@ echo "Installing Sonarr-Nzbdrone ... " >>"${OUTTO}" 2>&1;_installSonarr4
 echo "Setting permissions to ${username} ... " >>"${OUTTO}" 2>&1;_installSonarr5
 echo "Setting up Sonarr as a service ... " >>"${OUTTO}" 2>&1;_installSonarr6
 echo "Setting Sonarr to fire on boot ... " >>"${OUTTO}" 2>&1;_installSonarr7
-_installSonarr8
+echo "Starting Sonarr service ... " >>"${OUTTO}" 2>&1;_installSonarr8
 _installSonarr9
+_installSonarr10
