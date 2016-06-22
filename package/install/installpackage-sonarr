@@ -43,12 +43,12 @@ function _installSonarr2() {
 function _installSonarr3() {
   sudo apt-get -y update
   if [[ $distribution == Debian ]]; then
-    sudo apt-get install mono-complete
+    sudo apt-get install -y mono-devel
   fi
 }
 
 function _installSonarr4() {
-  sudo apt-get install nzbdrone -y
+  sudo apt-get install -y nzbdrone
   sleep 5
   sudo rm /etc/apt/sources.list.d/sonarr.list
   sed -i 's/SONARR=no/SONARR=yes/g' /home/"${username}"/.startup
