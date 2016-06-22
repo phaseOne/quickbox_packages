@@ -33,6 +33,7 @@ else
   rm quassel-core*
   apt install -f -y -q
   touch /install/.quassel.lock
+fi
 }
 
 
