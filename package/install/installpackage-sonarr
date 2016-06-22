@@ -22,11 +22,16 @@ OUTTO=/srv/rutorrent/home/db/output.log
 local_setup=/root/QuickBox/setup/
 local_packages=/root/QuickBox/packages/
 username=$(cat /srv/rutorrent/home/db/master.txt)
-
+distribution=$(lsb_release -is)
 
 function _installSonarr1() {
-  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-  echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+  if [[ $distribution == Ubuntu ]]; then
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+    echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+  else
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+    echo "deb http://debian.meebey.net/pkg-mono ./" | sudo tee /etc/apt/sources.list.d/mono-meeby.list
+  fi
 }
 
 function _installSonarr2() {
@@ -37,6 +42,9 @@ function _installSonarr2() {
 
 function _installSonarr3() {
   sudo apt-get -y update
+  if [[ $distribution == Debian ]]; then
+    sudo apt-get install mono-complete
+  fi
 }
 
 function _installSonarr4() {
