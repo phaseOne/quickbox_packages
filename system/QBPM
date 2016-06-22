@@ -30,10 +30,10 @@ function _function() {
     if [[ $function == install ]]; then
       echo -n "Starting installer ... "
       _install
-    if [[ $function == remove ]]; then
+    elif [[ $function == remove ]]; then
       echo -n "Starting uninstaller ... "
       _remove
-    if [[ $function == quit ]]; then
+    elif [[ $function == quit ]]; then
       _exit
     fi
 }
