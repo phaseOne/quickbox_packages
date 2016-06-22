@@ -1,0 +1,286 @@
+#!/bin/bash
+#
+# [Quick Box :: QuickBox Package Manager Batch CLI Installer]
+#
+# GitHub  :   https://github.com/QuickBox/quickbox_packages
+# Local   :   ~/QuickBox/packages
+# Author  :   QuickBox.io | liara
+# URL     :   https://plaza.quickbox.io
+#
+# QuickBox Copyright (C) 2016 Swizards.net
+# Licensed under GNU General Public License v3.0 GPL-3 (in short)
+#
+#   You may copy, distribute and modify the software as long as you track
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
+#   under the GPL along with build & install instructions.
+#
+#################################################################################
+
+intro() {
+  whiptail --title "QuickBox Package Manager" --msgbox "Welcome to the QuickBox Package Manger! Using this script you can choose to install and remove the packages contained within our quickbox package repository." 8 78
+}
+
+function() {
+function=$(whiptail —menu "Install or Uninstall or Quit?" 10 40 4 \
+             install "Install Packages" \
+             remove "Remove Packages" \
+             quit "Exit" 3>&2 2>&1 1>&3)
+
+  if [[ $function == install ]]; then
+    echo -n "Starting installer ... "
+    _install
+  if [[ $function == remove ]]; then
+    echo -n "Starting uninstaller ... "
+    _remove
+  if [[ $function == quit ]]; then
+    _exit
+  fi
+}
+
+install() {
+	whiptail --title "Install Software" --checklist --separate-output "Select Desired Software:" 15 25 7 \
+  "autodl" "" off \
+  "btsync" "" off \
+	"deluge" "" off \
+  "plex" "" off \
+	"quassel" "" off \
+	"rapidleech" "" off \
+	"sickrage" "" off \
+	"sonarr" "" off \
+	"x2go" "" off  2>/root/results
+
+
+	while read choices; do
+        case $choices in
+          autodl) echo -n "Installing Autodl ... ";_installautodl & spinner $!;echo
+          ;;
+					btsync) echo -n "Installing Btsync ... ";_installbtsync & spinner $!;echo
+					;;
+					deluge) echo -n "Installing Deluge ... ";_installdeluge & spinner $!;echo
+					;;
+          plex) echo -n "Installing Plex ... ";_installplex & spinner $!;echo
+          ;;
+					quassel) echo -n "Installing Quassel-Core ... ";_installquassel & spinner $!;echo
+					;;
+					rapidleech) echo -n "Installing Rapidleech ... ";_installrapidleech & spinner $!;echo
+					;;
+					sickrage) echo -n "Installing SickRage ... ";_installsickrage & spinner $!;echo
+					;;
+					sonarr) echo -n "Installing Sonarr ... ";_installsonarr & spinner $!;echo
+					;;
+					x2go) echo -n "Installing x2Go ... ";_installx2go & spinner $!;echo
+					;;
+          *)
+          ;;
+
+		esac
+	done < /root/results
+  _function
+}
+
+remove() {
+  whiptail --title "Remove Software" --checklist --separate-output "Remove:" 15 25 7 \
+  "autodl" "" off \
+  "btsync" "" off \
+  "deluge" "" off \
+  "plex" "" off \
+  "quassel" "" off \
+  "rapidleech" "" off \
+  "sickrage" "" off \
+  "sonarr" "" off \
+  "x2go" "" off  2>results
+
+
+  while read choices; do
+        case $choices in
+          autodl) echo -n "Removing Autodl ... ";_removeautodl & spinner $!;echo
+          ;;
+          btsync) echo -n "Removing Btsync ... ";_removebtsync & spinner $!;echo
+          ;;
+          deluge) echo -n "Removing Deluge ... ";_removedeluge & spinner $!;echo
+          ;;
+          plex) echo -n "Removing Plex ... ";_removeplex & spinner $!;echo
+          ;;
+          quassel) echo -n "Removing Quassel-Core ... ";_removequassel & spinner $!;echo
+          ;;
+          rapidleech) echo -n "Removing Rapidleech ... ";_removerapidleech & spinner $!;echo
+          ;;
+          sickrage) echo -n "Removing SickRage ... ";_removesickrage & spinner $!;echo
+          ;;
+          sonarr) echo -n "Removing Sonarr ... ";_removesonarr & spinner $!;echo
+          ;;
+          x2go) echo -n "Removing x2Go ... ";_removex2go & spinner $!;echo
+          ;;
+          *)
+          ;;
+    esac
+  done < /root/results
+  _function
+}
+
+installautodl() {
+  if [[ ! -f /install/.autodl.lock]]; then
+    bash /usr/local/bin/quickbox/package/install/installpackage-autodl
+  else
+    echo -n "Autodl already installed! Skipping ... "
+fi
+}
+
+installbtsync() {
+if [[ ! -f /install/.btsync.lock]]; then
+  bash /usr/local/bin/quickbox/package/install/installpackage-btsync
+else
+  echo -n "Btsync already installed! Skipping ... "
+fi
+}
+
+installdeluge() {
+if [[ ! -f /install/.deluge.lock]]; then
+  bash /usr/local/bin/quickbox/package/install/installpackage-deluge
+else
+  echo -n "Deluge already installed! Skipping ... "
+fi
+}
+
+installplex() {
+if [[ ! -f /install/.plex.lock]]; then
+  bash /usr/local/bin/quickbox/package/install/installpackage-plex
+else
+  echo -n "Plex already installed! Skipping ... "
+fi
+}
+
+installquassel() {
+if [[ ! -f /install/.quassel.lock]]; then
+  bash /usr/local/bin/quickbox/package/install/installpackage-quassel
+else
+  echo -n "Quassel already installed! Skipping ... "
+fi
+}
+installrapidleech() {
+if [[ ! -f /install/.rapidleech.lock]]; then
+  bash /usr/local/bin/quickbox/package/install/installpackage-rapidleech
+else
+  echo -n "Rapidleech already installed! Skipping ... "
+fi
+}
+
+installsickrage() {
+if [[ ! -f /install/.sickrage.lock]]; then
+  bash /usr/local/bin/quickbox/package/install/installpackage-sickrage
+else
+  echo -n "Sickrage already installed! Skipping ... "
+fi
+}
+
+installsonarr() {
+if [[ ! -f /install/.sonarr.lock]]; then
+  bash /usr/local/bin/quickbox/package/install/installpackage-sonarr
+else
+  echo -n "Sonarr already installed! Skipping ... "
+fi
+}
+
+installx2go() {
+if [[ ! -f /install/.x2go.lock]]; then
+  bash /usr/local/bin/quickbox/package/install/installpackage-x2go
+else
+  echo -n "x2go already installed! Skipping ... "
+fi
+}
+
+removeautodl() {
+if [[ -f /install/.autodl.lock]]; then
+  bash /usr/local/bin/quickbox/package/remove/removepackage-autodl
+else
+  echo -n "Autodl not installed. Not removing ... "
+fi
+}
+
+removebtsync() {
+if [[ -f /install/.btsync.lock]]; then
+  bash /usr/local/bin/quickbox/package/remove/removepackage-btsync
+else
+  echo -n "Btsync not installed. Not removing ... "
+fi
+}
+
+removedeluge() {
+if [[ -f /install/.deluge.lock]]; then
+  bash /usr/local/bin/quickbox/package/remove/removepackage-deluge
+else
+  echo -n "Deluge not installed. Not removing ... "
+fi
+}
+
+removeplex() {
+if [[ -f /install/.plex.lock]]; then
+  bash /usr/local/bin/quickbox/package/remove/removepackage-plex
+else
+  echo -n "Plex not installed. Not removing ... "
+fi
+}
+
+removequassel() {
+if [[ -f /install/.quassel.lock]]; then
+  bash /usr/local/bin/quickbox/package/remove/removepackage-quassel
+else
+  echo -n "Quassel not installed. Not removing ... "
+fi
+}
+removerapidleech() {
+if [[ -f /install/.rapidleech.lock]]; then
+  bash /usr/local/bin/quickbox/package/remove/removepackage-rapidleech
+else
+  echo -n "Rapidleech not installed. Not removing ... "
+fi
+}
+
+removesickrage() {
+if [[ -f /install/.sickrage.lock]]; then
+  bash /usr/local/bin/quickbox/package/remove/removepackage-sickrage
+else
+  echo -n "Sickrage not installed. Not removing ... "
+fi
+}
+
+removesonarr() {
+if [[ -f /install/.sonarr.lock]]; then
+  bash /usr/local/bin/quickbox/package/remove/removepackage-sonarr
+else
+  echo -n "Sonarr not installed. Not removing ... "
+fi
+}
+
+removex2go() {
+if [[ -f /install/.x2go.lock]]; then
+  bash /usr/local/bin/quickbox/package/remove/removepackage-x2go
+else
+  echo -n "x2go not installed. Not removing ... "
+fi
+}
+
+exit() {
+  echo -n "Goodbye!"
+  rm function
+  rm results
+  exit
+}
+
+spinner() {
+    local pid=$1
+    local delay=0.25
+    local spinstr='|/-\'
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        local temp=${spinstr#?}
+        printf " [${bold}${yellow}%c${normal}]  " "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b\b\b"
+    done
+    printf "    \b\b\b\b"
+    echo -ne "${OK}"
+
+_intro
+_function
