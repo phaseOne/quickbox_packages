@@ -120,7 +120,7 @@ function _remove() {
 }
 
 function _installautodl() {
-  if [[ ! -f /install/.autodl.lock]]; then
+  if [[ ! -f /install/.autodl.lock ]]; then
     bash /usr/local/bin/quickbox/package/install/installpackage-autodl
   else
     echo -n "Autodl already installed! Skipping ... "
@@ -128,7 +128,7 @@ fi
 }
 
 function _installbtsync() {
-if [[ ! -f /install/.btsync.lock]]; then
+if [[ ! -f /install/.btsync.lock ]]; then
   bash /usr/local/bin/quickbox/package/install/installpackage-btsync
 else
   echo -n "Btsync already installed! Skipping ... "
@@ -136,7 +136,7 @@ fi
 }
 
 function _installdeluge() {
-if [[ ! -f /install/.deluge.lock]]; then
+if [[ ! -f /install/.deluge.lock ]]; then
   bash /usr/local/bin/quickbox/package/install/installpackage-deluge
 else
   echo -n "Deluge already installed! Skipping ... "
@@ -144,7 +144,7 @@ fi
 }
 
 function _installplex() {
-if [[ ! -f /install/.plex.lock]]; then
+if [[ ! -f /install/.plex.lock ]]; then
   bash /usr/local/bin/quickbox/package/install/installpackage-plex
 else
   echo -n "Plex already installed! Skipping ... "
@@ -152,7 +152,7 @@ fi
 }
 
 function _installquassel() {
-if [[ ! -f /install/.quassel.lock]]; then
+if [[ ! -f /install/.quassel.lock ]]; then
   bash /usr/local/bin/quickbox/package/install/installpackage-quassel
 else
   echo -n "Quassel already installed! Skipping ... "
@@ -160,7 +160,7 @@ fi
 }
 
 function _installrapidleech() {
-if [[ ! -f /install/.rapidleech.lock]]; then
+if [[ ! -f /install/.rapidleech.lock ]]; then
   bash /usr/local/bin/quickbox/package/install/installpackage-rapidleech
 else
   echo -n "Rapidleech already installed! Skipping ... "
@@ -168,7 +168,7 @@ fi
 }
 
 function _installsickrage() {
-if [[ ! -f /install/.sickrage.lock]]; then
+if [[ ! -f /install/.sickrage.lock ]]; then
   bash /usr/local/bin/quickbox/package/install/installpackage-sickrage
 else
   echo -n "Sickrage already installed! Skipping ... "
@@ -176,7 +176,7 @@ fi
 }
 
 function _installsonarr() {
-if [[ ! -f /install/.sonarr.lock]]; then
+if [[ ! -f /install/.sonarr.lock ]]; then
   bash /usr/local/bin/quickbox/package/install/installpackage-sonarr
 else
   echo -n "Sonarr already installed! Skipping ... "
@@ -184,7 +184,7 @@ fi
 }
 
 function _installx2go() {
-if [[ ! -f /install/.x2go.lock]]; then
+if [[ ! -f /install/.x2go.lock ]]; then
   bash /usr/local/bin/quickbox/package/install/installpackage-x2go
 else
   echo -n "x2go already installed! Skipping ... "
@@ -192,7 +192,7 @@ fi
 }
 
 function _removeautodl() {
-if [[ -f /install/.autodl.lock]]; then
+if [[ -f /install/.autodl.lock ]]; then
   bash /usr/local/bin/quickbox/package/remove/removepackage-autodl
 else
   echo -n "Autodl not installed. Not removing ... "
@@ -200,7 +200,7 @@ fi
 }
 
 function _removebtsync() {
-if [[ -f /install/.btsync.lock]]; then
+if [[ -f /install/.btsync.lock ]]; then
   bash /usr/local/bin/quickbox/package/remove/removepackage-btsync
 else
   echo -n "Btsync not installed. Not removing ... "
@@ -208,7 +208,7 @@ fi
 }
 
 function _removedeluge() {
-if [[ -f /install/.deluge.lock]]; then
+if [[ -f /install/.deluge.lock ]]; then
   bash /usr/local/bin/quickbox/package/remove/removepackage-deluge
 else
   echo -n "Deluge not installed. Not removing ... "
@@ -216,7 +216,7 @@ fi
 }
 
 function _removeplex() {
-if [[ -f /install/.plex.lock]]; then
+if [[ -f /install/.plex.lock ]]; then
   bash /usr/local/bin/quickbox/package/remove/removepackage-plex
 else
   echo -n "Plex not installed. Not removing ... "
@@ -224,7 +224,7 @@ fi
 }
 
 function _removequassel() {
-if [[ -f /install/.quassel.lock]]; then
+if [[ -f /install/.quassel.lock ]]; then
   bash /usr/local/bin/quickbox/package/remove/removepackage-quassel
 else
   echo -n "Quassel not installed. Not removing ... "
@@ -232,7 +232,7 @@ fi
 }
 
 function _removerapidleech() {
-if [[ -f /install/.rapidleech.lock]]; then
+if [[ -f /install/.rapidleech.lock ]]; then
   bash /usr/local/bin/quickbox/package/remove/removepackage-rapidleech
 else
   echo -n "Rapidleech not installed. Not removing ... "
@@ -240,7 +240,7 @@ fi
 }
 
 function _removesickrage() {
-if [[ -f /install/.sickrage.lock]]; then
+if [[ -f /install/.sickrage.lock ]]; then
   bash /usr/local/bin/quickbox/package/remove/removepackage-sickrage
 else
   echo -n "Sickrage not installed. Not removing ... "
@@ -248,7 +248,7 @@ fi
 }
 
 function _removesonarr() {
-if [[ -f /install/.sonarr.lock]]; then
+if [[ -f /install/.sonarr.lock ]]; then
   bash /usr/local/bin/quickbox/package/remove/removepackage-sonarr
 else
   echo -n "Sonarr not installed. Not removing ... "
@@ -256,7 +256,7 @@ fi
 }
 
 function _removex2go() {
-if [[ -f /install/.x2go.lock]]; then
+if [[ -f /install/.x2go.lock ]]; then
   bash /usr/local/bin/quickbox/package/remove/removepackage-x2go
 else
   echo -n "x2go not installed. Not removing ... "
@@ -283,6 +283,10 @@ spinner() {
     done
     printf "    \b\b\b\b"
     echo -ne "${OK}"
+}
 
+normal=$(tput sgr0)
+yellow=$(tput setaf 3)
+bold=$(tput bold)
 _intro
 _function
