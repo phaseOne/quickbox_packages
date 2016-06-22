@@ -22,18 +22,17 @@ function _intro() {
 }
 
 function _function() {
-  function=$(whiptail —menu "Install or Uninstall or Quit?" 10 40 4 \
-               install "Install Packages" \
-               remove "Remove Packages" \
-               quit "Exit" 3>&2 2>&1 1>&3)
+  whiptail --title "QBPM" --menu "Install or Uninstall or Quit?" 10 40 4 \
+               Install "Packages" \
+               Remove "Packages" \
+               Quit "" 2>function
+  function=$(cat function)
 
-    if [[ $function == install ]]; then
-      echo -n "Starting installer ... "
+    if [[ $function == Install ]]; then
       _install
-    elif [[ $function == remove ]]; then
-      echo -n "Starting uninstaller ... "
+    elif [[ $function == Remove ]]; then"
       _remove
-    elif [[ $function == quit ]]; then
+    elif [[ $function == Quit ]]; then
       _exit
     fi
 }
@@ -48,7 +47,7 @@ function _install() {
 	"rapidleech" "" off \
 	"sickrage" "" off \
 	"sonarr" "" off \
-	"x2go" "" off  2>/root/results
+	"x2go" "" off  2>results
 
 
 	while read choices; do
@@ -75,7 +74,7 @@ function _install() {
           ;;
 
 		esac
-	done < /root/results
+	done < results
   _function
 }
 
@@ -115,7 +114,7 @@ function _remove() {
           *)
           ;;
     esac
-  done < /root/results
+  done < results
   _function
 }
 
