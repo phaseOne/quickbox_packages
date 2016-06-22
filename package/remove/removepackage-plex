@@ -16,7 +16,7 @@
 #
 
 function _removePlex() {
-  dpkg -r plexmediaserver
+  dpkg -r plexmediaserver >/dev/null 2>&1
   rm -rf /var/lib/plexmediaserver
   rm -rf /usr/lib/plexmediaserver
   rm /etc/init/plexmediaserver.conf

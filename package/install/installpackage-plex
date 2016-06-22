@@ -28,18 +28,18 @@ function _installPlex2() {
     chown www-data: /etc/apache2/sites-enabled/plex.conf
 }
 function _installPlex3() {
-    wget -O - http://shell.ninthgate.se/packages/shell.ninthgate.se.gpg.key | apt-key add -
+    wget -O - http://shell.ninthgate.se/packages/shell.ninthgate.se.gpg.key | apt-key add - >/dev/null 2>&1
     echo "deb http://www.deb-multimedia.org wheezy main non-free" > /etc/apt/sources.list.d/deb-multimedia.list
     echo "deb http://shell.ninthgate.se/packages/debian wheezy main" > /etc/apt/sources.list.d/plexmediaserver.list
     echo
 }
 function _installPlex4() {
-    apt-get -y update
+    apt-get -y update >/dev/null 2>&1
     echo
 }
 function _installPlex5() {
-    apt-get install deb-multimedia-keyring -y
-    apt-get -y install plexmediaserver
+    apt-get install deb-multimedia-keyring -y >/dev/null 2>&1
+    apt-get -y install plexmediaserver >/dev/null 2>&1
     echo
 }
 function _installPlex6() {

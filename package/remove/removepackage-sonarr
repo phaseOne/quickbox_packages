@@ -21,9 +21,9 @@ function _removeSonarr() {
   cp "${local_setup}"templates/startup.template /home/"${username}"/.startup
   sudo service sonarr stop
   sudo rm /etc/apt/sources.list.d/mono-xamarin.list
-  sudo apt-get remove nzbdrone
-  sudo apt-get autoremove
-  sudo update-rc.d -f sonarr remove
+  sudo apt-get remove nzbdrone >/dev/null 2>&1
+  sudo apt-get autoremove >/dev/null 2>&1
+  sudo update-rc.d -f sonarr remove >/dev/null 2>&1
   sudo rm /etc/default/sonarr
   sudo rm /etc/init.d/sonarr
   sudo rm /install/.sonarr.lock

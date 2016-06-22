@@ -26,29 +26,29 @@ distribution=$(lsb_release -is)
 
 function _installSonarr1() {
   if [[ $distribution == Ubuntu ]]; then
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF >/dev/null 2>&1
     echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
   else
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF >/dev/null 2>&1
     echo "deb http://debian.meebey.net/pkg-mono ./" | sudo tee /etc/apt/sources.list.d/mono-meeby.list
   fi
 }
 
 function _installSonarr2() {
-  sudo apt-get install apt-transport-https -y
-  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FDA5DFFC
+  sudo apt-get install apt-transport-https -y >/dev/null 2>&1
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FDA5DFFC >/dev/null 2>&1
   echo "deb https://apt.sonarr.tv/ master main" | sudo tee -a /etc/apt/sources.list.d/sonarr.list
 }
 
 function _installSonarr3() {
-  sudo apt-get -y update
+  sudo apt-get -y update >/dev/null 2>&1
   if [[ $distribution == Debian ]]; then
-    sudo apt-get install -y mono-devel
+    sudo apt-get install -y mono-devel >/dev/null 2>&1
   fi
 }
 
 function _installSonarr4() {
-  sudo apt-get install -y nzbdrone
+  sudo apt-get install -y nzbdrone >/dev/null 2>&1
   sleep 5
   sudo rm /etc/apt/sources.list.d/sonarr.list
   sed -i 's/SONARR=no/SONARR=yes/g' /home/"${username}"/.startup
@@ -68,7 +68,7 @@ function _installSonarr6() {
 }
 
 function _installSonarr7() {
-  sudo update-rc.d sonarr defaults
+  sudo update-rc.d sonarr defaults >/dev/null 2>&1
   sleep 2
 }
 

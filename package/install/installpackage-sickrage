@@ -19,7 +19,7 @@ OUTTO=/srv/rutorrent/home/db/output.log
 local_setup=/root/QuickBox/setup/
 
 function _installSickRage1() {
-  sudo git clone https://github.com/SickRage/SickRage.git  /home/"${MASTER}"/.sickrage
+  sudo git clone https://github.com/SickRage/SickRage.git  /home/"${MASTER}"/.sickrage >/dev/null 2>&1
 }
 function _installSickRage2() {
   touch /install/.sickrage.lock
