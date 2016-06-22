@@ -28,7 +28,7 @@ if [[ $distribution == Ubuntu ]]; then
   apt-get -q -y install quassel-core >/dev/null 2>&1
   touch /install/.quassel.lock
 else
-  wget -r -l1 --no-parent -A "quassel-core*.deb" https://iskrembilen.com/quassel-packages-debian/
+  wget -r -l1 --no-parent -O quassel-core.deb -A "quassel-core*.deb" https://iskrembilen.com/quassel-packages-debian/
   dpkg -i quassel-core*
   rm quassel-core*
   apt install -f -y -q
