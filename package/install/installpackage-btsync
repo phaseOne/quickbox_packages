@@ -36,7 +36,7 @@ function _installBTSync4() {
   sudo usermod -a -G btsync ${MASTER} >/dev/null 2>&1
 }
 function _installBTSync5() {
-  sed -i 's/BTSYNC=no/BTSYNC=yes/g' /home/"${username}"/.startup
+  sed -i 's/BTSYNC=no/BTSYNC=yes/g' /home/"${MASTER}"/.startup
   cp -r ${local_setup}templates/btsync/config.json.template /etc/btsync/config.json
   cp -r ${local_setup}templates/btsync/user_config.json.template /etc/btsync/user_config.json
   sudo sed -i "s/BTSGUIP/$BTSYNCIP/g" /etc/btsync/config.json
