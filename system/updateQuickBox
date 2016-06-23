@@ -106,8 +106,15 @@ function _perms() {
   chmod -R g+rw ${rutorrent}*
   sh -c 'find /srv/rutorrent/* -type d -print0 | sudo xargs -0 chmod g+s'
   chmod +x /etc/cron.d/set_interface
-  chmod +x /home/"${A1}"/.startup
-  chmod +x $(find /usr/local/bin/quickbox -type f)
+  find /home -name ".startup" -exec chmod 775 {} \;
+  find /usr/local/bin/quickbox -type f -exec chmod 755 {} \;
+}
+
+function _updatedeps() {
+  if [[ ! -f /bin/ed ]]; then
+    apt update -y -q
+    apt install -y -q ed
+  fi
 }
 
 function _fin() {
@@ -141,6 +148,7 @@ _logcheck
 _directorycheck
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
+echo "Checking new dependencies and updating as necessary ... " >>"${OUTTO}" 2>&1;_updatedeps;echo
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
 echo "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
 echo "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent;echo
