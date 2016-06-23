@@ -31,8 +31,8 @@ DWPORT=$(shuf -i 10001-11000 -n 1)
 DWSALT=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)
 
 function _installDeluge1() {
-  sudo apt-get -y update
-  sudo apt-get -y install deluged deluge-web
+  sudo apt-get -y update >/dev/null 2>&1
+  sudo apt-get -y install deluged deluge-web >/dev/null 2>&1
 }
 function _installDeluge2() {
   DWP=$(python ${local_packages}system/deluge.Userpass.py ${passwd} ${DWSALT})
@@ -73,12 +73,10 @@ function _installDeluge4() {
 
 function _installDeluge5() {
   echo "Deluge Install Complete!" >>"${OUTTO}" 2>&1;
-  echo "Deluge Install Complete!"
   sleep 5
   echo >>"${OUTTO}" 2>&1;
   echo >>"${OUTTO}" 2>&1;
   echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
-  echo "Close this dialog box to refresh your browser"
 }
 function _installDeluge6() {
   exit

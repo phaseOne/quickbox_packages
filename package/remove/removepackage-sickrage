@@ -19,7 +19,7 @@ OUTTO="/root/quick-box.log"
 
 function _removeSickRage() {
   sudo service sickrage stop
-  service sickrage status
+  #service sickrage status
     sleep 5
 
   sudo update-rc.d -f sickrage remove
