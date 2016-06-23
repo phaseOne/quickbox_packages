@@ -24,217 +24,51 @@ function _intro() {
 function _function() {
   whiptail --title "QBPM" --menu "Choose an option:" 12 50 3 \
                Install "Packages" \
-               Remove "Packages" \
-               Quit "" 2>function
+               Remove "Packages" 2>function
   function=$(cat function)
 
     if [[ $function == Install ]]; then
       _install
     elif [[ $function == Remove ]]; then
       _remove
-    elif [[ $function == Quit ]]; then
-      _exit
     fi
 }
 
 function _install() {
   installa=()
-    if [[ ! -f /install/.autodl.lock ]]; then
-      installa="${installa} autodl off"
+  for i in btsync deluge plex quassel rapidleech sickrage sonarr x2go; do
+    if [[ ! -f /install/.$i.lock ]]; then
+      installa="${installa} $i off"
     fi
-    if [[ ! -f /install/.btsync.lock ]]; then
-      installa="${installa} btsync off"
-    fi
-    if [[ ! -f /install/.deluge.lock ]]; then
-      installa="${installa} deluge off"
-    fi
-    if [[ ! -f /install/.plex.lock ]]; then
-      installa="${installa} plex off"
-    fi
-    if [[ ! -f /install/.quassel.lock ]]; then
-      installa="${installa} quassel off"
-    fi
-    if [[ ! -f /install/.rapidleech.lock ]]; then
-      installa="${installa} rapidleech off"
-    fi
-    if [[ ! -f /install/.sickrage.lock ]]; then
-      installa="${installa} sickrage off"
-    fi
-    if [[ ! -f /install/.sonarr.lock ]]; then
-      installa="${installa} sonarr off"
-    fi
-    if [[ ! -f /install/.x2go.lock ]]; then
-      installa="${installa} x2go off"
-    fi
+  done
 	whiptail --title "Install Software" --noitem --checklist --separate-output "Make some choices:" 15 26 7 ${installa[@]} 2>results
+  readarray packages < results
+  for i in "${packages[@]}"; do
+    echo -n "Installing $i ";
+    bash /usr/local/bin/quickbox/package/install/installpackage-$i
+  done
+  rm results
+  rm function
 
-
-	while read choices; do
-        case $choices in
-          autodl) echo -n "Installing Autodl ... ";_installautodl & spinner $!;echo
-          ;;
-					btsync) echo -n "Installing Btsync ... ";_installbtsync & spinner $!;echo
-					;;
-					deluge) echo -n "Installing Deluge ... ";_installdeluge & spinner $!;echo
-					;;
-          plex) echo -n "Installing Plex ... ";_installplex & spinner $!;echo
-          ;;
-					quassel) echo -n "Installing Quassel-Core ... ";_installquassel & spinner $!;echo
-					;;
-					rapidleech) echo -n "Installing Rapidleech ... ";_installrapidleech & spinner $!;echo
-					;;
-					sickrage) echo -n "Installing SickRage ... ";_installsickrage & spinner $!;echo
-					;;
-					sonarr) echo -n "Installing Sonarr ... ";_installsonarr & spinner $!;echo
-					;;
-					x2go) echo -n "Installing x2Go ... ";_installx2go & spinner $!;echo
-					;;
-          *)
-          ;;
-
-		esac
-	done < results
   _function
 }
 
 function _remove() {
 removea=()
-  if [[ -f /install/.autodl.lock ]]; then
-    removea="${removea} autodl off"
+for i in btsync deluge plex quassel rapidleech sickrage sonarr x2go; do
+  if [[ -f /install/.$i.lock ]]; then
+    removea="${removea} $i off"
   fi
-  if [[ -f /install/.btsync.lock ]]; then
-    removea="${removea} btsync off"
-  fi
-  if [[ -f /install/.deluge.lock ]]; then
-    removea="${removea} deluge off"
-  fi
-  if [[ -f /install/.plex.lock ]]; then
-    removea="${removea} plex off"
-  fi
-  if [[ -f /install/.quassel.lock ]]; then
-    removea="${removea} quassel off"
-  fi
-  if [[ -f /install/.rapidleech.lock ]]; then
-    removea="${removea} rapidleech off"
-  fi
-  if [[ -f /install/.sickrage.lock ]]; then
-    removea="${removea} sickrage off"
-  fi
-  if [[ -f /install/.sonarr.lock ]]; then
-    removea="${removea} sonarr off"
-  fi
-  if [[ -f /install/.x2go.lock ]]; then
-    removea="${removea} x2go off"
-  fi
-whiptail --title "Install Software" --noitem --checklist --separate-output "Make some choices:" 15 26 7 ${removea[@]} 2>results
-
-
-
-  while read choices; do
-        case $choices in
-          autodl) echo -n "Removing Autodl ... ";_removeautodl & spinner $!;echo
-          ;;
-          btsync) echo -n "Removing Btsync ... ";_removebtsync & spinner $!;echo
-          ;;
-          deluge) echo -n "Removing Deluge ... ";_removedeluge & spinner $!;echo
-          ;;
-          plex) echo -n "Removing Plex ... ";_removeplex & spinner $!;echo
-          ;;
-          quassel) echo -n "Removing Quassel-Core ... ";_removequassel & spinner $!;echo
-          ;;
-          rapidleech) echo -n "Removing Rapidleech ... ";_removerapidleech & spinner $!;echo
-          ;;
-          sickrage) echo -n "Removing SickRage ... ";_removesickrage & spinner $!;echo
-          ;;
-          sonarr) echo -n "Removing Sonarr ... ";_removesonarr & spinner $!;echo
-          ;;
-          x2go) echo -n "Removing x2Go ... ";_removex2go & spinner $!;echo
-          ;;
-          *)
-          ;;
-    esac
-  done < results
-  _function
-}
-
-function _installautodl() {
-    bash /usr/local/bin/quickbox/package/install/installpackage-autodl
-}
-
-function _installbtsync() {
-  bash /usr/local/bin/quickbox/package/install/installpackage-btsync
-}
-
-function _installdeluge() {
-  bash /usr/local/bin/quickbox/package/install/installpackage-deluge
-}
-
-function _installplex() {
-  bash /usr/local/bin/quickbox/package/install/installpackage-plex
-}
-
-function _installquassel() {
-  bash /usr/local/bin/quickbox/package/install/installpackage-quassel
-}
-
-function _installrapidleech() {
-  bash /usr/local/bin/quickbox/package/install/installpackage-rapidleech
-}
-
-function _installsickrage() {
-  bash /usr/local/bin/quickbox/package/install/installpackage-sickrage
-}
-
-function _installsonarr() {
-  bash /usr/local/bin/quickbox/package/install/installpackage-sonarr
-}
-
-function _installx2go() {
-  bash /usr/local/bin/quickbox/package/install/installpackage-x2go
-}
-
-function _removeautodl() {
-  bash /usr/local/bin/quickbox/package/remove/removepackage-autodl
-}
-
-function _removebtsync() {
-  bash /usr/local/bin/quickbox/package/remove/removepackage-btsync
-}
-
-function _removedeluge() {
-  bash /usr/local/bin/quickbox/package/remove/removepackage-deluge
-}
-
-function _removeplex() {
-  bash /usr/local/bin/quickbox/package/remove/removepackage-plex
-}
-
-function _removequassel() {
-  bash /usr/local/bin/quickbox/package/remove/removepackage-quassel
-}
-
-function _removerapidleech() {
-  bash /usr/local/bin/quickbox/package/remove/removepackage-rapidleech
-}
-
-function _removesickrage() {
-  bash /usr/local/bin/quickbox/package/remove/removepackage-sickrage
-}
-
-function _removesonarr() {
-  bash /usr/local/bin/quickbox/package/remove/removepackage-sonarr
-}
-
-function _removex2go() {
-  bash /usr/local/bin/quickbox/package/remove/removepackage-x2go
-}
-
-function _exit() {
-  printf "Goodbye!"
-  printf ""
-  rm function
-  rm results
-  exit
+done
+whiptail --title "Remove Software" --noitem --checklist --separate-output "Make some choices:" 15 26 7 ${removea[@]} 2>results
+readarray packages < results
+for i in "${packages[@]}"; do
+  echo -n "Removing $i ";
+  bash /usr/local/bin/quickbox/package/remove/removepackage-$i
+done
+rm results
+rm function
+_function
 }
 
 spinner() {
