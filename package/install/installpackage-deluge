@@ -73,7 +73,6 @@ function _installDeluge4() {
 
 function _installDeluge5() {
   echo "Deluge Install Complete!" >>"${OUTTO}" 2>&1;
-  echo "Deluge Install Complete!"
   sleep 5
   echo >>"${OUTTO}" 2>&1;
   echo >>"${OUTTO}" 2>&1;
