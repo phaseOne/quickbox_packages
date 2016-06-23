@@ -8,21 +8,26 @@
 #
 # QuickBox Copyright (C) 2016 Swizards.net
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
-# 
+#
 #   You may copy, distribute and modify the software as long as you track
-#   changes/dates in source files. Any modifications to our software 
-#   including (via compiler) GPL-licensed code must also be made available 
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
 #   under the GPL along with build & install instructions.
 #
 REALM=rutorrent
 HTPASSWD=/etc/htpasswd
+genpass=$(_string)
+
+function _string() { perl -le 'print map {(a..z,A..Z,0..9)[rand 62] } 0..pop' 15 ; }
+
+
 echo -n "Username: "; read user
         username=$(echo "$user"|sed 's/.*/\L&/')
-        if [[ ! $(grep "^${username}" ${HTPASSWD}) ]]; then 
+        if [[ ! $(grep "^${username}" ${HTPASSWD}) ]]; then
 		echo "Username ${username} wasnt found in ${HTPASSWD} .. please try again"
 		exit
 	fi
-        echo -n "Password: (hit enter to generate a password) "; read password
+        echo -n "Password: (hit enter to generate a password) "; read 'password'
         if [[ ! -z "${password}" ]]; then
                 echo "setting password to ${password}"
                 passwd=${password}
