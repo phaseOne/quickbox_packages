@@ -18,11 +18,11 @@
 #################################################################################
 
 function _intro() {
-  whiptail --title "QuickBox Package Manager" --msgbox "Welcome to the QuickBox Package Manger! Using this script you can choose to install and remove the packages contained within our quickbox package repository." 8 78
+  whiptail --title "QuickBox Package Manager" --msgbox "Welcome to the QuickBox Package Manger! Using this script you can choose to install and remove the packages contained within our quickbox package repository." 10 50
 }
 
 function _function() {
-  whiptail --title "QBPM" --menu "Install or Uninstall or Quit?" 10 40 4 \
+  whiptail --title "QBPM" --menu "Choose an option:" 12 50 3 \
                Install "Packages" \
                Remove "Packages" \
                Quit "" 2>function
@@ -30,7 +30,7 @@ function _function() {
 
     if [[ $function == Install ]]; then
       _install
-    elif [[ $function == Remove ]]; then"
+    elif [[ $function == Remove ]]; then
       _remove
     elif [[ $function == Quit ]]; then
       _exit
@@ -38,16 +38,35 @@ function _function() {
 }
 
 function _install() {
-	whiptail --title "Install Software" --checklist --separate-output "Select Desired Software:" 15 25 7 \
-  "autodl" "" off \
-  "btsync" "" off \
-	"deluge" "" off \
-  "plex" "" off \
-	"quassel" "" off \
-	"rapidleech" "" off \
-	"sickrage" "" off \
-	"sonarr" "" off \
-	"x2go" "" off  2>results
+  installa=()
+    if [[ ! -f /install/.autodl.lock ]]; then
+      installa="${installa} autodl off"
+    fi
+    if [[ ! -f /install/.btsync.lock ]]; then
+      installa="${installa} btsync off"
+    fi
+    if [[ ! -f /install/.deluge.lock ]]; then
+      installa="${installa} deluge off"
+    fi
+    if [[ ! -f /install/.plex.lock ]]; then
+      installa="${installa} plex off"
+    fi
+    if [[ ! -f /install/.quassel.lock ]]; then
+      installa="${installa} quassel off"
+    fi
+    if [[ ! -f /install/.rapidleech.lock ]]; then
+      installa="${installa} rapidleech off"
+    fi
+    if [[ ! -f /install/.sickrage.lock ]]; then
+      installa="${installa} sickrage off"
+    fi
+    if [[ ! -f /install/.sonarr.lock ]]; then
+      installa="${installa} sonarr off"
+    fi
+    if [[ ! -f /install/.x2go.lock ]]; then
+      installa="${installa} x2go off"
+    fi
+	whiptail --title "Install Software" --noitem --checklist --separate-output "Make some choices:" 15 26 7 ${installa[@]} 2>results
 
 
 	while read choices; do
@@ -79,16 +98,36 @@ function _install() {
 }
 
 function _remove() {
-  whiptail --title "Remove Software" --checklist --separate-output "Remove:" 15 25 7 \
-  "autodl" "" off \
-  "btsync" "" off \
-  "deluge" "" off \
-  "plex" "" off \
-  "quassel" "" off \
-  "rapidleech" "" off \
-  "sickrage" "" off \
-  "sonarr" "" off \
-  "x2go" "" off  2>results
+removea=()
+  if [[ -f /install/.autodl.lock ]]; then
+    removea="${removea} autodl off"
+  fi
+  if [[ -f /install/.btsync.lock ]]; then
+    removea="${removea} btsync off"
+  fi
+  if [[ -f /install/.deluge.lock ]]; then
+    removea="${removea} deluge off"
+  fi
+  if [[ -f /install/.plex.lock ]]; then
+    removea="${removea} plex off"
+  fi
+  if [[ -f /install/.quassel.lock ]]; then
+    removea="${removea} quassel off"
+  fi
+  if [[ -f /install/.rapidleech.lock ]]; then
+    removea="${removea} rapidleech off"
+  fi
+  if [[ -f /install/.sickrage.lock ]]; then
+    removea="${removea} sickrage off"
+  fi
+  if [[ -f /install/.sonarr.lock ]]; then
+    removea="${removea} sonarr off"
+  fi
+  if [[ -f /install/.x2go.lock ]]; then
+    removea="${removea} x2go off"
+  fi
+whiptail --title "Install Software" --noitem --checklist --separate-output "Make some choices:" 15 26 7 ${removea[@]} 2>results
+
 
 
   while read choices; do
@@ -263,7 +302,8 @@ fi
 }
 
 function _exit() {
-  echo -n "Goodbye!"
+  printf "Goodbye!"
+  printf ""
   rm function
   rm results
   exit
