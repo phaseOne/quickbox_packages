@@ -38,7 +38,7 @@ SR_USER=${MASTER}" > /etc/default/sickrage
   update-rc.d sickrage defaults
 }
 function _installSickRage4() {
-  sudo service sickrage start
+  sudo service sickrage start >/dev/null 2>&1
 }
 
 function _installSickRage5() {
