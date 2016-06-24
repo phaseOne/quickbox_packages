@@ -21,7 +21,6 @@
 #
 OUTTO=/srv/rutorrent/home/db/output.log
 
-function _removeplugin-autodlirssi() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
   echo "Uninstalling the autodl-irssi plugin ... " >>"${OUTTO}" 2>&1;
@@ -39,6 +38,3 @@ function _removeplugin-autodlirssi() {
   echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
 
     exit
-}
-
-_removeplugin-autodlirrsi

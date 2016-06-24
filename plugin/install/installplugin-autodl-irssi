@@ -21,7 +21,6 @@
 #
 OUTTO=/srv/rutorrent/home/db/output.log
 
-function _installplugin-autodlirssi() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
   echo "Accessing autodl-irssi in the plugin vault ... " >>"${OUTTO}" 2>&1;
@@ -45,6 +44,3 @@ function _installplugin-autodlirssi() {
   echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
 
     exit
-}
-
-_installplugin-autodlirssi
