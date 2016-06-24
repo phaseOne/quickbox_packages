@@ -32,7 +32,7 @@ function _removeplugin-autodlirssi() {
   sleep 5
 
   echo "Autodl-irssi Plugin Uninstall Complete!" >>"${OUTTO}" 2>&1;
-  
+
   sleep 5
   echo >>"${OUTTO}" 2>&1;
   echo >>"${OUTTO}" 2>&1;
