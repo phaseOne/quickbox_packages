@@ -96,7 +96,9 @@ function _updatesudo() {
 }
 
 function _updatecronfile() {
-  cp ${local_setup}templates/startup.template /home/"${A1}"/.startup
+  # We'll disable this function unless a new packages
+  # is included or startup requires a fix.
+  #cp ${local_setup}templates/startup.template /home/"${A1}"/.startup
 }
 
 # adjust permissions function (9)
