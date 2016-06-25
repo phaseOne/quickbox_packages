@@ -19,7 +19,7 @@ function _string() { perl -le 'print map {(a..z,A..Z,0..9)[rand 62] } 0..pop' 15
 #################################################################################
 
 function _installSonarrintro() {
-  echo "Sonarr will now being installing." >>"${OUTTO}" 2>&1;
+  echo "Sonarr will now be installed." >>"${OUTTO}" 2>&1;
   echo "This process may take up to 2 minutes." >>"${OUTTO}" 2>&1;
   echo "Please wait until install is completed." >>"${OUTTO}" 2>&1;
   echo
