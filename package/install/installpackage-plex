@@ -39,7 +39,7 @@ function _installPlex4() {
 }
 function _installPlex5() {
     apt-get install deb-multimedia-keyring -y >/dev/null 2>&1
-    apt-get -y install plexmediaserver >/dev/null 2>&1
+    apt-get install -y --force-yes plexmediaserver >/dev/null 2>&1
     echo
 }
 function _installPlex6() {
