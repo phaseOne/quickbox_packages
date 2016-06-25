@@ -20,6 +20,7 @@
 #   under the GPL along with build & install instructions.
 #
 OUTTO=/srv/rutorrent/home/db/output.log
+local_setup=/root/QuickBox/setup/
 
 function _installplugin-fileshare() {
   username=$(whoami);
@@ -33,12 +34,16 @@ function _installplugin-fileshare() {
     for i in $PLUGIN; do
       cp -R "${PLUGINVAULT}$i" .
     done
+  cd /srv/rutorrent/home/fileshare/
+  rm -rf share.php
+  ln -s ../../plugins/fileshare/share.php
+  cp ${local_setup}templates/rutorrent/plugins/fileshare/conf.php.template /srv/rutorrent/plugins/fileshare/conf.php
   sleep 5
 
   echo "Adjusting permissions ... " >>"${OUTTO}" 2>&1;
   chown -R www-data: ${rutorrent}plugins/$PLUGIN
   echo "Fileshare Plugin Install Complete!" >>"${OUTTO}" 2>&1;
-  
+
   sleep 5
   echo >>"${OUTTO}" 2>&1;
   echo >>"${OUTTO}" 2>&1;
