@@ -62,6 +62,9 @@ function _bashrc() {
 function _updatesyscommands() {
   cd ${usrbin}
   cp -R ${local_packages}. ${usrbin}quickbox
+  if [[ -f ${usrbin}quickbox/system/changeUserpass*]]; then
+    rm ${usrbin}quickbox/system/changeUserpass*
+  fi
 }
 
 function _updateskel() {
