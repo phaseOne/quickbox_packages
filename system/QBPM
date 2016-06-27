@@ -36,7 +36,7 @@ function _function() {
 
 function _install() {
   installa=()
-  for i in btsync deluge plex quassel rapidleech sickrage sonarr x2go; do
+  for i in btsync deluge plex quassel quota rapidleech sickrage sonarr x2go; do
     if [[ ! -f /install/.$i.lock ]]; then
       installa="${installa} $i off"
     fi
@@ -55,7 +55,7 @@ function _install() {
 
 function _remove() {
 removea=()
-for i in btsync deluge plex quassel rapidleech sickrage sonarr x2go; do
+for i in btsync deluge plex quassel quota rapidleech sickrage sonarr x2go; do
   if [[ -f /install/.$i.lock ]]; then
     removea="${removea} $i off"
   fi
