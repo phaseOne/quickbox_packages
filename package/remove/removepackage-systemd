@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# [Quick Box :: Install systemd services]
+#
+# GitHub:   https://github.com/QuickBox/quickbox_packages
+# Author:   QuickBox.IO | liara
+# URL:      https://plaza.quickbox.io
+#
+# QuickBox Copyright (C) 2016 Swizards.net
+# Licensed under GNU General Public License v3.0 GPL-3 (in short)
+#
+#   You may copy, distribute and modify the software as long as you track
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
+#   under the GPL along with build & install instructions.
+#
+
+function _removed() {
+  services=($(find ${local_setup}templates/system -type f -printf "%f\n" | cut -d "." -f 1 ))
+  for i in "${services[@]}"; do
+    systemctl disable $i@* >> /dev/null 2>&1
+    systemctl stop $i@* >> /dev/null 2>&1
+    rm /etc/systemd/system/$i@.service
+      if [[ $i == autodl-irssi ]]; then
+        systemctl disable irssi@* >> /dev/null 2>&1
+        systemctl stop irssi@* >> /dev/null 2>&1
+        rm /etc/systemd/system/irssi@.service
+      fi
+    done
+}
+
+function _installcron() {
+  for i in "${users[@]}"; do
+    sudo -u ${i} crontab -l | echo "*/1 * * * * /home/${i}/.startup >/dev/null 2>&1" | crontab -
+  done
+  rm /install/.cron.lock
+}
+
+
+local_setup=/root/QuickBox/setup/
+users=($(cat /etc/htpasswd | cut -d ":" -f 1))
+master=($(cat /srv/rutorrent/home/db/master.txt))
+_removed
+_installcron
