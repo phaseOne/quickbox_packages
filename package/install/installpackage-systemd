@@ -23,14 +23,19 @@ rm /install/.cron.lock
 }
 
 function _installd() {
+arr=()
 locks=($(find ${local_setup}templates/system -type f -printf "%f\n" | cut -d "." -f 1 ))
 for i in "${locks[@]}"; do
-  if [[ -f /install/.$i.lock ]]; then
-    arr=$($arr $i)
+  app=$i
+  if [[ $i == deluged ]] || [[ $i == deluge-web ]]; then
+    app=deluge
+  fi
+  if [[ -f /install/.$app.lock ]]; then
+    arr="${arr} $i"
     pkill $i
     cp ${local_setup}templates/system/$i.template /etc/systemd/system/$i@.service
     if [[ $i == autodl-irssi ]]; then
-    mv /etc/systemd/system/autodl-irssi@.service /etc/systemd/system/irssi@.service
+    mv /etc/systemd/system/autodlirssi@.service /etc/systemd/system/irssi@.service
     fi
   fi
 done
