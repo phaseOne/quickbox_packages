@@ -70,7 +70,7 @@ function _checklocks() {
 
 function _updatesyscommands() {
   cd ${usrbin}
-  cp -R ${local_packages}. ${usrbin}quickbox
+  rsync -aP ${local_packages}* ${usrbin}quickbox
   if [[ -f ${usrbin}quickbox/system/changeUserpass ]]; then
     rm ${usrbin}quickbox/system/changeUserpass
   fi
@@ -81,26 +81,24 @@ function _updateskel() {
     rm -r /etc/skel
   fi
   mkdir /etc/skel
-  cp -r ${local_setup}templates/skel/. /etc/skel
+  rsync -aP ${local_setup}templates/skel/* /etc/skel
 }
 
 function _updaterutorrent() {
   cd /srv
-  cp -R ${local_rutorrent}. rutorrent
+  rsync -aP ${local_rutorrent}* rutorrent
 }
 
 function _updaterutorrent-plugins() {
   cd ${rutorrent}
-  cp -R ${local_rplugins}. plugins
+  #cp -R ${local_rplugins}. plugins
+  rsync -aP ${local_rplugins}* plugins
 }
 
 # function to install dashboard (23)
 function _updatedashboard() {
   cd ${rutorrent}
-  rsync -aP --exclude=disk_*.php ${local_dashboard}* ${rutorrent}home
-  rsync -aP --exclude=branding-*.php ${local_dashboard}* ${rutorrent}home
-  rsync -aP --exclude=logo.png ${local_dashboard}* ${rutorrent}home
-  #cp -R ${local_dashboard}. ${rutorrent}home
+  rsync -aP --exclude=disk_*.php --exclude=branding-*.php ${local_dashboard}* ${rutorrent}home
 }
 
 function _updatesudo() {
@@ -124,6 +122,7 @@ function _perms() {
   chmod +x /etc/cron.d/set_interface
   find /home -name ".startup" -exec chmod 775 {} \;
   find /usr/local/bin/quickbox -type f -exec chmod 755 {} \;
+  chmod +x $(find /usr/local/bin/quickbox -type f) >/dev/null 2>&1
 }
 
 function _updatedeps() {
