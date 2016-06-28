@@ -16,27 +16,30 @@
 #
 
 function _removecron() {
-for i in ${users[@]}; do
+for i in "${users[@]}"; do
   sudo -u ${i} crontab -l | sed '/.startup/d' | crontab -
 done
 rm /install/.cron.lock
 }
 
 function _installd() {
-locks=( $(find ${local_setup}templates/system -type f -printf "%f\n" | cut -d "." -f 1 ))
-for i in ${locks[@]}; do
+locks=($(find ${local_setup}templates/system -type f -printf "%f\n" | cut -d "." -f 1 ))
+for i in "${locks[@]}"; do
   if [[ -f /install/.$i.lock ]]; then
     arr=$($arr $i)
     pkill $i
     cp ${local_setup}templates/system/$i.template /etc/systemd/system/$i@.service
-    if [[ $i == autodl-irssi]]; then
+    if [[ $i == autodl-irssi ]]; then
     mv /etc/systemd/system/autodl-irssi@.service /etc/systemd/system/irssi@.service
     fi
   fi
- for i in ${arr[@]}; do
+done
+ for i in "${arr[@]}"; do
+   if [[ $i == autodl-irssi ]]; then
+     i=irssi
+   fi
   systemctl enable $i@$master
   systemctl start $i@$master
-
 done
 }
 
