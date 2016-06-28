@@ -99,6 +99,7 @@ function _updatedashboard() {
   cd ${rutorrent}
   rsync -aP --exclude=disk_*.php ${local_dashboard}* ${rutorrent}home
   rsync -aP --exclude=branding-*.php ${local_dashboard}* ${rutorrent}home
+  rsync -aP --exclude=logo.png ${local_dashboard}* ${rutorrent}home
   #cp -R ${local_dashboard}. ${rutorrent}home
 }
 
