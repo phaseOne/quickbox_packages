@@ -88,7 +88,7 @@ function _updaterutorrent-plugins() {
 # function to install dashboard (23)
 function _updatedashboard() {
   cd ${rutorrent}
-  rsync -aP --exclude=disk_*.php branding-*.php logo-custom.png ${local_dashboard}* ${rutorrent}home
+  rsync -aP --exclude=disk_*.php --exclude=branding-*.php --exclude=logo-custom.png ${local_dashboard}* ${rutorrent}home
 }
 
 function _updatesudo() {
