@@ -101,7 +101,7 @@ function _updatedashboard() {
   if [[ -f ${rutorrent}home/widgets/branding-*.php ]]; then
     rsync -aP --exclude=disk_*.php --exclude=branding-*.php ${local_dashboard}* ${rutorrent}home
   else
-    rsync -aP ${local_dashboard}* ${rutorrent}home
+    rsync -aP --exclude=disk_*.php ${local_dashboard}* ${rutorrent}home
   fi
 }
 
