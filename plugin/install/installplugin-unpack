@@ -25,7 +25,7 @@ function _installplugin-unpack() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
   echo "Accessing unpack in the plugin vault ... " >>"${OUTTO}" 2>&1;
-  PLUGINVAULT="/root/quickbox_rutorrent-plugins/"; cd "${rutorrent}plugins"
+  PLUGINVAULT="/root/QuickBox/rtplugins/"; cd "${rutorrent}plugins"
   sleep 5
 
   echo "Installing unpack plugin ... " >>"${OUTTO}" 2>&1;

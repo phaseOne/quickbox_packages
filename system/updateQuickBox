@@ -23,29 +23,35 @@ function _logcheck() {
   OUTTO=/srv/rutorrent/home/db/output.log
 }
 
-if [[ -d /root/quickbox_* ]]; then
-    rm -r /root/quickbox_*
-    git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
-  elif [[ -d /root/QuickBox ]]; then
-    cd /root/
+function _directorycheck() {
+if [[ -d /root/QuickBox ]]; then
+  cd /root
+  find -type d -name "quickbox_*" -exec rm -rf {} \;
+else
+  cd /root
+  git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
 fi
+}
 
 function _downloadrepos() {
   echo >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_setup              :: " >>"${OUTTO}" 2>&1; \
-    cd ${local_setup} && git checkout master \
+  cd /root/QuickBox
+  git pull >>"${OUTTO}" 2>&1;
+  echo
+  echo -n "quickbox_setup              :: " >>"${OUTTO}" 2>&1;
+    cd ${local_setup} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_rutorrent          :: " >>"${OUTTO}" 2>&1; \
-    cd ${local_rutorrent} && git checkout master \
+  echo -n "quickbox_rutorrent          :: " >>"${OUTTO}" 2>&1;
+    cd ${local_rutorrent} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_rutorrent-plugins  :: " >>"${OUTTO}" 2>&1; \
-    cd ${local_rplugins} && git checkout master \
+  echo -n "quickbox_rutorrent-plugins  :: " >>"${OUTTO}" 2>&1;
+    cd ${local_rplugins} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_packages           :: " >>"${OUTTO}" 2>&1; \
-    cd ${local_packages} && git checkout master \
+  echo -n "quickbox_packages           :: " >>"${OUTTO}" 2>&1;
+    cd ${local_packages} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
-  echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1; \
-    cd ${local_dashboard} && git checkout master \
+  echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
+    cd ${local_dashboard} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
 }
 
@@ -56,6 +62,9 @@ function _bashrc() {
 function _updatesyscommands() {
   cd ${usrbin}
   cp -R ${local_packages}. ${usrbin}quickbox
+  if [[ -f ${usrbin}quickbox/system/changeUserpass ]]; then
+    rm ${usrbin}quickbox/system/changeUserpass
+  fi
 }
 
 function _updateskel() {
@@ -79,7 +88,7 @@ function _updaterutorrent-plugins() {
 # function to install dashboard (23)
 function _updatedashboard() {
   cd ${rutorrent}
-  cp -R ${local_dashboard}. ${rutorrent}home
+  rsync -aP --exclude=disk_*.php --exclude=branding-*.php --exclude=logo-custom.png ${local_dashboard}* ${rutorrent}home
 }
 
 function _updatesudo() {
@@ -88,32 +97,43 @@ function _updatesudo() {
   awk -v username="${A1}" '/^root/ && !x {print username    " ALL=(ALL:ALL) NOPASSWD: ALL"; x=1} 1' /etc/sudoers > /tmp/sudoers;mv /tmp/sudoers /etc
 }
 
-function _updatecronfile() {
-  cp ${local_setup}templates/startup.template /home/"${A1}"/.startup
-}
+#function _updatecronfile() {
+  # We'll disable this function unless a new packages
+  # is included or startup requires a fix.
+  #cp ${local_setup}templates/startup.template /home/"${A1}"/.startup
+#}
 
 # adjust permissions function (9)
 function _perms() {
-  chown -R www-data /srv/rutorrent/*
-  chgrp -R www-data /srv/rutorrent/*
-  chmod -R g+rw /srv/rutorrent/*
+  chown -R www-data ${rutorrent}*
+  chgrp -R www-data ${rutorrent}*
+  chmod -R g+rw ${rutorrent}*
   sh -c 'find /srv/rutorrent/* -type d -print0 | sudo xargs -0 chmod g+s'
   chmod +x /etc/cron.d/set_interface
-  chmod +x /home/"${A1}"/.startup
+  find /home -name ".startup" -exec chmod 775 {} \;
+  find /usr/local/bin/quickbox -type f -exec chmod 755 {} \;
+}
+
+function _updatedeps() {
+  if [[ ! -f /bin/ed ]]; then
+    apt update -y -q
+    apt install -y -q ed
+  fi
 }
 
 function _fin() {
+  source ~/.bashrc >> /dev/null 2>&1
   echo
-  echo "[QuickBox] Seddbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
+  echo "[QuickBox] Seedbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
   sleep 5
-  echo "Refreshing your browser in 5 seconds" >>"${OUTTO}" 2>&1;
-  sleep 5
-  printf "" > /srv/rutorrent/home/db/output.log
+
+  echo >>"${OUTTO}" 2>&1;
+  echo >>"${OUTTO}" 2>&1;
+  echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
 
   exit
 }
 
-clear
 
 local_setup=/root/QuickBox/setup/
 local_packages=/root/QuickBox/packages/
@@ -129,15 +149,15 @@ usrbin=/usr/local/bin/
 
 # QuickBox Update STRUCTURE
 _logcheck
-#echo -n "Setting up git stash for saved changes ... " >>"${OUTTO}" 2>&1;_setstash
+_directorycheck
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
-echo -n "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands
-echo -n "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel
-#echo -n "Looking for install directory for .lock files ... " >>"${OUTTO}" 2>&1;_installdir
-echo -n "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent
-echo -n "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard
-echo -n "Updating the QuickBox Sudoers template ... " >>"${OUTTO}" 2>&1;_updatesudo
-echo -n "Updating ${A1}'s .startup cronfile... " >>"${OUTTO}" 2>&1;_updatecronfile
-echo -n "Adjusting permissions ... " >>"${OUTTO}" 2>&1;_perms
+echo "Checking new dependencies and updating as necessary ... " >>"${OUTTO}" 2>&1;_updatedeps;echo
+echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
+echo "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
+echo "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent;echo
+echo "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard;echo
+echo "Updating the QuickBox Sudoers template ... " >>"${OUTTO}" 2>&1;_updatesudo;echo
+#echo "Updating ${A1}'s .startup cronfile... " >>"${OUTTO}" 2>&1;_updatecronfile;echo
+echo "Adjusting permissions ... " >>"${OUTTO}" 2>&1;_perms;echo
 _fin

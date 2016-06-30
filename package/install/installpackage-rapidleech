@@ -18,7 +18,7 @@ MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 OUTTO=/srv/rutorrent/home/db/output.log
 
 function _installRapidleech1() {
-  sudo git clone https://github.com/Th3-822/rapidleech.git  /home/"${MASTER}"/rapidleech
+  sudo git clone https://github.com/Th3-822/rapidleech.git  /home/"${MASTER}"/rapidleech >/dev/null 2>&1
 }
 function _installRapidleech2() {
   touch /install/.rapidleech.lock

@@ -25,7 +25,7 @@ function _installplugin-mediainfo() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
   echo "Accessing mediainfo in the plugin vault ... " >>"${OUTTO}" 2>&1;
-  PLUGINVAULT="/root/quickbox_rutorrent-plugins/"; cd "${rutorrent}plugins"
+  PLUGINVAULT="/root/QuickBox/rtplugins/"; cd "${rutorrent}plugins"
   sleep 5
 
   echo "Installing mediainfo plugin ... " >>"${OUTTO}" 2>&1;

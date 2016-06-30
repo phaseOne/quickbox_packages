@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# [Quick Box :: Install autodl-irssi plugin]
+# [Quick Box :: Remove autodl plugin]
 #
 # GITHUB REPOS
 # GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
@@ -21,30 +21,20 @@
 #
 OUTTO=/srv/rutorrent/home/db/output.log
 
-function _installplugin-autodlirssi() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
-  echo "Accessing autodl_irssi in the plugin vault ... " >>"${OUTTO}" 2>&1;
-  PLUGINVAULT="/root/quickbox_rutorrent-plugins"; cd "${rutorrent}plugins"
-  sleep 5
-
-  echo "Installing autodl_irssi plugin ... " >>"${OUTTO}" 2>&1;
-  PLUGIN="autodl_irssi"
+  echo "Uninstalling the autodl-irssi plugin ... " >>"${OUTTO}" 2>&1;
+  PLUGIN="autodl-irssi"
     for i in $PLUGIN; do
-      cp -R "${PLUGINVAULT}$i" .
+      rm -rf "${rutorrent}plugins/$i"
     done
   sleep 5
 
-  echo "Adjusting permissions ... " >>"${OUTTO}" 2>&1;
-  chown -R www-data: ${rutorrent}plugins/$PLUGIN
-  echo "Autodl_irssi Plugin Install Complete!" >>"${OUTTO}" 2>&1;
-  
+  echo "Autodl-irssi Plugin Uninstall Complete!" >>"${OUTTO}" 2>&1;
+
   sleep 5
   echo >>"${OUTTO}" 2>&1;
   echo >>"${OUTTO}" 2>&1;
   echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
 
     exit
-}
-
-_installplugin-autodlirssi

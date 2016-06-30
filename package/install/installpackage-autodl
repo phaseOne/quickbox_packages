@@ -29,7 +29,7 @@ function _installautodl() {
     done
   mkdir -p "/home/${MASTER}/.irssi/scripts/autorun/" >>"${OUTTO}" 2>&1
   cd "/home/${MASTER}/.irssi/scripts/"
-  wget -qO autodl-irssi.zip https://github.com/autodl-community/autodl-irssi/releases/download/community-v1.60/autodl-irssi-community-v1.60.zip
+  wget -qO autodl-irssi.zip https://github.com/autodl-community/autodl-irssi/releases/download/community-v1.60/autodl-irssi-community-v1.60.zip >/dev/null 2>&1
   unzip -o autodl-irssi.zip >>"${OUTTO}" 2>&1
   rm autodl-irssi.zip
   cp autodl-irssi.pl autorun/

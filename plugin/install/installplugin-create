@@ -25,7 +25,7 @@ function _installplugin-create() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
   echo "Accessing create in the plugin vault ... " >>"${OUTTO}" 2>&1;
-  PLUGINVAULT="/root/quickbox_rutorrent-plugins/"; cd "${rutorrent}plugins"
+  PLUGINVAULT="/root/QuickBox/rtplugins/"; cd "${rutorrent}plugins"
   sleep 5
 
   echo "Installing create plugin ... " >>"${OUTTO}" 2>&1;
