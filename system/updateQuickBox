@@ -59,6 +59,11 @@ function _bashrc() {
   cp ${local_setup}templates/bashrc.template /root/.bashrc
 }
 
+function _updatequota(){
+  sed -i 's/usrquota,errors=remount-ro/usrjquota=aquota.user,jqfmt=vfsv1,errors=remount-ro/g' /etc/fstab
+  service quota restart
+}
+
 function _checklocks() {
   if [[ -f /usr/sbin/repquota ]] && [[ ! -f /install/.quota.lock ]]; then
     touch /install/.quota.lock
