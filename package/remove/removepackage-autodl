@@ -17,14 +17,23 @@
 
 function _removepackage-autodl() {
   username=$(whoami);
+  users=($(cat /etc/htpasswd | cut -d ":" -f 1))
   rutorrent="/srv/rutorrent/";
   PLUGIN="autodl-irssi"
     for i in $PLUGIN; do
       rm -rf "${rutorrent}/plugins/$i"
-      rm -rf /home/${username}/.autodl
-      rm -rf /home/${username}/.irssi
-      rm /install/.autodlirssi.lock
     done
+    if [[ ! -f /install/.cron.lock ]]; then
+      systemctl stop irssi@*
+      systemctl disable irssi@*
+      rm /etc/systemd/system/irssi@.service
+    fi
+    for u in "${users[@]}"; do
+      rm -rf /home/${u}/.autodl
+      rm -rf /home/${u}/.irssi
+    done
+    rm /install/.autodlirssi.lock
+
 }
 
 _removepackage-autodl
