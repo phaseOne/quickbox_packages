@@ -41,8 +41,6 @@ for i in "${locks[@]}"; do
 done
   systemctl enable "rtorrent@${master}" > /dev/null 2>&1
   systemctl restart "rtorrent@${master}" > /dev/null 2>&1
-  rm -f /etc/init.d/deluge >/dev/null 2>&1
-  rm -f /etc/init.d/deluged >/dev/null 2>&1
  for i in "${arr[@]}"; do
    if [[ $i == autodlirssi ]]; then
      i=irssi
