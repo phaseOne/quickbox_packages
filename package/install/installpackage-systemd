@@ -43,8 +43,8 @@ done
    if [[ $i == autodlirssi ]]; then
      i=irssi
    fi
-  systemctl enable ${i}\@${master}
-  systemctl start ${i}\@${master}
+  systemctl enable ${i}\@${master} > /dev/null 2>&1
+  systemctl start ${i}\@${master} > /dev/null 2>&1
 done
 }
 
