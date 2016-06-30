@@ -176,6 +176,8 @@ _logcheck
 _directorycheck
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
+#echo "Modifying fstab to use journaled quotas ... " >>"${OUTTO}" 2>&1;_updatequota;echo
+_updatequota
 echo "Checking locks and adding if necessary ... " >>"${OUTTO}" 2>&1;_checklocks;echo
 echo "Checking new dependencies and updating as necessary ... " >>"${OUTTO}" 2>&1;_updatedeps;echo
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
