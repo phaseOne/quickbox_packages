@@ -20,11 +20,11 @@ function _removed() {
   for i in "${services[@]}"; do
     systemctl disable $i@* >> /dev/null 2>&1
     systemctl stop $i@* >> /dev/null 2>&1
-    rm /etc/systemd/system/$i@.service
+    rm /etc/systemd/system/$i@.service > /dev/null 2>&1
       if [[ $i == autodlirssi ]]; then
         systemctl disable irssi@* >> /dev/null 2>&1
         systemctl stop irssi@* >> /dev/null 2>&1
-        rm /etc/systemd/system/irssi@.service
+        rm /etc/systemd/system/irssi@.service > /dev/null 2>&1
       fi
     done
 }
