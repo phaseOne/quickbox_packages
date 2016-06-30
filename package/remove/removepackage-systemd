@@ -21,7 +21,7 @@ function _removed() {
     systemctl disable $i@* >> /dev/null 2>&1
     systemctl stop $i@* >> /dev/null 2>&1
     rm /etc/systemd/system/$i@.service
-      if [[ $i == autodl-irssi ]]; then
+      if [[ $i == autodlirssi ]]; then
         systemctl disable irssi@* >> /dev/null 2>&1
         systemctl stop irssi@* >> /dev/null 2>&1
         rm /etc/systemd/system/irssi@.service
