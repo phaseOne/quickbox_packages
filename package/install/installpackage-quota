@@ -55,6 +55,8 @@ function _installquota(){
   touch /install/.quota.lock
 }
 
+primaryroot=root
+
 function _installquota2(){
   echo "Quota Install Complete!" >>"${OUTTO}" 2>&1;
   sleep 5
