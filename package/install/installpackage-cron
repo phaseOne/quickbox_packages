@@ -21,6 +21,9 @@ function _removed() {
     systemctl disable $i@* >> /dev/null 2>&1
     systemctl stop $i@* >> /dev/null 2>&1
     rm /etc/systemd/system/$i@.service > /dev/null 2>&1
+    rm -f /etc/init.d/deluge >/dev/null 2>&1
+    rm -f /etc/init.d/deluged >/dev/null 2>&1
+    if [[ -f /etc/init.d/$i ]]; then update-rc.d $i defaults; fi
       if [[ $i == autodlirssi ]]; then
         systemctl disable irssi@* >> /dev/null 2>&1
         systemctl stop irssi@* >> /dev/null 2>&1
