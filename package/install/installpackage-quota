@@ -15,7 +15,6 @@
 #   under the GPL along with build & install instructions.
 #
 #################################################################################
-DISTRO=$(lsb_release -is)
 
 function _installquota(){
   apt-get install -y -q quota >/dev/null 2>&1
@@ -55,6 +54,9 @@ function _installquota(){
   touch /install/.quota.lock
 }
 
+
+OUTTO=/srv/rutorrent/home/db/output.log
+DISTRO=$(lsb_release -is)
 primaryroot=root
 
 function _installquota2(){
