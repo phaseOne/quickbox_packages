@@ -18,6 +18,7 @@
 DISTRO=$(lsb_release -is)
 
 function _installquota(){
+  apt-get install -y -q quota >/dev/null 2>&1
   if [[ $DISTRO == Ubuntu ]]; then
     if [[ ${primaryroot} == "root" ]]; then
       sed -i 's/errors=remount-ro/usrquota,errors=remount-ro/g' /etc/fstab
