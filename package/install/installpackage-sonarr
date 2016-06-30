@@ -64,21 +64,19 @@ function _installSonarr5() {
 }
 
 function _installSonarr6() {
-  cp "${local_setup}"templates/sonarr.template /etc/init.d/sonarr
-  sed -i "s/USERNAME/${username}/g" /etc/init.d/sonarr
-  sudo chmod +x /etc/init.d/sonarr
+  if [[ -e /install/.cron.lock ]]; then
+    cp "${local_setup}"templates/sonarr.template /etc/init.d/sonarr
+    sed -i "s/USERNAME/${username}/g" /etc/init.d/sonarr
+    sudo chmod +x /etc/init.d/sonarr
+    sudo update-rc.d sonarr defaults >/dev/null 2>&1
+    sudo service sonarr start
+  else
+    cp ${local_setup}templates/system/sonarr.template /etc/systemd/system/sonarr@.service
+    systemctl enable sonarr@${username}
+    systemctl start sonarr@${username}
   sleep 2
 }
 
-function _installSonarr7() {
-  sudo update-rc.d sonarr defaults >/dev/null 2>&1
-  sleep 2
-}
-
-function _installSonarr8() {
-  sudo service sonarr start
-  sleep 2
-}
 
 function _installSonarr9() {
   echo "Sonarr Install Complete!" >>"${OUTTO}" 2>&1;
