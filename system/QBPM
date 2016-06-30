@@ -36,12 +36,15 @@ function _function() {
 
 function _install() {
   installa=()
-  for i in btsync deluge plex quassel quota rapidleech sickrage sonarr x2go; do
-    if [[ ! -f /install/.$i.lock ]]; then
-      installa="${installa} $i off"
+  locks=($(find /usr/local/bin/quickbox/package/install -type f -printf "%f\n" | cut -d "-" -f 2 | sort -d))
+  for i in "${locks[@]}"; do
+    app=${i}
+    if [[ $i == autodl ]]; then app=autodlirssi; fi
+    if [[ ! -f /install/.$app.lock ]]; then
+      installa+=("$i" '""')
     fi
   done
-	whiptail --title "Install Software" --noitem --checklist --separate-output "Make some choices:" 15 26 7 ${installa[@]} 2>results
+	whiptail --title "Install Software" --checklist --noitem --separate-output "Make some choices:" 15 26 7 "${installa[@]}" 2>results
   readarray packages < results
   for i in "${packages[@]}"; do
     echo -n "Installing $i ";
@@ -49,18 +52,20 @@ function _install() {
   done
   rm results
   rm function
-
   _function
 }
 
 function _remove() {
 removea=()
-for i in btsync deluge plex quassel quota rapidleech sickrage sonarr x2go; do
-  if [[ -f /install/.$i.lock ]]; then
-    removea="${removea} $i off"
+locks=($(find /usr/local/bin/quickbox/package/remove -type f -printf "%f\n" | cut -d "-" -f 2 | sort -d))
+for i in "${locks[@]}"; do
+  app=${i}
+  if [[ $i == autodl ]]; then app=autodlirssi; fi
+  if [[ -f /install/.$app.lock ]]; then
+    removea+=("$i" '""')
   fi
 done
-whiptail --title "Remove Software" --noitem --checklist --separate-output "Make some choices:" 15 26 7 ${removea[@]} 2>results
+whiptail --title "Remove Software" --noitem --checklist --separate-output "Make some choices:" 15 26 7 "${removea[@]}" 2>results
 readarray packages < results
 for i in "${packages[@]}"; do
   echo -n "Removing $i ";
