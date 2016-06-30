@@ -32,7 +32,9 @@ function _installSonarr1() {
     echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
   else
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF >/dev/null 2>&1
-    echo "deb http://debian.meebey.net/pkg-mono ./" | sudo tee /etc/apt/sources.list.d/mono-meeby.list
+    #echo "deb http://debian.meebey.net/pkg-mono ./" | sudo tee /etc/apt/sources.list.d/mono-meeby.list
+    echo "deb http://download.mono-project.com/repo/debian wheezy-libjpeg62-compat main" | tee /etc/apt/sources.list.d/mono-xamarin.list >/dev/null 2>&1
+    echo "deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main" | tee -a /etc/apt/sources.list.d/mono-xamarin.list >/dev/null 2>&1
   fi
 }
 
@@ -52,7 +54,6 @@ function _installSonarr3() {
 function _installSonarr4() {
   sudo apt-get install -y nzbdrone >/dev/null 2>&1
   sleep 5
-  sudo rm /etc/apt/sources.list.d/sonarr.list
   sed -i 's/SONARR=no/SONARR=yes/g' /home/"${username}"/.startup
   touch /install/.sonarr.lock
 }
