@@ -33,7 +33,7 @@ function _installcron() {
   for i in "${users[@]}"; do
     sudo -u ${i} crontab -l | echo "*/1 * * * * /home/${i}/.startup >/dev/null 2>&1" | crontab -u ${i} -
   done
-  rm /install/.cron.lock
+  touch /install/.cron.lock
 }
 
 
