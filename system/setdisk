@@ -16,6 +16,11 @@
 #
 
 function _setdisk() {
+echo "================================================================================="
+echo "Disk Space MUST be in GB/TB - Do not attempt to add deciamals in space settings,"
+echo "Example - Good: 711GB OR 2TB, Example - Bad: 711.5GB OR 2.5TB"
+echo "================================================================================="
+echo
 echo -n "Username: "
 read username
 echo "Quota size for user: (EX: 500GB): "
@@ -37,7 +42,11 @@ case $SIZE in
                 setquota -u ${username} ${DISKSIZE} ${DISKSIZE} 0 0 -a
   ;;
   *)
-    echo "Disk Space MUST be in GB/TB - Do not attempt to add deciamals in space settings, Example - Good: 711GB OR 2TB, Example - Bad: 711.5GB OR 2.5TB, Exiting script, type bash $0 and try again";exit 0
+    echo "================================================================================="
+    echo "Disk Space MUST be in GB/TB - Do not attempt to add deciamals in space settings,"
+    echo "Example - Good: 711GB OR 2TB, Example - Bad: 711.5GB OR 2.5TB"
+    echo "Exiting script, type bash $0 and try again"
+    echo "=================================================================================";exit 0
   ;;
 esac
 }
