@@ -145,7 +145,7 @@ function _updatedeps() {
 }
 
 function _fin() {
-  source ~/.bashrc >> /dev/null 2>&1
+  source /root/.bashrc >> /dev/null 2>&1
   echo
   echo "[QuickBox] Seedbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
   sleep 5

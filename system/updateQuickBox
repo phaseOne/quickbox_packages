@@ -104,7 +104,7 @@ function _updaterutorrent-plugins() {
 function _updatedashboard() {
   cd ${rutorrent}
   #if [[ -f ${rutorrent}home/widgets/branding-*.php ]]; then
-  if [[ -n $(find /srv/rutorrent/home/widgets -name "branding-*.php") ]]; then
+  if [[ -n $(find /srv/rutorrent/home/db -name "branding-*.php") ]]; then
     rsync -aP --exclude=disk_*.php --exclude=branding-*.php ${local_dashboard}* ${rutorrent}home
   else
     rsync -aP --exclude=disk_*.php ${local_dashboard}* ${rutorrent}home
@@ -145,7 +145,7 @@ function _updatedeps() {
 }
 
 function _fin() {
-  source ~/.bashrc >> /dev/null 2>&1
+  source /root/.bashrc >> /dev/null 2>&1
   echo
   echo "[QuickBox] Seedbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
   sleep 5
