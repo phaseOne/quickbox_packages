@@ -7,7 +7,7 @@
 # Author  :   QuickBox.io
 # URL     :   https://plaza.quickbox.io
 #
-# QuickBox Copyright (C) 2016 QuickBox.io
+# QuickBox Copyright (C) 2016 Swizards.net
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
 #
 #   You may copy, distribute and modify the software as long as you track
@@ -59,6 +59,11 @@ function _bashrc() {
   cp ${local_setup}templates/bashrc.template /root/.bashrc
 }
 
+function _updatequota(){
+  sed -i 's/usrquota,errors=remount-ro/usrjquota=aquota.user,jqfmt=vfsv1,errors=remount-ro/g' /etc/fstab
+  service quota restart
+}
+
 function _checklocks() {
   if [[ -f /usr/sbin/repquota ]] && [[ ! -f /install/.quota.lock ]]; then
     touch /install/.quota.lock
@@ -98,11 +103,13 @@ function _updaterutorrent-plugins() {
 # function to install dashboard (23)
 function _updatedashboard() {
   cd ${rutorrent}
-  if [[ -f ${rutorrent}home/widgets/branding-*.php ]]; then
+  #if [[ -f ${rutorrent}home/widgets/branding-*.php ]]; then
+  if [[ -n $(find /srv/rutorrent/home/widgets -name "branding-*.php") ]]; then
     rsync -aP --exclude=disk_*.php --exclude=branding-*.php ${local_dashboard}* ${rutorrent}home
   else
     rsync -aP --exclude=disk_*.php ${local_dashboard}* ${rutorrent}home
   fi
+
 }
 
 function _updatesudo() {
@@ -156,7 +163,7 @@ local_rutorrent=/root/QuickBox/rutorrent/
 local_rplugins=/root/QuickBox/rtplugins/
 local_dashboard=/root/QuickBox/dashboard/
 
-btesting=v2.3.8
+btesting=v2.4.0
 
 Reth0=$(ifconfig | grep -m 1 "Link encap" | sed 's/[ \t].*//;/^\(lo\|\)$/d' | awk '{ print $1 '});
 IFACE=$(echo -n "${Reth0}");
@@ -169,6 +176,8 @@ _logcheck
 _directorycheck
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
+#echo "Modifying fstab to use journaled quotas ... " >>"${OUTTO}" 2>&1;_updatequota;echo
+_updatequota
 echo "Checking locks and adding if necessary ... " >>"${OUTTO}" 2>&1;_checklocks;echo
 echo "Checking new dependencies and updating as necessary ... " >>"${OUTTO}" 2>&1;_updatedeps;echo
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
