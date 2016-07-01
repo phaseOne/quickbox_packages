@@ -19,7 +19,7 @@
 #
 
 function _removed() {
-  services=($(find ${local_setup}templates/system -type f -printf "%f\n" | cut -d "." -f 1 ))
+  services=($(find ${local_setup}templates/sysd -type f -printf "%f\n" | cut -d "." -f 1 ))
   for i in "${services[@]}"; do
     systemctl disable $i@* >> /dev/null 2>&1
     systemctl stop $i@* >> /dev/null 2>&1
