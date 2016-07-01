@@ -33,7 +33,7 @@ for i in "${locks[@]}"; do
   if [[ -f /install/.$app.lock ]]; then
     arr+=("$i")
     pkill $i
-    cp ${local_setup}templates/system/$i.template /etc/systemd/system/$i@.service
+    cp ${local_setup}templates/sysd/$i.template /etc/systemd/system/$i@.service
     if [[ $i == autodlirssi ]]; then
     mv /etc/systemd/system/autodlirssi@.service /etc/systemd/system/irssi@.service
     fi

@@ -29,7 +29,7 @@ function _installSickRage3() {
   if [[ -f /install/.cron.lock ]]; then
     cd /home/"${MASTER}"/.sickrage/runscripts
     cd /etc/init.d/
-    cp ${local_setup}templates/sickrage.template /etc/init.d/sickrage
+    cp ${local_setup}templates/sysv/sickrage.template /etc/init.d/sickrage
     sudo chmod +x /etc/init.d/sickrage
     echo -e "SR_HOME=/home/${MASTER}/.sickrage/
     SR_DATA=/home/${MASTER}/.sickrage/
@@ -37,7 +37,7 @@ function _installSickRage3() {
     update-rc.d sickrage defaults
     sudo service sickrage start >/dev/null 2>&1
   else
-    cp ${local_setup}templates/system/sickrage.template /etc/systemd/system/sickrage@.service
+    cp ${local_setup}templates/sysd/sickrage.template /etc/systemd/system/sickrage@.service
     systemctl enable sickrage@${MASTER} > /dev/null 2>&1
     systemctl start sickrage@${MASTER} > /dev/null 2>&1
   fi
