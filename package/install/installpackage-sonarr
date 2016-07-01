@@ -107,8 +107,6 @@ echo "Adding source repositories for Sonarr-Nzbdrone ... " >>"${OUTTO}" 2>&1;_in
 echo "Updating your system with new sources ... " >>"${OUTTO}" 2>&1;_installSonarr3
 echo "Installing Sonarr-Nzbdrone ... " >>"${OUTTO}" 2>&1;_installSonarr4
 echo "Setting permissions to ${username} ... " >>"${OUTTO}" 2>&1;_installSonarr5
-echo "Setting up Sonarr as a service ... " >>"${OUTTO}" 2>&1;_installSonarr6
-echo "Setting Sonarr to fire on boot ... " >>"${OUTTO}" 2>&1;_installSonarr7
-echo "Starting Sonarr service ... " >>"${OUTTO}" 2>&1;_installSonarr8
+echo "Setting up Sonarr as a service and enabling ... " >>"${OUTTO}" 2>&1;_installSonarr6
 _installSonarr9
 _installSonarr10
