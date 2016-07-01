@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# [Quick Box :: Install ZNC package]
+#
+# GitHub:   https://github.com/QuickBox/QuickBox
+# Author:   QuickBox.io | liara
+# URL:      https://swizards.net
+#
+# QuickBox Copyright (C) 2016 Swizards.net
+# Licensed under GNU General Public License v3.0 GPL-3 (in short)
+#
+#   You may copy, distribute and modify the software as long as you track
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
+#   under the GPL along with build & install instructions.
+
+DISTRO=$(lsb_release -is)
+CODENAME=$(lsb_release -cs)
+OUTTO=/srv/rutorrent/home/db/output.log
+
+echo "Installing ZNC. Please wait ... " >> ${OUTTO} 2>&1
+echo "" >> ${OUTTO} 2>&1
+echo "" >> ${OUTTO} 2>&1
+useradd znc -m -s /bin/bash
+passwd znc -l
+
+if [[ $DISTRO == Debian ]]; then
+  echo "deb http://packages.temporal-intelligence.net/znc/debian/ ${CODENAME} main" > /etc/apt/sources.list.d/znc.list
+  echo "#deb-src http://packages.temporal-intelligence.net/znc/debian/ ${CODENAME} main" >> /etc/apt/sources.list.d/znc.list
+  wget --quiet http://packages.temporal-intelligence.net/repo.gpg.key -O - | apt-key add - > /dev/null 2>&1
+elif [[ $DISTRO == Ubuntu ]]; then
+  sudo apt-get install -q -y python-software-properties software-properties-common
+  sudo add-apt-repository -q -y ppa:teward/znc
+fi
+  apt-get update -q -y
+  apt-get install znc -q -y
+  touch /install/.znc.lock
+  sudo -u znc crontab -l | echo "*/10 * * * * /usr/local/bin/znc >/dev/null 2>&1" | crontab -u znc -
+
+echo "ZNC now installed!" | tee -a ${OUTTO}
+echo "To finish installation, log into ssh" | tee -a ${OUTTO}
+echo "as root and use the commands:" | tee -a ${OUTTO}
+echo "su - znc" | tee -a ${OUTTO}
+echo "znc --makeconf" | tee -a ${OUTTO}
+echo "After configuration, the command 'znc' will start" | tee -a ${OUTTO}
+echo "znc, but a cron job has been set to ensure it stays running." | tee -a ${OUTTO}
