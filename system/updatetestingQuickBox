@@ -131,6 +131,7 @@ function _perms() {
   chmod -R g+rw ${rutorrent}*
   sh -c 'find /srv/rutorrent/* -type d -print0 | sudo xargs -0 chmod g+s'
   chmod +x /etc/cron.d/set_interface
+  find /home/*/.config/deluge -name "auth" -exec chmod 600 {} \;
   find /home -name ".startup" -exec chmod 775 {} \;
   find /usr/local/bin/quickbox -type f -exec chmod 755 {} \;
   chmod +x $(find /usr/local/bin/quickbox -type f) >/dev/null 2>&1
