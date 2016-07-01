@@ -20,18 +20,22 @@
 
 function _removed() {
   services=($(find ${local_setup}templates/sysd -type f -printf "%f\n" | cut -d "." -f 1 ))
+  sysv=($(find ${local_setup}templates/sysv -type f -printf "%f\n" | cut -d "." -f 1 ))
   for i in "${services[@]}"; do
     systemctl disable $i@* >> /dev/null 2>&1
     systemctl stop $i@* >> /dev/null 2>&1
     rm /etc/systemd/system/$i@.service > /dev/null 2>&1
     rm -f /etc/init.d/deluge >/dev/null 2>&1
     rm -f /etc/init.d/deluged >/dev/null 2>&1
-    if [[ -f /etc/init.d/$i ]]; then update-rc.d $i defaults; fi
-      if [[ $i == autodlirssi ]]; then
-        systemctl disable irssi@* >> /dev/null 2>&1
-        systemctl stop irssi@* >> /dev/null 2>&1
-        rm /etc/systemd/system/irssi@.service > /dev/null 2>&1
-      fi
+    for l in "${sysv[@]}"; do
+      if [[ -f /etc/init.d/$i ]]; then update-rc.d $i defaults; fi
+      if [[ -f /etc/init.d/$l ]]; then service $l start; fi
+    done
+    if [[ $i == autodlirssi ]]; then
+      systemctl disable irssi@* >> /dev/null 2>&1
+      systemctl stop irssi@* >> /dev/null 2>&1
+      rm /etc/systemd/system/irssi@.service > /dev/null 2>&1
+    fi
     done
 }
 
