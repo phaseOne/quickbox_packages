@@ -28,6 +28,8 @@ rm /install/.cron.lock
 function _installd() {
 arr=()
 locks=($(find ${local_setup}templates/sysd -type f -printf "%f\n" | cut -d "." -f 1 ))
+sysv=($(find ${local_setup}templates/sysv -type f -printf "%f\n" | cut -d "." -f 1 ))
+
 for i in "${locks[@]}"; do
   app=$i
   if [[ $i == deluged ]] || [[ $i == deluge-web ]]; then
@@ -44,11 +46,14 @@ for i in "${locks[@]}"; do
 done
   systemctl enable "rtorrent@${master}" > /dev/null 2>&1
   systemctl restart "rtorrent@${master}" > /dev/null 2>&1
- for i in "${arr[@]}"; do
+  for l in "${sysv[@]}"; do
+    if [[ -f /etc/init.d/$l ]]; then update-rc.d -f $l remove; fi
+    if [[ -f /etc/init.d/$l ]]; then service $l stop; fi
+  done
+  for i in "${arr[@]}"; do
    if [[ $i == autodlirssi ]]; then
      i=irssi
    fi
-  if [[ -f /etc/init.d/$i ]]; then update-rc.d -f $i remove; fi
   systemctl enable "${i}@${master}" > /dev/null 2>&1
   systemctl restart "${i}@${master}" > /dev/null 2>&1
 done
