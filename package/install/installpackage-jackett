@@ -27,7 +27,7 @@ echo "Installing Jackett ... " >>"${OUTTO}" 2>&1;
 
 cd /home/$username
 wget -q https://github.com/Jackett/Jackett/releases/download/$jackettver/Jackett.Binaries.Mono.tar.gz
-tar -xvzf Jackett.Binaries.Mono.tar.gz
+tar -xvzf Jackett.Binaries.Mono.tar.gz > /dev/null 2>&1
 rm Jackett.Binaries.Mono.tar.gz
 chown ${username}.${username} -R Jackett
 touch /install/.jackett.lock
