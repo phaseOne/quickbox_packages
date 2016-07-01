@@ -96,8 +96,8 @@ function _updaterutorrent() {
 
 function _updaterutorrent-plugins() {
   cd ${rutorrent}
-  #cp -R ${local_rplugins}. plugins
-  rsync -aP ${local_rplugins}* plugins
+  cp -R ${local_rplugins}. plugins
+  #rsync -aP ${local_rplugins}* plugins
 }
 
 # function to install dashboard (23)
