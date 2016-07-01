@@ -25,6 +25,7 @@ rm /install/.cron.lock
 function _installd() {
 arr=()
 locks=($(find ${local_setup}templates/system -type f -printf "%f\n" | cut -d "." -f 1 ))
+cp ${local_setup}templates/sysd/rtorrent.template /etc/systemd/system/rtorrent@.service
 for i in "${locks[@]}"; do
   app=$i
   if [[ $i == deluged ]] || [[ $i == deluge-web ]]; then

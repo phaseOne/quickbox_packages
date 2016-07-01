@@ -75,6 +75,7 @@ function _installSonarr6() {
     systemctl enable sonarr@${username}
     systemctl start sonarr@${username}
   sleep 2
+fi
 }
 
 

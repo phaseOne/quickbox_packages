@@ -32,7 +32,7 @@ echo >>"${OUTTO}" 2>&1;
 echo >>"${OUTTO}" 2>&1;
 echo "Installing and enabling service ... " >>"${OUTTO}" 2>&1;
 
-if [[ ! -f /install/.cron.lock]]; then
+if [[ ! -f /install/.cron.lock ]]; then
   cp ${local_setup}templates/sysd/couchpotato.template /etc/systemd/system/couchpotato@.service
   systemctl enable couchpotato@${MASTER} >/dev/null 2>&1
   systemctl start couchpotato@${MASTER} >/dev/null 2>&1
