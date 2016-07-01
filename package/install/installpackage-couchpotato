@@ -44,6 +44,9 @@ else
   cp /home/${MASTER}/.couchpotato/init/ubuntu /etc/init.d/couchpotato
   sed -i "s/.*CP_USER.*/CP_USER=${MASTER}/" /etc/default/couchpotato
   sed -i "s/.*CP_PIDFILE.*/CP_PIDFILE=\/home\/${MASTER}\/.couchpotato.pid/" /etc/default/couchpotato
+  sed -i "s/.*CP_HOME.*/CP_PIDFILE=\/home\/${MASTER}\/.couchpotato/" /etc/default/couchpotato
+  sed -i "s/.*CP_DATA.*/CP_PIDFILE=\/home\/${MASTER}\/.couchpotato/" /etc/default/couchpotato
+
   chmod +x /etc/init.d/couchpotato
   update-rc.d couchpotato defaults >/dev/null 2>&1
   service couchpotato start >/dev/null 2>&1
