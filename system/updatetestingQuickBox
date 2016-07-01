@@ -75,7 +75,7 @@ function _checklocks() {
 
 function _updatesyscommands() {
   cd ${usrbin}
-  rsync -aP ${local_packages}* ${usrbin}quickbox
+  cp -R ${local_packages}. ${usrbin}quickbox
   if [[ -f ${usrbin}quickbox/system/changeUserpass ]]; then
     rm ${usrbin}quickbox/system/changeUserpass
   fi
@@ -86,12 +86,13 @@ function _updateskel() {
     rm -r /etc/skel
   fi
   mkdir /etc/skel
-  rsync -aP ${local_setup}templates/skel/* /etc/skel
+  cp -R ${local_setup}templates/skel/. /etc/skel
+  #rsync -aP ${local_setup}templates/skel/* /etc/skel
 }
 
 function _updaterutorrent() {
   cd /srv
-  rsync -aP ${local_rutorrent}* rutorrent
+  cp -R ${local_rutorrent}. rutorrent
 }
 
 function _updaterutorrent-plugins() {
