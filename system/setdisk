@@ -6,7 +6,7 @@
 # Author:   QuickBox.io
 # URL:      https://plaza.quickbox.io
 #
-# QuickBox Copyright (C) 2016 Swizards.net
+# QuickBox Copyright (C) 2016 QuickBox.io
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
 #
 #   You may copy, distribute and modify the software as long as you track
@@ -16,6 +16,11 @@
 #
 
 function _setdisk() {
+echo "================================================================================="
+echo "Disk Space MUST be in GB/TB - Do not attempt to add deciamals in space settings,"
+echo "Example - Good: 711GB OR 2TB, Example - Bad: 711.5GB OR 2.5TB"
+echo "================================================================================="
+echo
 echo -n "Username: "
 read username
 echo "Quota size for user: (EX: 500GB): "
@@ -37,7 +42,11 @@ case $SIZE in
                 setquota -u ${username} ${DISKSIZE} ${DISKSIZE} 0 0 -a
   ;;
   *)
-    echo "Disk Space MUST be in GB/TB - Do not attempt to add deciamals in space settings, Example - Good: 711GB OR 2TB, Example - Bad: 711.5GB OR 2.5TB, Exiting script, type bash $0 and try again";exit 0
+    echo "================================================================================="
+    echo "Disk Space MUST be in GB/TB - Do not attempt to add deciamals in space settings,"
+    echo "Example - Good: 711GB OR 2TB, Example - Bad: 711.5GB OR 2.5TB"
+    echo "Exiting script, type bash $0 and try again"
+    echo "=================================================================================";exit 0
   ;;
 esac
 }

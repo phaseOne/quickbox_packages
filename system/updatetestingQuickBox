@@ -7,7 +7,7 @@
 # Author  :   QuickBox.io
 # URL     :   https://plaza.quickbox.io
 #
-# QuickBox Copyright (C) 2016 Swizards.net
+# QuickBox Copyright (C) 2016 QuickBox.io
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
 #
 #   You may copy, distribute and modify the software as long as you track
@@ -96,15 +96,15 @@ function _updaterutorrent() {
 
 function _updaterutorrent-plugins() {
   cd ${rutorrent}
-  #cp -R ${local_rplugins}. plugins
-  rsync -aP ${local_rplugins}* plugins
+  cp -R ${local_rplugins}. plugins
+  #rsync -aP ${local_rplugins}* plugins
 }
 
 # function to install dashboard (23)
 function _updatedashboard() {
   cd ${rutorrent}
-  #if [[ -f ${rutorrent}home/widgets/branding-*.php ]]; then
-  if [[ -n $(find /srv/rutorrent/home/widgets -name "branding-*.php") ]]; then
+  #if [[ -f ${rutorrent}home/db/branding-*.php ]]; then
+  if [[ -n $(find /srv/rutorrent/home/db -name "branding-*.php") ]]; then
     rsync -aP --exclude=disk_*.php --exclude=branding-*.php ${local_dashboard}* ${rutorrent}home
   else
     rsync -aP --exclude=disk_*.php ${local_dashboard}* ${rutorrent}home
@@ -145,7 +145,7 @@ function _updatedeps() {
 }
 
 function _fin() {
-  source ~/.bashrc >> /dev/null 2>&1
+  source /root/.bashrc >> /dev/null 2>&1
   echo
   echo "[QuickBox] Seedbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
   sleep 5
