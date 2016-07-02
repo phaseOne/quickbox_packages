@@ -44,4 +44,13 @@ function _installQuassel2() {
 
 
 echo "Installing Quassel PPA (Ubuntu) or grabbing latest backport (Debian) ... " >>"${OUTTO}" 2>&1;_installQuassel1
-echo "Quassel has now been installed! Please install quassel-client on your personal computer and connect to the newly created core at ${IP}:4242 to set up your account" >>"${OUTTO}" 2>&1;_installQuassel2
+echo >>"${OUTTO}"
+echo "Quassel has now been installed!"  >>"${OUTTO}"
+echo >>"${OUTTO}"
+echo "=============================================================================" >>"${OUTTO}" 2>&1;
+echo "Please install quassel-client on your personal computer and connect to the " >>"${OUTTO}" 2>&1;
+echo "newly created core at ${IP}:4242 to set up your account." >>"${OUTTO}" 2>&1;
+echo "=============================================================================" >>"${OUTTO}" 2>&1;
+echo >>"${OUTTO}" 2>&1;
+echo >>"${OUTTO}" 2>&1;
+echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;_installQuassel2
