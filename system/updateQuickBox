@@ -59,6 +59,11 @@ function _bashrc() {
   cp ${local_setup}templates/bashrc.template /root/.bashrc
 }
 
+function _updatequota(){
+  sed -i 's/usrquota,errors=remount-ro/usrjquota=aquota.user,jqfmt=vfsv1,errors=remount-ro/g' /etc/fstab
+  service quota restart
+}
+
 function _updatesyscommands() {
   cd ${usrbin}
   cp -r ${local_packages}. ${usrbin}quickbox
@@ -157,6 +162,7 @@ _logcheck
 _directorycheck
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
+_updatequota
 echo "Checking new dependencies and updating as necessary ... " >>"${OUTTO}" 2>&1;_updatedeps;echo
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
 echo "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
