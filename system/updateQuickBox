@@ -64,6 +64,12 @@ function _updatequota(){
   service quota restart
 }
 
+function _checkquota() {
+  if [[ -f /usr/sbin/repquota ]] && [[ ! -f /install/.quota.lock ]]; then
+    touch /install/.quota.lock
+  fi
+}
+
 function _updatesyscommands() {
   cd ${usrbin}
   cp -r ${local_packages}. ${usrbin}quickbox
@@ -164,6 +170,7 @@ _directorycheck
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
 _updatequota
+echo "Checking for quotas and adding lock file if necessary ... " >>"${OUTTO}" 2>&1;_checkquota;echo
 echo "Checking new dependencies and updating as necessary ... " >>"${OUTTO}" 2>&1;_updatedeps;echo
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
 echo "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
