@@ -122,6 +122,7 @@ function _perms() {
   chmod +x /etc/cron.d/set_interface
   find /home -name ".startup" -exec chmod 775 {} \;
   find /usr/local/bin/quickbox -type f -exec chmod 755 {} \;
+  chmod +x $(find /usr/local/bin/quickbox -type f)
 }
 
 function _updatedeps() {
