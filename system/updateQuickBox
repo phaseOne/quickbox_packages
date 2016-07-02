@@ -61,7 +61,7 @@ function _bashrc() {
 
 function _updatesyscommands() {
   cd ${usrbin}
-  cp -R ${local_packages}. ${usrbin}quickbox
+  cp -r ${local_packages}. ${usrbin}quickbox
   if [[ -f ${usrbin}quickbox/system/changeUserpass ]]; then
     rm ${usrbin}quickbox/system/changeUserpass
   fi
@@ -77,18 +77,23 @@ function _updateskel() {
 
 function _updaterutorrent() {
   cd /srv
-  cp -R ${local_rutorrent}. rutorrent
+  cp -r ${local_rutorrent}. rutorrent
 }
 
 function _updaterutorrent-plugins() {
   cd ${rutorrent}
-  cp -R ${local_rplugins}. plugins
+  cp -r ${local_rplugins}. plugins
 }
 
 # function to install dashboard (23)
 function _updatedashboard() {
   cd ${rutorrent}
-  rsync -aP --exclude=disk_*.php --exclude=branding-*.php --exclude=logo-custom.png ${local_dashboard}* ${rutorrent}home
+  #if [[ -f ${rutorrent}home/widgets/branding-*.php ]]; then
+  if [[ -n $(find /srv/rutorrent/home/db -name "branding-*.php") ]]; then
+    rsync -aP --exclude=disk_*.php --exclude=branding-*.php ${local_dashboard}* ${rutorrent}home
+  else
+    rsync -aP --exclude=disk_*.php ${local_dashboard}* ${rutorrent}home
+  fi
 }
 
 function _updatesudo() {
