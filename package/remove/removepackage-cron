@@ -44,8 +44,6 @@ for i in "${locks[@]}"; do
     fi
   fi
 done
-  systemctl enable "rtorrent@${master}" > /dev/null 2>&1
-  systemctl restart "rtorrent@${master}" > /dev/null 2>&1
   for l in "${sysv[@]}"; do
     if [[ -f /etc/init.d/$l ]]; then update-rc.d -f $l remove; fi
     if [[ -f /etc/init.d/$l ]]; then service $l stop; fi
