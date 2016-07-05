@@ -2,12 +2,9 @@
 #
 # [Quick Box :: Install User Quotas]
 #
-# GITHUB REPOS
-# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
-# LOCAL REPOS
-# Local _ packages   :   ~/QuickBox/packages
-# Author             :   QuickBox.IO | JMSolo
-# URL                :   https://plaza.quickbox.io
+# GitHub:   https://github.com/QuickBox/quickbox_packages
+# Author:   QuickBox.IO | JMSolo
+# URL:      https://plaza.quickbox.io
 #
 # QuickBox Copyright (C) 2016
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
@@ -20,7 +17,6 @@
 #################################################################################
 
 function _installquota(){
-  apt-get install -y -q quota >/dev/null 2>&1
   if [[ $DISTRO == Ubuntu ]]; then
     if [[ ${primaryroot} == "root" ]]; then
       sed -i 's/errors=remount-ro/usrjquota=aquota.user,jqfmt=vfsv1,errors=remount-ro/g' /etc/fstab
