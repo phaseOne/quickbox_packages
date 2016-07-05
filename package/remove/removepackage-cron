@@ -20,7 +20,7 @@
 
 function _removecron() {
 for i in "${users[@]}"; do
-  sudo -u ${i} crontab -l | sed '/.startup/d' | crontab -u ${i} -
+  sudo -u ${i} crontab -l | sed '/.startup/d' | crontab -u ${i} -  > /dev/null 2>&1
 done
 rm /install/.cron.lock
 }
@@ -52,9 +52,22 @@ done
    if [[ $i == autodlirssi ]]; then
      i=irssi
    fi
-  systemctl enable "${i}@${master}" > /dev/null 2>&1
-  systemctl restart "${i}@${master}" > /dev/null 2>&1
+    systemctl enable "${i}@${master}" > /dev/null 2>&1
+    systemctl restart "${i}@${master}" > /dev/null 2>&1
+  done
+for u in "${users[@]}"; do
+  if [[ ! $u == $master ]]; then
+    for p in rtorrent irssi deluged delugeweb; do
+      if [[ $(cat /home/${u}/.startup | grep -i -m 1 ${p} | cut -d "=" -f 2) == yes ]]; then
+        if [[ $p == delugeweb ]]; then p=deluge-web; fi
+        systemctl enable "${p}@${u}"  > /dev/null 2>&1
+        systemctl start "${p}@${u}"  > /dev/null 2>&1
+      fi
+    done
+  fi
 done
+echo "systemd installation complete! "
+echo "Reboot recommended ... "
 }
 
 local_setup=/root/QuickBox/setup/

@@ -41,7 +41,7 @@ function _removed() {
 
 function _installcron() {
   for i in "${users[@]}"; do
-    sudo -u ${i} crontab -l | echo "*/1 * * * * /home/${i}/.startup >/dev/null 2>&1" | crontab -u ${i} - > /dev/null 2>&1
+    sudo -u ${i} crontab -l | echo "*/1 * * * * /home/${i}/.startup >/dev/null 2>&1" | crontab -u ${i} -  > /dev/null 2>&1
   done
   touch /install/.cron.lock
 }

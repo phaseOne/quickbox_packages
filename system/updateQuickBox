@@ -2,7 +2,7 @@
 #
 # [Quick Box :: EcoSystem Update Script]
 #
-# GitHub  :   https://github.com/QuickBox/quickbox_packages
+# QuickLab:   https://lab.quickbox.io/QuickBox/quickbox_packages
 # Local   :   ~/QuickBox/packages
 # Author  :   QuickBox.io
 # URL     :   https://plaza.quickbox.io
@@ -29,7 +29,7 @@ if [[ -d /root/QuickBox ]]; then
   find -type d -name "quickbox_*" -exec rm -rf {} \;
 else
   cd /root
-  git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
+  git clone --recursive https://lab.quickbox.io/QuickBox/QuickBox QuickBox
 fi
 }
 
@@ -59,12 +59,6 @@ function _bashrc() {
   cp ${local_setup}templates/bashrc.template /root/.bashrc
 }
 
-function _checkquota() {
-  if [[ -f /usr/sbin/repquota ]] && [[ ! -f /install/.quota.lock ]]; then
-    touch /install/.quota.lock
-  fi
-}
-
 function _updatequota(){
   sed -i 's/usrquota,errors=remount-ro/usrjquota=aquota.user,jqfmt=vfsv1,errors=remount-ro/g' /etc/fstab
   service quota restart
@@ -81,7 +75,7 @@ function _checklocks() {
 
 function _updatesyscommands() {
   cd ${usrbin}
-  cp -r ${local_packages}. ${usrbin}quickbox
+  cp -R ${local_packages}. ${usrbin}quickbox
   if [[ -f ${usrbin}quickbox/system/changeUserpass ]]; then
     rm ${usrbin}quickbox/system/changeUserpass
   fi
@@ -97,12 +91,13 @@ function _updateskel() {
 
 function _updaterutorrent() {
   cd /srv
-  cp -r ${local_rutorrent}. rutorrent
+  cp -R ${local_rutorrent}. rutorrent
 }
 
 function _updaterutorrent-plugins() {
   cd ${rutorrent}
-  cp -r ${local_rplugins}. plugins
+  cp -R ${local_rplugins}. plugins
+  #rsync -aP ${local_rplugins}* plugins
 }
 
 # function to install dashboard (23)
@@ -114,6 +109,7 @@ function _updatedashboard() {
   else
     rsync -aP --exclude=disk_*.php ${local_dashboard}* ${rutorrent}home
   fi
+
 }
 
 function _updatesudo() {
@@ -179,8 +175,7 @@ _logcheck
 _directorycheck
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
-_updatequota
-echo "Checking for quotas and adding lock file if necessary ... " >>"${OUTTO}" 2>&1;_checkquota;echo
+echo "Checking locks and adding if necessary ... " >>"${OUTTO}" 2>&1;_checklocks;echo
 echo "Checking new dependencies and updating as necessary ... " >>"${OUTTO}" 2>&1;_updatedeps;echo
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
 echo "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo

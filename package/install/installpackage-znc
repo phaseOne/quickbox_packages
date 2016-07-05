@@ -32,18 +32,20 @@ if [[ $DISTRO == Debian ]]; then
   echo "#deb-src http://packages.temporal-intelligence.net/znc/debian/ ${CODENAME} main" >> /etc/apt/sources.list.d/znc.list
   wget --quiet http://packages.temporal-intelligence.net/repo.gpg.key -O - | apt-key add - > /dev/null 2>&1
 elif [[ $DISTRO == Ubuntu ]]; then
-  sudo apt-get install -q -y python-software-properties software-properties-common
-  sudo add-apt-repository -q -y ppa:teward/znc
+  sudo apt-get install -q -y python-software-properties software-properties-common > /dev/null 2>&1
+  sudo add-apt-repository -q -y ppa:teward/znc > /dev/null 2>&1
 fi
-  apt-get update -q -y
-  apt-get install znc -q -y
+  apt-get update -q -y > /dev/null 2>&1
+  apt-get install znc -q -y > /dev/null 2>&1
   touch /install/.znc.lock
-  sudo -u znc crontab -l | echo "*/10 * * * * /usr/local/bin/znc >/dev/null 2>&1" | crontab -u znc -
+  sudo -u znc crontab -l | echo "*/10 * * * * /usr/local/bin/znc >/dev/null 2>&1" | crontab -u znc - > /dev/null 2>&1
 
-echo "ZNC now installed!" | tee -a ${OUTTO}
+echo "#### ZNC now installed! ####" | tee -a ${OUTTO}
 echo "To finish installation, log into ssh" | tee -a ${OUTTO}
 echo "as root and use the commands:" | tee -a ${OUTTO}
 echo "su - znc" | tee -a ${OUTTO}
 echo "znc --makeconf" | tee -a ${OUTTO}
 echo "After configuration, the command 'znc' will start" | tee -a ${OUTTO}
 echo "znc, but a cron job has been set to ensure it stays running." | tee -a ${OUTTO}
+echo "############################" | tee -a ${OUTTO}
+sleep 5

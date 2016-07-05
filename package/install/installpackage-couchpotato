@@ -57,7 +57,7 @@ echo >>"${OUTTO}" 2>&1;
 echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
 }
 
-local_setup=/root/quickbox/setup/
+local_setup=/root/QuickBox/setup/
 OUTTO=/srv/rutorrent/home/db/output.log
 MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 _install
