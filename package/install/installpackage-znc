@@ -39,13 +39,10 @@ fi
   apt-get install znc -q -y > /dev/null 2>&1
   touch /install/.znc.lock
   sudo -u znc crontab -l | echo "*/10 * * * * /usr/local/bin/znc >/dev/null 2>&1" | crontab -u znc - > /dev/null 2>&1
+  echo "#### ZNC configuration will now run. Please answer the following prompts ####"
+  sleep 5
+  sudo -u znc znc --makeconf
+  echo "$(cat /home/znc/.znc/configs/znc.conf | grep Port | sed -e 's/^[ \t]*//')" > /srv/rutorrent/home/db/znc.txt
+  echo "$(cat /home/znc/.znc/configs/znc.conf | grep SSL |  sed -e 's/^[ \t]*//')" >> /srv/rutorrent/home/db/znc.txt
 
-echo "#### ZNC now installed! ####" | tee -a ${OUTTO}
-echo "To finish installation, log into ssh" | tee -a ${OUTTO}
-echo "as root and use the commands:" | tee -a ${OUTTO}
-echo "su - znc" | tee -a ${OUTTO}
-echo "znc --makeconf" | tee -a ${OUTTO}
-echo "After configuration, the command 'znc' will start" | tee -a ${OUTTO}
-echo "znc, but a cron job has been set to ensure it stays running." | tee -a ${OUTTO}
-echo "############################" | tee -a ${OUTTO}
-sleep 5
+echo "#### ZNC now installed! ####"

@@ -75,7 +75,7 @@ function _checklocks() {
 
 function _updatesyscommands() {
   cd ${usrbin}
-  cp -R ${local_packages}. ${usrbin}quickbox
+  cp -r ${local_packages}. ${usrbin}quickbox
   if [[ -f ${usrbin}quickbox/system/changeUserpass ]]; then
     rm ${usrbin}quickbox/system/changeUserpass
   fi
@@ -86,17 +86,45 @@ function _updateskel() {
     rm -r /etc/skel
   fi
   mkdir /etc/skel
-  cp -R ${local_setup}templates/skel/. /etc/skel
+  cp -r ${local_setup}templates/skel/. /etc/skel
+}
+
+function _updateapachealias() {
+  cd /etc/apache2/sites-enabled
+  if [[ -f aliases-seedbox.conf.orig ]]; then
+    rm -r aliases-seedbox.conf.orig
+  fi
+  mv aliases-seedbox.conf aliases-seedbox.conf.orig
+  cp -r ${local_setup}templates/aliases-seedbox.conf.template /etc/apache2/sites-enabled/aliases-seedbox.conf
+  sed -i "s/USERNAME/${A1}/g" /etc/apache2/sites-enabled/aliases-seedbox.conf
+
+  service apache2 reload  >> /dev/null 2>&1
+}
+
+function _updateuserhome() {
+  cd /home/"${A1}"/torrents
+  if [[ -d rtorrent ]]; then
+    cd
+  else
+    mv deluge /home/"${A1}"/deluge
+    cd ..
+    mv torrents rtorrent
+    mkdir -p torrents
+    mv deluge torrents/deluge
+    mv rtorrent torrents/rtorrent
+    sed -i "s/directory = \/home\/${A1}\/torrents\//directory = \/home\/${A1}\/torrents\/rtorrent/g" /home/"${A1}"/.rtorrent.rc
+  fi
+  systemctl restart rtorrent@"${A1}".service
 }
 
 function _updaterutorrent() {
   cd /srv
-  cp -R ${local_rutorrent}. rutorrent
+  rsync -aP ${local_rutorrent}* rutorrent
 }
 
 function _updaterutorrent-plugins() {
   cd ${rutorrent}
-  cp -R ${local_rplugins}. plugins
+  rsync -aP ${local_rplugins}* plugins
   #rsync -aP ${local_rplugins}* plugins
 }
 
@@ -179,6 +207,8 @@ echo "Checking locks and adding if necessary ... " >>"${OUTTO}" 2>&1;_checklocks
 echo "Checking new dependencies and updating as necessary ... " >>"${OUTTO}" 2>&1;_updatedeps;echo
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
 echo "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
+echo "Checking apache aliases ... " >>"${OUTTO}" 2>&1;_updateapachealias;echo
+echo "Reorganizing home directory of ${A1} ... " >>"${OUTTO}" 2>&1;_updateuserhome;echo
 echo "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent;echo
 echo "Updating all rutorrent plugins ... " >>"${OUTTO}" 2>&1;_updaterutorrent-plugins;echo
 echo "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard;echo
