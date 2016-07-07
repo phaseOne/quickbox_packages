@@ -2,9 +2,12 @@
 #
 # [Quick Box :: Install Quassel IRC Bouncer package]
 #
-# GitHub:   https://github.com/QuickBox/quickbox_packages
-# Author:   QuickBox.IO | liara
-# URL:      https://plaza.quickbox.io
+# GITHUB REPOS
+# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   QuickBox.IO | liara
+# URL                :   https://plaza.quickbox.io
 #
 # QuickBox Copyright (C) 2016
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
@@ -44,13 +47,4 @@ function _installQuassel2() {
 
 
 echo "Installing Quassel PPA (Ubuntu) or grabbing latest backport (Debian) ... " >>"${OUTTO}" 2>&1;_installQuassel1
-echo >>"${OUTTO}"
-echo "Quassel has now been installed!"  >>"${OUTTO}"
-echo >>"${OUTTO}"
-echo "=============================================================================" >>"${OUTTO}" 2>&1;
-echo "Please install quassel-client on your personal computer and connect to the " >>"${OUTTO}" 2>&1;
-echo "newly created core at ${IP}:4242 to set up your account." >>"${OUTTO}" 2>&1;
-echo "=============================================================================" >>"${OUTTO}" 2>&1;
-echo >>"${OUTTO}" 2>&1;
-echo >>"${OUTTO}" 2>&1;
-echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;_installQuassel2
+echo "Quassel has now been installed! Please install quassel-client on your personal computer and connect to the newly created core at ${IP}:4242 to set up your account" >>"${OUTTO}" 2>&1;_installQuassel2

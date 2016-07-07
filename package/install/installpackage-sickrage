@@ -2,11 +2,14 @@
 #
 # [Quick Box :: Install SickRage package]
 #
-# GitHub:   https://github.com/QuickBox/quickbox_packages
-# Author:   QuickBox.IO | JMSolo
-# URL:      https://plaza.quickbox.io
+# GITHUB REPOS
+# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   QuickBox.IO | JMSolo
+# URL                :   https://plaza.quickbox.io
 #
-# QuickBox Copyright (C) 2016 Swizards.net
+# QuickBox Copyright (C) 2016 QuickBox.io
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
 #
 #   You may copy, distribute and modify the software as long as you track
@@ -26,35 +29,37 @@ function _installSickRage2() {
   chown "${MASTER}":"${MASTER}" -R /home/"${MASTER}"/.sickrage
 }
 function _installSickRage3() {
-  cd /home/"${MASTER}"/.sickrage/runscripts
-  cd /etc/init.d/
-  cp ${local_setup}templates/sickrage.template /etc/init.d/sickrage
-  sudo chmod +x /etc/init.d/sickrage
-
-echo -e "SR_HOME=/home/${MASTER}/.sickrage/
-SR_DATA=/home/${MASTER}/.sickrage/
-SR_USER=${MASTER}" > /etc/default/sickrage
-
-  update-rc.d sickrage defaults
+  if [[ -f /install/.cron.lock ]]; then
+    cd /home/"${MASTER}"/.sickrage/runscripts
+    cd /etc/init.d/
+    cp ${local_setup}templates/sysv/sickrage.template /etc/init.d/sickrage
+    sudo chmod +x /etc/init.d/sickrage
+    echo -e "SR_HOME=/home/${MASTER}/.sickrage/
+    SR_DATA=/home/${MASTER}/.sickrage/
+    SR_USER=${MASTER}" > /etc/default/sickrage
+    update-rc.d sickrage defaults
+    sudo service sickrage start >/dev/null 2>&1
+  else
+    cp ${local_setup}templates/sysd/sickrage.template /etc/systemd/system/sickrage@.service
+    systemctl enable sickrage@${MASTER} > /dev/null 2>&1
+    systemctl start sickrage@${MASTER} > /dev/null 2>&1
+  fi
 }
+
+
 function _installSickRage4() {
-  sudo service sickrage start >/dev/null 2>&1
-}
-
-function _installSickRage5() {
   echo "SickRage Install Complete!" >>"${OUTTO}" 2>&1;
   sleep 5
   echo >>"${OUTTO}" 2>&1;
   echo >>"${OUTTO}" 2>&1;
   echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
 }
-function _installSickRage6() {
+function _installSickRage5() {
   exit
 }
 
 echo "Installing sickrage ... " >>"${OUTTO}" 2>&1;_installSickRage1
 echo "Setting up sickrage permissions ... " >>"${OUTTO}" 2>&1;_installSickRage2
-echo "Setting up sickrage configurations ... " >>"${OUTTO}" 2>&1;_installSickRage3
-echo "Starting sickrage ... " >>"${OUTTO}" 2>&1;_installSickRage4
+echo "Setting up sickrage configurations and enabling ... " >>"${OUTTO}" 2>&1;_installSickRage3
+_installSickRage4
 _installSickRage5
-_installSickRage6

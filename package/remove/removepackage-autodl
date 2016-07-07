@@ -2,11 +2,14 @@
 #
 # [Quick Box :: Remove AutoDL-IRSSI package]
 #
-# GitHub:   https://github.com/JMSDOnline/QuickBox
-# Author:   Swizards.net
-# URL:      https://swizards.net
+# GITHUB REPOS
+# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   QuickBox.IO | JMSolo
+# URL                :   https://plaza.quickbox.io
 #
-# QuickBox Copyright (C) 2016 Swizards.net
+# QuickBox Copyright (C) 2016 QuickBox.io
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
 #
 #   You may copy, distribute and modify the software as long as you track
@@ -17,14 +20,23 @@
 
 function _removepackage-autodl() {
   username=$(whoami);
+  users=($(cat /etc/htpasswd | cut -d ":" -f 1))
   rutorrent="/srv/rutorrent/";
   PLUGIN="autodl-irssi"
     for i in $PLUGIN; do
       rm -rf "${rutorrent}/plugins/$i"
-      rm -rf /home/${username}/.autodl
-      rm -rf /home/${username}/.irssi
-      rm /install/.autodlirssi.lock
     done
+    if [[ ! -f /install/.cron.lock ]]; then
+      systemctl stop irssi@*
+      systemctl disable irssi@*
+      rm /etc/systemd/system/irssi@.service
+    fi
+    for u in "${users[@]}"; do
+      rm -rf /home/${u}/.autodl
+      rm -rf /home/${u}/.irssi
+    done
+    rm /install/.autodlirssi.lock
+
 }
 
 _removepackage-autodl

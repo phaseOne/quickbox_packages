@@ -2,9 +2,12 @@
 #
 # [Quick Box :: Install Sonarr-NzbDrone package]
 #
-# GitHub:   https://github.com/QuickBox/quickbox_packages
-# Author:   QuickBox.IO | JMSolo
-# URL:      https://plaza.quickbox.io
+# GITHUB REPOS
+# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   QuickBox.IO | JMSolo
+# URL                :   https://plaza.quickbox.io
 #
 # QuickBox Copyright (C) 2016
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
@@ -27,13 +30,10 @@ function _installSonarrintro() {
 }
 
 function _installSonarr1() {
-  if [[ $distribution == Ubuntu ]]; then
+  if [[ ! -f /etc/apt/sources.list.d/mono-xamarin.list ]]; then
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF >/dev/null 2>&1
     echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
-  else
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF >/dev/null 2>&1
-    #echo "deb http://debian.meebey.net/pkg-mono ./" | sudo tee /etc/apt/sources.list.d/mono-meeby.list
-    echo "deb http://download.mono-project.com/repo/debian wheezy-libjpeg62-compat main" | tee /etc/apt/sources.list.d/mono-xamarin.list >/dev/null 2>&1
+    echo "deb http://download.mono-project.com/repo/debian wheezy-libjpeg62-compat main" | tee -a /etc/apt/sources.list.d/mono-xamarin.list >/dev/null 2>&1
     echo "deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main" | tee -a /etc/apt/sources.list.d/mono-xamarin.list >/dev/null 2>&1
   fi
 }
@@ -64,21 +64,20 @@ function _installSonarr5() {
 }
 
 function _installSonarr6() {
-  cp "${local_setup}"templates/sonarr.template /etc/init.d/sonarr
-  sed -i "s/USERNAME/${username}/g" /etc/init.d/sonarr
-  sudo chmod +x /etc/init.d/sonarr
+  if [[ -e /install/.cron.lock ]]; then
+    cp "${local_setup}"templates/sysv/sonarr.template /etc/init.d/sonarr
+    sed -i "s/USERNAME/${username}/g" /etc/init.d/sonarr
+    sudo chmod +x /etc/init.d/sonarr
+    sudo update-rc.d sonarr defaults >/dev/null 2>&1
+    sudo service sonarr start
+  else
+    cp ${local_setup}templates/sysd/sonarr.template /etc/systemd/system/sonarr@.service
+    systemctl enable sonarr@${username}
+    systemctl start sonarr@${username}
   sleep 2
+fi
 }
 
-function _installSonarr7() {
-  sudo update-rc.d sonarr defaults >/dev/null 2>&1
-  sleep 2
-}
-
-function _installSonarr8() {
-  sudo service sonarr start
-  sleep 2
-}
 
 function _installSonarr9() {
   echo "Sonarr Install Complete!" >>"${OUTTO}" 2>&1;
@@ -105,8 +104,6 @@ echo "Adding source repositories for Sonarr-Nzbdrone ... " >>"${OUTTO}" 2>&1;_in
 echo "Updating your system with new sources ... " >>"${OUTTO}" 2>&1;_installSonarr3
 echo "Installing Sonarr-Nzbdrone ... " >>"${OUTTO}" 2>&1;_installSonarr4
 echo "Setting permissions to ${username} ... " >>"${OUTTO}" 2>&1;_installSonarr5
-echo "Setting up Sonarr as a service ... " >>"${OUTTO}" 2>&1;_installSonarr6
-echo "Setting Sonarr to fire on boot ... " >>"${OUTTO}" 2>&1;_installSonarr7
-echo "Starting Sonarr service ... " >>"${OUTTO}" 2>&1;_installSonarr8
+echo "Setting up Sonarr as a service and enabling ... " >>"${OUTTO}" 2>&1;_installSonarr6
 _installSonarr9
 _installSonarr10

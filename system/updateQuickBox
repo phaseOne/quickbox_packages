@@ -2,12 +2,12 @@
 #
 # [Quick Box :: EcoSystem Update Script]
 #
-# GitHub  :   https://github.com/QuickBox/quickbox_packages
+# QuickLab:   https://lab.quickbox.io/QuickBox/quickbox_packages
 # Local   :   ~/QuickBox/packages
 # Author  :   QuickBox.io
 # URL     :   https://plaza.quickbox.io
 #
-# QuickBox Copyright (C) 2016 Swizards.net
+# QuickBox Copyright (C) 2016 QuickBox.io
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
 #
 #   You may copy, distribute and modify the software as long as you track
@@ -29,7 +29,7 @@ if [[ -d /root/QuickBox ]]; then
   find -type d -name "quickbox_*" -exec rm -rf {} \;
 else
   cd /root
-  git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
+  git clone --recursive https://lab.quickbox.io/QuickBox/QuickBox QuickBox
 fi
 }
 
@@ -64,9 +64,12 @@ function _updatequota(){
   service quota restart
 }
 
-function _checkquota() {
+function _checklocks() {
   if [[ -f /usr/sbin/repquota ]] && [[ ! -f /install/.quota.lock ]]; then
     touch /install/.quota.lock
+  fi
+  if [[ ! -f /etc/systemd/system/rtorrent@.service ]]; then
+    touch /install/.cron.lock
   fi
 }
 
@@ -86,14 +89,43 @@ function _updateskel() {
   cp -r ${local_setup}templates/skel/. /etc/skel
 }
 
+function _updateapachealias() {
+  cd /etc/apache2/sites-enabled
+  if [[ -f aliases-seedbox.conf.orig ]]; then
+    rm -r aliases-seedbox.conf.orig
+  fi
+  mv aliases-seedbox.conf aliases-seedbox.conf.orig
+  cp -r ${local_setup}templates/aliases-seedbox.conf.template /etc/apache2/sites-enabled/aliases-seedbox.conf
+  sed -i "s/USERNAME/${A1}/g" /etc/apache2/sites-enabled/aliases-seedbox.conf
+
+  service apache2 reload  >> /dev/null 2>&1
+}
+
+function _updateuserhome() {
+  cd /home/"${A1}"/torrents
+  if [[ -d rtorrent ]]; then
+    cd
+  else
+    mv deluge /home/"${A1}"/deluge
+    cd ..
+    mv torrents rtorrent
+    mkdir -p torrents
+    mv deluge torrents/deluge
+    mv rtorrent torrents/rtorrent
+    sed -i "s/directory = \/home\/${A1}\/torrents\//directory = \/home\/${A1}\/torrents\/rtorrent/g" /home/"${A1}"/.rtorrent.rc
+  fi
+  systemctl restart rtorrent@"${A1}".service
+}
+
 function _updaterutorrent() {
   cd /srv
-  cp -r ${local_rutorrent}. rutorrent
+  rsync -aP ${local_rutorrent}* rutorrent
 }
 
 function _updaterutorrent-plugins() {
   cd ${rutorrent}
-  cp -r ${local_rplugins}. plugins
+  rsync -aP ${local_rplugins}* plugins
+  #rsync -aP ${local_rplugins}* plugins
 }
 
 # function to install dashboard (23)
@@ -105,6 +137,7 @@ function _updatedashboard() {
   else
     rsync -aP --exclude=disk_*.php ${local_dashboard}* ${rutorrent}home
   fi
+
 }
 
 function _updatesudo() {
@@ -126,9 +159,10 @@ function _perms() {
   chmod -R g+rw ${rutorrent}*
   sh -c 'find /srv/rutorrent/* -type d -print0 | sudo xargs -0 chmod g+s'
   chmod +x /etc/cron.d/set_interface
+  find /home/*/.config/deluge -name "auth" -exec chmod 600 {} \;
   find /home -name ".startup" -exec chmod 775 {} \;
   find /usr/local/bin/quickbox -type f -exec chmod 755 {} \;
-  chmod +x $(find /usr/local/bin/quickbox -type f)
+  chmod +x $(find /usr/local/bin/quickbox -type f) >/dev/null 2>&1
 }
 
 function _updatedeps() {
@@ -139,7 +173,7 @@ function _updatedeps() {
 }
 
 function _fin() {
-  source ~/.bashrc >> /dev/null 2>&1
+  source /root/.bashrc >> /dev/null 2>&1
   echo
   echo "[QuickBox] Seedbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
   sleep 5
@@ -169,12 +203,14 @@ _logcheck
 _directorycheck
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
-_updatequota
-echo "Checking for quotas and adding lock file if necessary ... " >>"${OUTTO}" 2>&1;_checkquota;echo
+echo "Checking locks and adding if necessary ... " >>"${OUTTO}" 2>&1;_checklocks;echo
 echo "Checking new dependencies and updating as necessary ... " >>"${OUTTO}" 2>&1;_updatedeps;echo
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
 echo "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
+echo "Checking apache aliases ... " >>"${OUTTO}" 2>&1;_updateapachealias;echo
+echo "Reorganizing home directory of ${A1} ... " >>"${OUTTO}" 2>&1;_updateuserhome;echo
 echo "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent;echo
+echo "Updating all rutorrent plugins ... " >>"${OUTTO}" 2>&1;_updaterutorrent-plugins;echo
 echo "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard;echo
 echo "Updating the QuickBox Sudoers template ... " >>"${OUTTO}" 2>&1;_updatesudo;echo
 #echo "Updating ${A1}'s .startup cronfile... " >>"${OUTTO}" 2>&1;_updatecronfile;echo

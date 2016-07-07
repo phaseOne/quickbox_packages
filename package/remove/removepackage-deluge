@@ -2,9 +2,12 @@
 #
 # [Quick Box :: Uninstaller for Deluge package]
 #
-# GitHub:   https://github.com/QuickBox/quickbox_packages
-# Author:   QuickBox.IO | liara
-# URL:      https://plaza.quickbox.io
+# GITHUB REPOS
+# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   QuickBox.IO | liara
+# URL                :   https://plaza.quickbox.io
 #
 # QuickBox Copyright (C) 2016
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
@@ -23,6 +26,12 @@ function _removeDeluge() {
   killall deluge-web
   cp "${local_setup}"templates/startup.template /home/"${username}"/.startup
     sleep 5
+  if [[ ! -f /install/.cron.lock ]]; then
+    systemctl disable deluged@* > /dev/null 2>&1
+    systemctl stop deluged@* > /dev/null 2>&1
+    rm /etc/systemd/system/deluged@.service > /dev/null 2>&1
+    rm /etc/systemd/system/deluge-web@.service > /dev/null 2>&1
+  fi
   sudo rm /install/.deluge.lock
 
   cd /home/"$username"

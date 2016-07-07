@@ -2,9 +2,12 @@
 #
 # [Quick Box :: Install Deluge package]
 #
-# GitHub:   https://github.com/QuickBox/quickbox_packages
-# Author:   QuickBox.IO | liara
-# URL:      https://plaza.quickbox.io
+# GITHUB REPOS
+# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   QuickBox.IO | liara
+# URL                :   https://plaza.quickbox.io
 #
 # QuickBox Copyright (C) 2016
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
@@ -69,6 +72,14 @@ function _installDeluge4() {
   cp "${local_setup}"templates/startup.template /home/"${username}"/.startup
   sed -i 's/DELUGEWEB_CLIENT=no/DELUGEWEB_CLIENT=yes/g' /home/"${username}"/.startup
   sed -i 's/DELUGED_CLIENT=no/DELUGED_CLIENT=yes/g' /home/"${username}"/.startup
+  if [[ ! -f /install/.cron.lock ]]; then
+    cp ${local_setup}templates/sysd/deluged.template /etc/systemd/system/deluged@.service
+    cp ${local_setup}templates/sysd/deluge-web.template /etc/systemd/system/deluge-web@.service
+    systemctl enable deluged@${username}
+    systemctl enable deluge-web@${username}
+    systemctl start deluged@${username}
+    systemctl start deluge-web@${username}
+  fi
 }
 
 function _installDeluge5() {
@@ -87,6 +98,6 @@ function _installDeluge6() {
 echo "Installing deluge ... " >>"${OUTTO}" 2>&1;_installDeluge1
 echo "Setting up deluge configurations ... " >>"${OUTTO}" 2>&1;_installDeluge2
 echo "Setting up deluge permissions ... " >>"${OUTTO}" 2>&1;_installDeluge3
-echo "Setting up cronfile and starting deluge ... " >>"${OUTTO}" 2>&1;_installDeluge4
+echo "Setting up services and starting deluge ... " >>"${OUTTO}" 2>&1;_installDeluge4
 _installDeluge5
 _installDeluge6

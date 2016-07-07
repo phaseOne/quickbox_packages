@@ -2,11 +2,14 @@
 #
 # [Quick Box :: Install AutoDL-IRSSI package]
 #
-# GitHub:   https://github.com/JMSDOnline/QuickBox
-# Author:   Swizards.net
-# URL:      https://swizards.net
+# GITHUB REPOS
+# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   QuickBox.IO
+# URL                :   https://plaza.quickbox.io
 #
-# QuickBox Copyright (C) 2016 Swizards.net
+# QuickBox Copyright (C) 2016 QuickBox.io
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
 #
 #   You may copy, distribute and modify the software as long as you track
@@ -16,36 +19,50 @@
 #
 MASTER=$(cat /etc/apache2/master.txt)
 IRSSIIP=$(curl -s http://ipecho.net/plain || curl -s http://ifconfig.me/ip ; echo)
-IRSSI_PASS=$(_string)
-IRSSI_PORT=$(shuf -i 2000-61000 -n 1)
+
 OUTTO="/root/quick-box.log"
+local_setup=/root/QuickBox/setup/
+
 
 function _installautodl() {
   rutorrent="/srv/rutorrent/";
   PLUGINVAULT="/etc/quickbox/plugins/"; cd "${rutorrent}plugins"
   PLUGIN="autodl-irssi"
+  users=($(cat /etc/htpasswd | cut -d ":" -f 1))
     for i in $PLUGIN; do
       cp -R "${PLUGINVAULT}$i" .
+      chown -R www-data: ${rutorrent}plugins/$PLUGIN
     done
-  mkdir -p "/home/${MASTER}/.irssi/scripts/autorun/" >>"${OUTTO}" 2>&1
-  cd "/home/${MASTER}/.irssi/scripts/"
-  wget -qO autodl-irssi.zip https://github.com/autodl-community/autodl-irssi/releases/download/community-v1.60/autodl-irssi-community-v1.60.zip >/dev/null 2>&1
-  unzip -o autodl-irssi.zip >>"${OUTTO}" 2>&1
-  rm autodl-irssi.zip
-  cp autodl-irssi.pl autorun/
-  mkdir -p "/home/${MASTER}/.autodl" >>"${OUTTO}" 2>&1
-  touch "/home/${MASTER}/.autodl/autodl.cfg"
-  touch /install/.autodlirssi.lock
-
-cat >"/home/${MASTER}/.autodl/autodl2.cfg"<<ADC
+    for u in "${users[@]}"; do
+      IRSSI_PASS=$(_string)
+      IRSSI_PORT=$(shuf -i 2000-61000 -n 1)
+      mkdir -p "/home/${u}/.irssi/scripts/autorun/" >>"${OUTTO}" 2>&1
+      cd "/home/${u}/.irssi/scripts/"
+      wget -qO autodl-irssi.zip https://github.com/autodl-community/autodl-irssi/releases/download/community-v1.60/autodl-irssi-community-v1.60.zip >/dev/null 2>&1
+      unzip -o autodl-irssi.zip >>"${OUTTO}" 2>&1
+      rm autodl-irssi.zip
+      cp autodl-irssi.pl autorun/
+      mkdir -p "/home/${u}/.autodl" >>"${OUTTO}" 2>&1
+      touch "/home/${u}/.autodl/autodl.cfg"
+cat >"/home/${u}/.autodl/autodl2.cfg"<<ADC
 [options]
 gui-server-port = ${IRSSI_PORT}
 gui-server-password = ${IRSSI_PASS}
 ADC
 
-  chown -R "${MASTER}.${MASTER}" "/home/${MASTER}/.irssi/"
-  chown -R "${MASTER}.${MASTER}" "/home/${MASTER}"
-  chown -R www-data: ${rutorrent}plugins/$PLUGIN
+      chown -R "${u}.${u}" "/home/${u}/.irssi/"
+      chown -R "${u}.${u}" "/home/${u}"
+    done
+
+  touch /install/.autodlirssi.lock
+
+
+
+  if [[ ! -f /install/.cron.lock ]]; then
+    cp ${local_setup}templates/sysd/autodlirssi.template /etc/systemd/system/irssi@.service
+    systemctl enable irssi@${MASTER} > /dev/null 2>&1
+    systemctl start irssi@${MASTER} > /dev/null 2>&1
+  fi
   cd
 }
 
