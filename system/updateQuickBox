@@ -113,6 +113,7 @@ function _updateuserhome() {
     mv deluge torrents/deluge
     mv rtorrent torrents/rtorrent
     sed -i "s/directory = \/home\/${A1}\/torrents\//directory = \/home\/${A1}\/torrents\/rtorrent/g" /home/"${A1}"/.rtorrent.rc
+    chown -R ${A1}:${A1} /home/${A1}
   fi
   systemctl restart rtorrent@"${A1}".service
 }
