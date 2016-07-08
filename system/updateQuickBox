@@ -124,9 +124,12 @@ function _updaterutorrent() {
 }
 
 function _updaterutorrent-plugins() {
-  cd ${rutorrent}
-  rsync -aP ${local_rplugins}* plugins
-  #rsync -aP ${local_rplugins}* plugins
+  plugins=($(find ${local_rplugins} -maxdepth 1 -type d -printf "%f\n"))
+  for i in "${plugins[@]}"; do
+    if [[ -d /srv/rutorrent/plugins/$i ]]; then
+      rsync -aP ${local_rplugins}${i} /srv/rutorrent/plugins/${i}
+    fi
+  done
 }
 
 # function to install dashboard (23)
@@ -164,6 +167,7 @@ function _perms() {
   find /home -name ".startup" -exec chmod 775 {} \;
   find /usr/local/bin/quickbox -type f -exec chmod 755 {} \;
   chmod +x $(find /usr/local/bin/quickbox -type f) >/dev/null 2>&1
+  chmod -R 775 ${rutorrent}plugins/filemanager/scripts
 }
 
 function _updatedeps() {
