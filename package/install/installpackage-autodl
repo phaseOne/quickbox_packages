@@ -55,14 +55,9 @@ ADC
     done
 
   touch /install/.autodlirssi.lock
-
-
-
-  if [[ ! -f /install/.cron.lock ]]; then
     cp ${local_setup}templates/sysd/autodlirssi.template /etc/systemd/system/irssi@.service
     systemctl enable irssi@${MASTER} > /dev/null 2>&1
     systemctl start irssi@${MASTER} > /dev/null 2>&1
-  fi
   cd
 }
 

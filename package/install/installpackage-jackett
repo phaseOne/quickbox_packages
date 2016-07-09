@@ -42,18 +42,9 @@ rm Jackett.Binaries.Mono.tar.gz
 chown ${username}.${username} -R Jackett
 touch /install/.jackett.lock
 
-if [[ ! -f /install/.cron.lock ]]; then
-  cp ${local_setup}templates/sysd/jackett.template /etc/systemd/system/jackett@.service
-  systemctl enable jackett@${username}
-  systemctl start jackett@${username}
-else
-  cp ${local_setup}templates/sysv/jackett.template /etc/init.d/jackett
-  sed -i "s/.*APP_PATH.*/APP_PATH=\/home\/${username}\/Jackett/" /etc/init.d/jackett
-  sed -i "s/.*RUN_AS.*/RUN_AS=${username}/" /etc/init.d/jackett
-  chmod +x /etc/init.d/jackett
-  update-rc.d jackett defaults
-  service jackett start
-fi
+cp ${local_setup}templates/sysd/jackett.template /etc/systemd/system/jackett@.service
+systemctl enable jackett@${username}
+systemctl start jackett@${username}
 
 echo >>"${OUTTO}" 2>&1;
 echo >>"${OUTTO}" 2>&1;

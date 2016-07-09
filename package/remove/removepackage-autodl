@@ -26,11 +26,9 @@ function _removepackage-autodl() {
     for i in $PLUGIN; do
       rm -rf "${rutorrent}/plugins/$i"
     done
-    if [[ ! -f /install/.cron.lock ]]; then
       systemctl stop irssi@*
       systemctl disable irssi@*
       rm /etc/systemd/system/irssi@.service
-    fi
     for u in "${users[@]}"; do
       rm -rf /home/${u}/.autodl
       rm -rf /home/${u}/.irssi

@@ -19,11 +19,10 @@
 #
 
 MASTER=$(cat /srv/rutorrent/home/db/master.txt)
-if [[ ! -f /install/.cron.lock ]]; then
   systemctl disable couchpotato@*
   systemctl stop couchpotato@*
   rm /etc/systemd/system/couchpotato@.service
-else
+if [[ -f /etc/init.d/couchpotato ]]; then
   service couchpotato stop
   rm /etc/init.d/couchpotato
   rm /etc/default/couchpotato

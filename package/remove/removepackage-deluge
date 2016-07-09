@@ -26,12 +26,10 @@ function _removeDeluge() {
   killall deluge-web
   cp "${local_setup}"templates/startup.template /home/"${username}"/.startup
     sleep 5
-  if [[ ! -f /install/.cron.lock ]]; then
-    systemctl disable deluged@* > /dev/null 2>&1
-    systemctl stop deluged@* > /dev/null 2>&1
-    rm /etc/systemd/system/deluged@.service > /dev/null 2>&1
-    rm /etc/systemd/system/deluge-web@.service > /dev/null 2>&1
-  fi
+  systemctl disable deluged@* > /dev/null 2>&1
+  systemctl stop deluged@* > /dev/null 2>&1
+  rm /etc/systemd/system/deluged@.service > /dev/null 2>&1
+  rm /etc/systemd/system/deluge-web@.service > /dev/null 2>&1
   sudo rm /install/.deluge.lock
 
   cd /home/"$username"

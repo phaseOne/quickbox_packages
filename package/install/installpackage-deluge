@@ -72,14 +72,13 @@ function _installDeluge4() {
   cp "${local_setup}"templates/startup.template /home/"${username}"/.startup
   sed -i 's/DELUGEWEB_CLIENT=no/DELUGEWEB_CLIENT=yes/g' /home/"${username}"/.startup
   sed -i 's/DELUGED_CLIENT=no/DELUGED_CLIENT=yes/g' /home/"${username}"/.startup
-  if [[ ! -f /install/.cron.lock ]]; then
-    cp ${local_setup}templates/sysd/deluged.template /etc/systemd/system/deluged@.service
-    cp ${local_setup}templates/sysd/deluge-web.template /etc/systemd/system/deluge-web@.service
-    systemctl enable deluged@${username}
-    systemctl enable deluge-web@${username}
-    systemctl start deluged@${username}
-    systemctl start deluge-web@${username}
-  fi
+  cp ${local_setup}templates/sysd/deluged.template /etc/systemd/system/deluged@.service
+  cp ${local_setup}templates/sysd/deluge-web.template /etc/systemd/system/deluge-web@.service
+  systemctl enable deluged@${username}
+  systemctl enable deluge-web@${username}
+  systemctl start deluged@${username}
+  systemctl start deluge-web@${username}
+
 }
 
 function _installDeluge5() {

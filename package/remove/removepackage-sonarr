@@ -22,14 +22,17 @@ local_setup=/root/QuickBox/setup/
 
 function _removeSonarr() {
   cp "${local_setup}"templates/startup.template /home/"${username}"/.startup
-  sudo service sonarr stop
+  systemctl stop sonarr@{username}
+  systemctl disable sonarr@{username}
   sudo rm /etc/apt/sources.list.d/mono-xamarin.list
   sudo apt-get remove nzbdrone >/dev/null 2>&1
   sudo apt-get autoremove >/dev/null 2>&1
-  sudo update-rc.d -f sonarr remove >/dev/null 2>&1
-  sudo rm /etc/default/sonarr
-  sudo rm /etc/init.d/sonarr
-  sudo rm /install/.sonarr.lock
+  if [[ -f /etc/init.d/sonarr ]]; then
+    sudo update-rc.d -f sonarr remove >/dev/null 2>&1
+    sudo rm /etc/default/sonarr
+    sudo rm /etc/init.d/sonarr
+  fi
+    sudo rm /install/.sonarr.lock
 }
 
 _removeSonarr

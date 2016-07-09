@@ -35,22 +35,10 @@ echo >>"${OUTTO}" 2>&1;
 echo >>"${OUTTO}" 2>&1;
 echo "Installing and enabling service ... " >>"${OUTTO}" 2>&1;
 
-if [[ ! -f /install/.cron.lock ]]; then
-  cp ${local_setup}templates/sysd/couchpotato.template /etc/systemd/system/couchpotato@.service
-  systemctl enable couchpotato@${MASTER} >/dev/null 2>&1
-  systemctl start couchpotato@${MASTER} >/dev/null 2>&1
-else
-  cp /home/${MASTER}/.couchpotato/init/ubuntu.default /etc/default/couchpotato
-  cp /home/${MASTER}/.couchpotato/init/ubuntu /etc/init.d/couchpotato
-  sed -i "s/.*CP_USER.*/CP_USER=${MASTER}/" /etc/default/couchpotato
-  sed -i "s/.*CP_PIDFILE.*/CP_PIDFILE=\/home\/${MASTER}\/.couchpotato.pid/" /etc/default/couchpotato
-  sed -i "s/.*CP_HOME.*/CP_PIDFILE=\/home\/${MASTER}\/.couchpotato/" /etc/default/couchpotato
-  sed -i "s/.*CP_DATA.*/CP_PIDFILE=\/home\/${MASTER}\/.couchpotato/" /etc/default/couchpotato
+cp ${local_setup}templates/sysd/couchpotato.template /etc/systemd/system/couchpotato@.service
+systemctl enable couchpotato@${MASTER} >/dev/null 2>&1
+systemctl start couchpotato@${MASTER} >/dev/null 2>&1
 
-  chmod +x /etc/init.d/couchpotato
-  update-rc.d couchpotato defaults >/dev/null 2>&1
-  service couchpotato start >/dev/null 2>&1
-fi
 touch /install/.couchpotato.lock
 echo >>"${OUTTO}" 2>&1;
 echo >>"${OUTTO}" 2>&1;

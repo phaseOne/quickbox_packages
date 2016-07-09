@@ -29,7 +29,7 @@ if [[ -d /root/QuickBox ]]; then
   find -type d -name "quickbox_*" -exec rm -rf {} \;
 else
   cd /root
-  git clone --recursive https://lab.quickbox.io/QuickBox/QuickBox QuickBox
+  git clone --recursive https://lab.quickbox.io/QuickBox/quickbox_dev QuickBox
 fi
 }
 
@@ -127,7 +127,8 @@ function _updaterutorrent-plugins() {
   plugins=($(find ${local_rplugins} -maxdepth 1 -type d -printf "%f\n"))
   for i in "${plugins[@]}"; do
     if [[ -d /srv/rutorrent/plugins/$i ]]; then
-      rsync -aP ${local_rplugins}${i} /srv/rutorrent/plugins/${i}
+      if [[ -d /srv/rutorrent/plugins/$i ]]; then rm -rf /srv/rutorrent/plugins/${i}/${i}; fi
+      rsync -aP ${local_rplugins}${i} /srv/rutorrent/plugins/
     fi
   done
 }

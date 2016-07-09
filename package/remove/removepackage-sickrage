@@ -21,17 +21,16 @@ MASTER=$(cat /etc/apache2/master.txt)
 OUTTO="/root/quick-box.log"
 
 function _removeSickRage() {
-  if [[ -f /install/.cron.lock ]]; then
+  if [[ -f /etc/init.d/sickrage ]]; then
     sudo service sickrage stop
     sudo update-rc.d -f sickrage remove
-      sleep 5
-  else
+    sudo rm /etc/default/sickrage > /dev/null 2>&1
+    sudo rm /etc/init.d/sickrage > /dev/null 2>&1
+  fi
     systemctl disable sickrage@${MASTER}
     systemctl stop sickrage@${MASTER}
-  fi
 
-  sudo rm /etc/default/sickrage > /dev/null 2>&1
-  sudo rm /etc/init.d/sickrage > /dev/null 2>&1
+
   sudo rm -r /var/run/sickrage > /dev/null 2>&1
   sudo rm /etc/systemd/sickrage@.service > /dev/null 2>&1
   sudo rm /install/.sickrage.lock

@@ -20,14 +20,13 @@
 #################################################################################
 
 function _intro() {
-  whiptail --title "QuickBox Package Manager" --msgbox "Welcome to the QuickBox Package Manger! Using this script you can choose to install and remove the packages contained within our quickbox package repository." 10 50
+  whiptail --title "QuickBox Package Manager" --msgbox "Welcome to the QuickBox Package Manger! Using this script you can choose to install and remove the packages contained within our quickbox package repository. Use the arrow keys to navigate, spacebar to toggle the currently selected item and enter to continue." 15 50
 }
 
 function _function() {
-  whiptail --title "QBPM" --menu "Choose an option:" 12 50 3 \
+  function=$(whiptail --title "QBPM" --menu "Choose an option:" --ok-button "Continue" --cancel-button "Quit" 12 50 3 \
                Install "Packages" \
-               Remove "Packages" 2>function
-  function=$(cat function)
+               Remove "Packages" 3>&1 1>&2 2>&3)
 
     if [[ $function == Install ]]; then
       _install
@@ -53,7 +52,6 @@ function _install() {
     bash /usr/local/bin/quickbox/package/install/installpackage-$i
   done
   rm results
-  rm function
   _function
 }
 
@@ -74,7 +72,6 @@ for i in "${packages[@]}"; do
   bash /usr/local/bin/quickbox/package/remove/removepackage-$i
 done
 rm results
-rm function
 _function
 }
 
