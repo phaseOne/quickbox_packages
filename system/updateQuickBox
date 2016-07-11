@@ -190,7 +190,7 @@ Welcome Back ${A1} !
   * Donate:     https://quickbox.io/donate
 EOF
 
-    apt-get install shellinabox
+    apt-get -y install shellinabox >/dev/null 2>&1
 
     cp ${local_setup}templates/sysd/shellinabox.template /etc/systemd/system/shellinabox.service
     cp ${local_setup}templates/quickconsole/00_QuickConsole.css.template /etc/shellinabox/options-enabled/00_QuickConsole.css
