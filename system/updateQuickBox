@@ -180,12 +180,24 @@ function _updatedeps() {
 
 function _quickconsole() {
   if [[ ! -f /etc/systemd/system/shellinabox.service ]]; then
+    CONSOLEIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+  
+    cat >/etc/profile<<EOF
+Welcome Back $(whoami) !
+  * Dashboard:  ${CONSOLEIP}
+  * Support:    https://plaza.quickbox.io
+  * Roadmap:    https://quickbox.io/roadmap
+  * Donate:     https://quickbox.io/donate
+EOF
+
     apt-get install shellinabox
     cp ${local_setup}templates/sysd/shellinabox.template /etc/systemd/system/shellinabox.service
     cp ${local_setup}templates/quickconsole/00_QuickConsole.css.template /etc/shellinabox/options-enabled/00_QuickConsole.css
     chmod +x /etc/shellinabox/options-enabled/00_QuickConsole.css
     chmod 777 /etc/shellinabox/options-enabled/00_QuickConsole.css
     systemctl enable shellinabox.service >/dev/null 2>&1
+    systemctl stop shellinabox.service >/dev/null 2>&1
+    systemctl daemon-reload >/dev/null 2>&1
     systemctl start shellinabox.service >/dev/null 2>&1
   fi
 }
