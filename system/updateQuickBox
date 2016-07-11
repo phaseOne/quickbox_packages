@@ -182,7 +182,7 @@ function _quickconsole() {
   if [[ ! -f /etc/systemd/system/shellinabox.service ]]; then
     CONSOLEIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
 
-cat >/etc/profile<<EOF
+cat >>/etc/profile<<EOF
 Welcome Back ${A1} !
   * Dashboard:  ${CONSOLEIP}
   * Support:    https://plaza.quickbox.io
@@ -194,7 +194,7 @@ EOF
 
     cp ${local_setup}templates/sysd/shellinabox.template /etc/systemd/system/shellinabox.service
     cp ${local_setup}templates/quickconsole/00_QuickConsole.css.template /etc/shellinabox/options-enabled/00_QuickConsole.css
-    
+
     chmod +x /etc/shellinabox/options-enabled/00_QuickConsole.css
     chmod 777 /etc/shellinabox/options-enabled/00_QuickConsole.css
 
