@@ -180,8 +180,6 @@ function _updatedeps() {
 
 function _quickconsole() {
   if [[ ! -f /etc/systemd/system/shellinabox.service ]]; then
-    cd
-  else
     apt-get install shellinabox
     cp ${local_setup}templates/sysd/shellinabox.template /etc/systemd/system/shellinabox.service
     cp ${local_setup}templates/quickconsole/00_QuickConsole.css.template /etc/shellinabox/options-enabled/00_QuickConsole.css
