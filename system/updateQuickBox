@@ -178,6 +178,20 @@ function _updatedeps() {
   fi
 }
 
+function _quickconsole() {
+  if [[ ! -f /etc/systemd/system/shellinabox.service ]]; then
+    cd
+  else
+    apt-get install shellinabox
+    cp ${local_setup}templates/sysd/shellinabox.template /etc/systemd/system/shellinabox.service
+    cp ${local_setup}templates/quickconsole/00_QuickConsole.css.template /etc/shellinabox/options-enabled/00_QuickConsole.css
+    chmod +x /etc/shellinabox/options-enabled/00_QuickConsole.css
+    chmod 777 /etc/shellinabox/options-enabled/00_QuickConsole.css
+    systemctl enable shellinabox.service >/dev/null 2>&1
+    systemctl start shellinabox.service >/dev/null 2>&1
+  fi
+}
+
 function _fin() {
   source /root/.bashrc >> /dev/null 2>&1
   echo
@@ -211,6 +225,7 @@ echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
 echo "Checking locks and adding if necessary ... " >>"${OUTTO}" 2>&1;_checklocks;echo
 echo "Checking new dependencies and updating as necessary ... " >>"${OUTTO}" 2>&1;_updatedeps;echo
+_quickconsole
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
 echo "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
 echo "Checking apache aliases ... " >>"${OUTTO}" 2>&1;_updateapachealias;echo
