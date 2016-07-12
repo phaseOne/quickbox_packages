@@ -183,11 +183,13 @@ function _quickconsole() {
     CONSOLEIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
 
 cat >>/etc/profile<<EOF
+echo ""
 echo "Welcome Back ${A1} !"
-echo "  * Dashboard:  ${CONSOLEIP}"
+echo "  * Dashboard:  https://${CONSOLEIP}"
 echo "  * Support:    https://plaza.quickbox.io"
 echo "  * Roadmap:    https://quickbox.io/roadmap"
 echo "  * Donate:     https://quickbox.io/donate"
+echo ""
 EOF
 
     apt-get -y install shellinabox >/dev/null 2>&1
