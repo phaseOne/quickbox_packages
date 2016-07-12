@@ -131,6 +131,10 @@ function _updaterutorrent-plugins() {
       rsync -aP ${local_rplugins}${i} /srv/rutorrent/plugins/
     fi
   done
+  cp /srv/rutorrent/home/fileshare/.htaccess /srv/rutorrent/plugins/fileshare/
+  cd /srv/rutorrent/home/fileshare/
+  rm -rf share.php
+  ln -s ../../plugins/fileshare/share.php
 }
 
 # function to install dashboard (23)
