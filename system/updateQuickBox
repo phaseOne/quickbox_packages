@@ -188,7 +188,7 @@ function _quickconsole() {
 
 cat >>/etc/profile<<EOF
 echo ""
-echo "Welcome Back ${A1} !"
+echo "Welcome Back $USER !"
 echo "  * Dashboard:  https://${CONSOLEIP}"
 echo "  * Support:    https://plaza.quickbox.io"
 echo "  * Roadmap:    https://quickbox.io/roadmap"
