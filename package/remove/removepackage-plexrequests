@@ -4,4 +4,4 @@ systemctl stop plexrequests
 rm /etc/systemd/system/plexrequests.service
 
 rm -rf /opt/plexrequests
-rm /install/.plexrequsets.lock
+rm /install/.plexrequests.lock
