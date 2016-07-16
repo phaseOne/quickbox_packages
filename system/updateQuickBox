@@ -19,6 +19,32 @@
 function _string() { perl -le 'print map {(a..z,A..Z,0..9)[rand 62] } 0..pop' 15 ; }
 #################################################################################
 
+function _oscheck() {
+  DISTRO=$(lsb_release -is)
+  RELEASE=$(lsb_release -rs)
+  CODENAME=$(lsb_release -cs)
+  SETNAME=$(lsb_release -rc)
+  echo
+  echo
+  echo "[${repo_title}QuickBox${normal}] ${title} QuickBox Seedbox Updater ${normal}  "
+  echo
+  echo "   ${title}              Heads Up!              ${normal} "
+  echo "   ${message_title}  QuickBox works with the following  ${normal} "
+  echo "   ${message_title}  Ubuntu 15.10 | 16.04 & Debian 8    ${normal} "
+  echo
+  echo
+  echo "${green}Checking distribution ...${normal}"
+  echo "$(lsb_release -a)"
+  echo
+  if [[ ! "$CODENAME" =~ ("xenial"|"wily"|"jessie") ]]; then
+    echo "Oh drats! You do not appear to be running a supported $DISTRO release."
+    echo "As of QuickBox version 2.4.0, we no longer support do not support systemd"
+    echo "${bold}$SETNAME${normal}"
+    echo 'Exiting...'
+    exit 1
+  fi
+}
+
 function _logcheck() {
   OUTTO=/srv/rutorrent/home/db/output.log
 }
@@ -29,7 +55,7 @@ if [[ -d /root/QuickBox ]]; then
   find -type d -name "quickbox_*" -exec rm -rf {} \;
 else
   cd /root
-  git clone --recursive https://lab.quickbox.io/QuickBox/quickbox_dev QuickBox
+  git clone --recursive https://lab.quickbox.io/QuickBox/QuickBox QuickBox
 fi
 }
 
@@ -73,6 +99,12 @@ function _checklocks() {
   fi
 }
 
+function _updated() {
+  if [[ -f /install/.cron.lock ]]; then
+    bash ${local_packages}package/remove/removepackage-cron
+  fi
+}
+
 function _updatesyscommands() {
   cd ${usrbin}
   cp -r ${local_packages}. ${usrbin}quickbox
@@ -97,6 +129,14 @@ function _updateapachealias() {
   mv aliases-seedbox.conf aliases-seedbox.conf.orig
   cp -r ${local_setup}templates/aliases-seedbox.conf.template /etc/apache2/sites-enabled/aliases-seedbox.conf
   sed -i "s/USERNAME/${A1}/g" /etc/apache2/sites-enabled/aliases-seedbox.conf
+
+  if [[ -f /install/.plex.lock ]] && [[ -s /etc/apache2/sites-enabled/plex.conf ]]; then
+    PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+    cp ${local_setup}templates/plex.conf.template /etc/apache2/sites-enabled/plex.conf
+    chown www-data: /etc/apache2/sites-enabled/plex.conf
+    a2enmod proxy >/dev/null 2>&1
+    sed -i "s/PUBLICIP/${PUBLICIP}/g" /etc/apache2/sites-enabled/plex.conf
+  fi
 
   service apache2 reload  >> /dev/null 2>&1
 }
@@ -155,6 +195,36 @@ function _updatesudo() {
   awk -v username="${A1}" '/^root/ && !x {print username    " ALL=(ALL:ALL) NOPASSWD: ALL"; x=1} 1' /etc/sudoers > /tmp/sudoers;mv /tmp/sudoers /etc
 }
 
+function _updateplexsysd() {
+  if [[ -f /etc/init.d/plexmediaserver ]]; then
+
+  OUTTO="/srv/rutorrent/home/db/output.log"
+  HOSTNAME1=$(hostname -s)
+  PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+  local_setup=/root/QuickBox/setup/
+
+  mv /etc/init.d/plexmediaserver /etc/init.d/plexmediaserver.BAK
+  cp ${local_setup}templates/sysd/plexmediaserver.template /lib/systemd/system/plexmediaserver.service
+
+  cp ${local_setup}templates/plex.conf.template /etc/apache2/sites-enabled/plex.conf
+  chown www-data: /etc/apache2/sites-enabled/plex.conf
+  a2enmod proxy >/dev/null 2>&1
+  sed -i "s/PUBLICIP/${PUBLICIP}/g" /etc/apache2/sites-enabled/plex.conf
+
+  wget -O - http://shell.ninthgate.se/packages/shell.ninthgate.se.gpg.key | apt-key add -
+  echo "deb http://shell.ninthgate.se/packages/debian jessie main" > /etc/apt/sources.list.d/plexmediaserver.list
+  apt-get -y update >/dev/null 2>&1
+
+  systemctl daemon-reload >/dev/null 2>&1
+  service plexmediaserver stop
+  systemctl enable plexmediaserver.service >/dev/null 2>&1
+  systemctl stop plexmediaserver.service >/dev/null 2>&1
+  systemctl start plexmediaserver.service >/dev/null 2>&1
+  service apache2 restart >/dev/null 2>&1
+
+  fi
+}
+
 #function _updatecronfile() {
   # We'll disable this function unless a new packages
   # is included or startup requires a fix.
@@ -169,27 +239,19 @@ function _perms() {
   sh -c 'find /srv/rutorrent/* -type d -print0 | sudo xargs -0 chmod g+s'
   chmod +x /etc/cron.d/set_interface
   find /home/*/.config/deluge -name "auth" -exec chmod 600 {} \;
-  find /home -name ".startup" -exec chmod 775 {} \;
   find /usr/local/bin/quickbox -type f -exec chmod 755 {} \;
   chmod +x $(find /usr/local/bin/quickbox -type f) >/dev/null 2>&1
-  chmod -R 775 ${rutorrent}plugins/filemanager/scripts
-}
-
-function _updatedeps() {
-  if [[ ! -f /bin/ed ]]; then
-    apt update -y -q
-    apt install -y -q ed
-  fi
+  chmod -R 755 ${rutorrent}plugins/filemanager/scripts
 }
 
 function _quickconsole() {
-  if [[ ! -f /etc/systemd/system/shellinabox.service ]]; then
-    CONSOLEIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+  #if [[ ! -f /etc/systemd/system/shellinabox.service ]]; then
+    PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
 
-cat >>/etc/profile<<EOF
+cat >/etc/profile<<EOF
 echo ""
-echo "Welcome Back $USER !"
-echo "  * Dashboard:  https://${CONSOLEIP}"
+echo "Welcome Back !"
+echo "  * Dashboard:  https://${PUBLICIP}"
 echo "  * Support:    https://plaza.quickbox.io"
 echo "  * Roadmap:    https://quickbox.io/roadmap"
 echo "  * Donate:     https://quickbox.io/donate"
@@ -200,19 +262,29 @@ EOF
 
     cp ${local_setup}templates/sysd/shellinabox.template /etc/systemd/system/shellinabox.service
     cp ${local_setup}templates/quickconsole/00_QuickConsole.css.template /etc/shellinabox/options-enabled/00_QuickConsole.css
+    cp ${local_setup}templates/web-console.conf.template /etc/apache2/sites-enabled/${A1}.console.conf
+
+    sed -i "s/PUBLICIP/${PUBLICIP}/g" /etc/apache2/sites-enabled/${A1}.console.conf
+    sed -i "s/USER/${A1}/g" /etc/apache2/sites-enabled/${A1}.console.conf
 
     chmod +x /etc/shellinabox/options-enabled/00_QuickConsole.css
     chmod 777 /etc/shellinabox/options-enabled/00_QuickConsole.css
+
+    mv /etc/init.d/shellinabox /etc/init.d/shellinabox.BAK
 
     systemctl enable shellinabox.service >/dev/null 2>&1
     systemctl stop shellinabox.service >/dev/null 2>&1
     systemctl daemon-reload >/dev/null 2>&1
     systemctl start shellinabox.service >/dev/null 2>&1
 
-  fi
+    service apache2 reload  >> /dev/null 2>&1
+    service memcached restart  >> /dev/null 2>&1
+
+  #fi
 }
 
 function _fin() {
+  service apache2 restart >/dev/null 2>&1
   source /root/.bashrc >> /dev/null 2>&1
   echo
   echo "[QuickBox] Seedbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
@@ -239,13 +311,14 @@ rutorrent=/srv/rutorrent/
 usrbin=/usr/local/bin/
 
 # QuickBox Update STRUCTURE
+_oscheck
 _logcheck
 _directorycheck
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
-echo "Checking locks and adding if necessary ... " >>"${OUTTO}" 2>&1;_checklocks;echo
-echo "Checking new dependencies and updating as necessary ... " >>"${OUTTO}" 2>&1;_updatedeps;echo
 _quickconsole
+echo "Checking locks and adding if necessary ... " >>"${OUTTO}" 2>&1;_checklocks;echo
+echo "Checking if cron services should be uninstalled and taking appropriate action ... " >>"${OUTTO}" 2>&1;_updated;echo
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
 echo "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
 echo "Checking apache aliases ... " >>"${OUTTO}" 2>&1;_updateapachealias;echo
@@ -254,6 +327,7 @@ echo "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent;
 echo "Updating all rutorrent plugins ... " >>"${OUTTO}" 2>&1;_updaterutorrent-plugins;echo
 echo "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard;echo
 echo "Updating the QuickBox Sudoers template ... " >>"${OUTTO}" 2>&1;_updatesudo;echo
+_updateplexsysd
 #echo "Updating ${A1}'s .startup cronfile... " >>"${OUTTO}" 2>&1;_updatecronfile;echo
 echo "Adjusting permissions ... " >>"${OUTTO}" 2>&1;_perms;echo
 _fin
