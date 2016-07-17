@@ -133,7 +133,7 @@ function _perms() {
 
 function _fin() {
   echo;echo
-  echo -e " ${black}${on_green}    [quickbox] Seddbox & GUI Update Completed !   ${normal} "
+  echo -e " ${black}${on_green}    [quickbox] Seedbox & GUI Update Completed !   ${normal} "
   echo;echo
 }
 
