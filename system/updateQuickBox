@@ -26,20 +26,20 @@ function _oscheck() {
   SETNAME=$(lsb_release -rc)
   echo
   echo
-  echo "[${repo_title}QuickBox${normal}] ${title} QuickBox Seedbox Updater ${normal}  "
+  echo "[QuickBox]  QuickBox Seedbox Updater   "
   echo
-  echo "   ${title}              Heads Up!              ${normal} "
-  echo "   ${message_title}  QuickBox works with the following  ${normal} "
-  echo "   ${message_title}  Ubuntu 15.10 | 16.04 & Debian 8    ${normal} "
+  echo "                 Heads Up!               "
+  echo "     QuickBox works with the following   "
+  echo "     Ubuntu 15.10 | 16.04 & Debian 8     "
   echo
   echo
-  echo "${green}Checking distribution ...${normal}"
+  echo "Checking distribution ..."
   echo "$(lsb_release -a)"
   echo
-  if [[ ! "$CODENAME" =~ ("xenial"|"wily"|"jessie") ]]; then
+  if [[ ! "$CODENAME" == xenial ]] || [[ ! "$CODENAME" == wily ]] || [[ ! "$CODENAME" == jessie ]]; then
     echo "Oh drats! You do not appear to be running a supported $DISTRO release."
     echo "As of QuickBox version 2.4.0, we no longer support do not support systemd"
-    echo "${bold}$SETNAME${normal}"
+    echo "$SETNAME"
     echo 'Exiting...'
     exit 1
   fi
@@ -284,7 +284,7 @@ EOF
 }
 
 function _fin() {
-  service apache2 restart >/dev/null 2>&1
+  service apache2 restart >>/dev/null 2>&1
   source /root/.bashrc >> /dev/null 2>&1
   echo
   echo "[QuickBox] Seedbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
