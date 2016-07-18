@@ -38,7 +38,7 @@ function _oscheck() {
   echo
   if [[ ! "$CODENAME" == xenial ]] || [[ ! "$CODENAME" == wily ]] || [[ ! "$CODENAME" == jessie ]]; then
     echo "Oh drats! You do not appear to be running a supported $DISTRO release."
-    echo "As of QuickBox version 2.4.0, we no longer support do not support systemd"
+    echo "As of QuickBox version 2.4.0, we now only support systemd"
     echo "$SETNAME"
     echo 'Exiting...'
     exit 1
