@@ -233,7 +233,7 @@ function _updatesudo() {
 }
 
 function _updateplex() {
-  OUTTO="/srv/rutorrent/home/db/output.log"
+  #OUTTO="/srv/rutorrent/home/db/output.log"
   HOSTNAME1=$(hostname -s)
   PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
   local_setup=/root/QuickBox/setup/
@@ -261,21 +261,8 @@ function _updateplex() {
   #cp ${local_setup}templates/startup.template /home/"${A1}"/.startup
 #}
 
-# adjust permissions function (9)
-function _perms() {
-  chown -R www-data ${rutorrent}*
-  chgrp -R www-data ${rutorrent}*
-  chmod -R g+rw ${rutorrent}*
-  sh -c 'find /srv/rutorrent/* -type d -print0 | sudo xargs -0 chmod g+s'
-  chmod +x /etc/cron.d/set_interface
-  find /home/*/.config/deluge -name "auth" -exec chmod 600 {} \;
-  find /usr/local/bin/quickbox -type f -exec chmod 755 {} \;
-  chmod +x $(find /usr/local/bin/quickbox -type f) >/dev/null 2>&1
-  chmod -R 755 ${rutorrent}plugins/filemanager/scripts
-}
-
 function _quickconsole() {
-  #if [[ ! -f /etc/systemd/system/shellinabox.service ]]; then
+  [[ ! -f /install/.webconsole.lock ]]; then
     PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
 
 cat >/etc/profile<<EOF
@@ -302,6 +289,8 @@ EOF
 
     mv /etc/init.d/shellinabox /etc/init.d/shellinabox.BAK
 
+    touch /install/.webconsole.lock
+
     systemctl enable shellinabox.service >/dev/null 2>&1
     systemctl stop shellinabox.service >/dev/null 2>&1
     systemctl daemon-reload >/dev/null 2>&1
@@ -310,7 +299,20 @@ EOF
     service apache2 reload  >> /dev/null 2>&1
     service memcached restart  >> /dev/null 2>&1
 
-  #fi
+  fi
+}
+
+# adjust permissions function (9)
+function _perms() {
+  chown -R www-data ${rutorrent}*
+  chgrp -R www-data ${rutorrent}*
+  chmod -R g+rw ${rutorrent}*
+  sh -c 'find /srv/rutorrent/* -type d -print0 | sudo xargs -0 chmod g+s'
+  chmod +x /etc/cron.d/set_interface
+  find /home/*/.config/deluge -name "auth" -exec chmod 600 {} \;
+  find /usr/local/bin/quickbox -type f -exec chmod 755 {} \;
+  chmod +x $(find /usr/local/bin/quickbox -type f) >/dev/null 2>&1
+  chmod -R 755 ${rutorrent}plugins/filemanager/scripts
 }
 
 function _fin() {
@@ -346,7 +348,6 @@ _oscheck
 _directorycheck
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
-_quickconsole
 echo "Checking locks and adding if necessary ... " >>"${OUTTO}" 2>&1;_checklocks;echo
 echo "Checking if cron services should be uninstalled and taking appropriate action ... " >>"${OUTTO}" 2>&1;_updated;echo
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
@@ -359,6 +360,7 @@ echo "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard;e
 echo "Updating the QuickBox Sudoers template ... " >>"${OUTTO}" 2>&1;_updatesudo;echo
 _updateznc
 _updateplex
+_quickconsole
 #echo "Updating ${A1}'s .startup cronfile... " >>"${OUTTO}" 2>&1;_updatecronfile;echo
 echo "Adjusting permissions ... " >>"${OUTTO}" 2>&1;_perms;echo
 _fin
