@@ -16,23 +16,14 @@
 #   under the GPL along with build & install instructions.
 #
 #################################################################################
-#Script Console Colors
-black=$(tput setaf 0); red=$(tput setaf 1); green=$(tput setaf 2); yellow=$(tput setaf 3);
-blue=$(tput setaf 4); magenta=$(tput setaf 5); cyan=$(tput setaf 6); white=$(tput setaf 7);
-on_red=$(tput setab 1); on_green=$(tput setab 2); on_yellow=$(tput setab 3); on_blue=$(tput setab 4);
-on_magenta=$(tput setab 5); on_cyan=$(tput setab 6); on_white=$(tput setab 7); bold=$(tput bold);
-dim=$(tput dim); underline=$(tput smul); reset_underline=$(tput rmul); standout=$(tput smso);
-reset_standout=$(tput rmso); normal=$(tput sgr0); alert=${white}${on_red}; title=${standout};
-sub_title=${bold}${yellow}; repo_title=${black}${on_green}; message_title=${white}${on_magenta}
-#################################################################################
 function _string() { perl -le 'print map {(a..z,A..Z,0..9)[rand 62] } 0..pop' 15 ; }
 #################################################################################
 
 function _oscheck() {
-  if [[ ! -f /bin/systemctl ]]; then
-    echo "Oh drats! Your system does not support systemd"
-    echo "As of QuickBox 2.4.0, systemd is now required"
-    echo 'Exiting...'
+  if [[ ! -f /bin/systemd ]]; then
+    echo "Oh drats! Your system does not support systemd" | tee -a ${OUTTO}
+    echo "As of QuickBox 2.4.0, systemd is now required"  | tee -a ${OUTTO}
+    echo 'Exiting...'  | tee -a ${OUTTO}
     exit 1
   fi
 }
@@ -106,14 +97,14 @@ function _updatesyscommands() {
 }
 
 function _updateskel() {
-  if [[ -d /etc/skel ]]; then
-    rm -r /etc/skel
+  if [[ ! -d /etc/skel ]]; then
+    mkdir /etc/skel
   fi
-  mkdir /etc/skel
-  cp -r ${local_setup}templates/skel/. /etc/skel
+  rsync -aP ${local_setup}templates/skel/. /etc/skel/
 }
 
 function _updateapachealias() {
+  users=($(cat /etc/htpasswd | cut -d ":" -f 1))
   cd /etc/apache2/sites-enabled
   if [[ -f aliases-seedbox.conf.orig ]]; then
     rm -r aliases-seedbox.conf.orig
@@ -121,6 +112,19 @@ function _updateapachealias() {
   mv aliases-seedbox.conf aliases-seedbox.conf.orig
   cp -r ${local_setup}templates/aliases-seedbox.conf.template /etc/apache2/sites-enabled/aliases-seedbox.conf
   sed -i "s/USERNAME/${A1}/g" /etc/apache2/sites-enabled/aliases-seedbox.conf
+  for i in "${users[@]}"; do
+    if [[ ! $i == $A1 ]]; then
+cat <<EOT >> /etc/apache2/sites-enabled/aliases.$i.download.conf
+    <Location "/$i">
+        AuthType Digest
+        AuthName "rutorrent"
+        AuthUserFile "/etc/htpasswd"
+        Require user $i
+    </Location>
+EOT
+        sed -i "s/valid-user/user $i/g" /etc/apache2/sites-enabled/aliases.$i.download.conf
+  fi
+done
 
   if [[ -f /install/.plex.lock ]] && [[ -s /etc/apache2/sites-enabled/plex.conf ]]; then
     PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
@@ -170,6 +174,46 @@ function _updaterutorrent-plugins() {
   ln -s ../../plugins/fileshare/share.php
 }
 
+function _updatedeluge() {
+  if [[ -f /install/.deluge.lock ]]; then
+    users=($(cat /etc/htpasswd | cut -d ":" -f 1))
+    if [[ ! -f /etc/skel/.config/deluge/plugins/ltConfig-0.2.5.0-py2.7.egg ]]; then
+      mkdir -p /etc/skel/.config/deluge/plugins/
+      cd /etc/skel/.config/deluge/plugins/
+      wget -q https://github.com/ratanakvlun/deluge-ltconfig/releases/download/v0.2.5.0/ltConfig-0.2.5.0-py2.7.egg
+    fi
+    for u in "${users[@]}"; do
+      if [[ ! -f /home/$u/.config/deluge/plugins/ltConfig-0.2.5.0-py2.7.egg ]]; then
+        cd /home/$u/.config/deluge/plugins/
+        wget -q https://github.com/ratanakvlun/deluge-ltconfig/releases/download/v0.2.5.0/ltConfig-0.2.5.0-py2.7.egg
+        chown $u: ltConfig-0.2.5.0-py2.7.egg
+        chmod +x ltConfig-0.2.5.0-py2.7.egg
+      fi
+      ltstatus=$(cat /home/$u/.config/deluge/core.conf | grep -i ltconfig)
+      if [[ -z $ltstatus ]]; then
+        enabledplugins=$(cat /home/$u/.config/deluge/core.conf | grep '"enabled_plugins": \[\],')
+        systemctl stop deluged@$u
+        if [[ -z $enabledplugins ]]; then
+          sed -i '/enabled_plugins/a \ \ \ \ "ltConfig",' /home/$u/.config/deluge/core.conf
+        else
+          sed -i '/enabled_plugins/a \ \ \ \ "ltConfig"\n],' /home/$u/.config/deluge/core.conf
+          sed -i 's/"enabled_plugins": \[\],/"enabled_plugins": \[/g' /home/$u/.config/deluge/core.conf
+        fi
+        systemctl start deluged@$u
+      fi
+    done
+  fi
+}
+
+function _updateznc() {
+  if [[ -f /install/.znc.lock ]]; then
+    bin=$(crontab -u znc -l | grep /usr/local/bin)
+    if [[ -n $bin ]]; then
+      sudo -u znc crontab -l | echo -e "*/10 * * * * /usr/bin/znc >/dev/null 2>&1\n@reboot /usr/bin/znc >/dev/null 2>&1" | crontab -u znc - > /dev/null 2>&1
+    fi
+  fi
+}
+
 # function to install dashboard (23)
 function _updatedashboard() {
   cd ${rutorrent}
@@ -188,34 +232,27 @@ function _updatesudo() {
   awk -v username="${A1}" '/^root/ && !x {print username    " ALL=(ALL:ALL) NOPASSWD: ALL"; x=1} 1' /etc/sudoers > /tmp/sudoers;mv /tmp/sudoers /etc
 }
 
-function _updateplexsysd() {
-  if [[ -f /etc/init.d/plexmediaserver ]]; then
-
+function _updateplex() {
   OUTTO="/srv/rutorrent/home/db/output.log"
   HOSTNAME1=$(hostname -s)
   PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
   local_setup=/root/QuickBox/setup/
+  if [[ -f /etc/init.d/plexmediaserver ]]; then
+    mv /etc/init.d/plexmediaserver /etc/init.d/plexmediaserver.BAK
+    cp ${local_setup}templates/sysd/plexmediaserver.template /lib/systemd/system/plexmediaserver.service
 
-  mv /etc/init.d/plexmediaserver /etc/init.d/plexmediaserver.BAK
-  cp ${local_setup}templates/sysd/plexmediaserver.template /lib/systemd/system/plexmediaserver.service
+    wget -O - http://shell.ninthgate.se/packages/shell.ninthgate.se.gpg.key | apt-key add -
+    echo "deb http://shell.ninthgate.se/packages/debian jessie main" > /etc/apt/sources.list.d/plexmediaserver.list
+    apt-get -y update >/dev/null 2>&1
 
-  cp ${local_setup}templates/plex.conf.template /etc/apache2/sites-enabled/plex.conf
-  chown www-data: /etc/apache2/sites-enabled/plex.conf
-  a2enmod proxy >/dev/null 2>&1
-  sed -i "s/PUBLICIP/${PUBLICIP}/g" /etc/apache2/sites-enabled/plex.conf
-
-  wget -O - http://shell.ninthgate.se/packages/shell.ninthgate.se.gpg.key | apt-key add -
-  echo "deb http://shell.ninthgate.se/packages/debian jessie main" > /etc/apt/sources.list.d/plexmediaserver.list
-  apt-get -y update >/dev/null 2>&1
-
-  systemctl daemon-reload >/dev/null 2>&1
-  service plexmediaserver stop
-  systemctl enable plexmediaserver.service >/dev/null 2>&1
-  systemctl stop plexmediaserver.service >/dev/null 2>&1
-  systemctl start plexmediaserver.service >/dev/null 2>&1
-  service apache2 restart >/dev/null 2>&1
-
+    systemctl daemon-reload >/dev/null 2>&1
+    update-rc.d plexmediaserver remove
+    service plexmediaserver stop
+    systemctl enable plexmediaserver.service >/dev/null 2>&1
+    systemctl stop plexmediaserver.service >/dev/null 2>&1
+    systemctl start plexmediaserver.service >/dev/null 2>&1
   fi
+
 }
 
 #function _updatecronfile() {
@@ -304,8 +341,8 @@ rutorrent=/srv/rutorrent/
 usrbin=/usr/local/bin/
 
 # QuickBox Update STRUCTURE
-_oscheck
 _logcheck
+_oscheck
 _directorycheck
 echo -n "Pulling QuickBox Ecosystem ... " >>"${OUTTO}" 2>&1;_downloadrepos;echo
 _bashrc
@@ -320,7 +357,8 @@ echo "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent;
 echo "Updating all rutorrent plugins ... " >>"${OUTTO}" 2>&1;_updaterutorrent-plugins;echo
 echo "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard;echo
 echo "Updating the QuickBox Sudoers template ... " >>"${OUTTO}" 2>&1;_updatesudo;echo
-_updateplexsysd
+_updateznc
+_updateplex
 #echo "Updating ${A1}'s .startup cronfile... " >>"${OUTTO}" 2>&1;_updatecronfile;echo
 echo "Adjusting permissions ... " >>"${OUTTO}" 2>&1;_perms;echo
 _fin
