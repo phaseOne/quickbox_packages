@@ -19,6 +19,7 @@
 function _string() { perl -le 'print map {(a..z,A..Z,0..9)[rand 62] } 0..pop' 15 ; }
 #################################################################################
 
+
 function _oscheck() {
   if [[ ! -f /bin/systemd ]]; then
     echo "Oh drats! Your system does not support systemd" | tee -a ${OUTTO}
@@ -28,9 +29,9 @@ function _oscheck() {
   fi
 }
 
-function _logcheck() {
-  OUTTO=/srv/rutorrent/home/db/output.log
-}
+#function _logcheck() {
+#  OUTTO=/srv/rutorrent/home/db/output.log
+#}
 
 function _directorycheck() {
 if [[ -d /root/QuickBox ]]; then
@@ -233,9 +234,6 @@ function _updatesudo() {
 }
 
 function _updateplex() {
-  #OUTTO="/srv/rutorrent/home/db/output.log"
-  HOSTNAME1=$(hostname -s)
-  PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
   local_setup=/root/QuickBox/setup/
   if [[ -f /etc/init.d/plexmediaserver ]]; then
     mv /etc/init.d/plexmediaserver /etc/init.d/plexmediaserver.BAK
@@ -330,13 +328,14 @@ function _fin() {
 }
 
 
+OUTTO=/srv/rutorrent/home/db/output.log
+
 local_setup=/root/QuickBox/setup/
 local_packages=/root/QuickBox/packages/
 local_rutorrent=/root/QuickBox/rutorrent/
 local_rplugins=/root/QuickBox/rtplugins/
 local_dashboard=/root/QuickBox/dashboard/
 
-OUTTO=/srv/rutorrent/home/db/output.log
 Reth0=$(ifconfig | grep -m 1 "Link encap" | sed 's/[ \t].*//;/^\(lo\|\)$/d' | awk '{ print $1 '});
 IFACE=$(echo -n "${Reth0}");
 A1=$(cat /srv/rutorrent/home/db/master.txt) >> /dev/null 2>&1
