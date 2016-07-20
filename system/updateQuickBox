@@ -314,7 +314,7 @@ EOF
 }
 
 function _fin() {
-  service apache2 restart >>/dev/null 2>&1
+  service apache2 restart >> /dev/null 2>&1
   source /root/.bashrc >> /dev/null 2>&1
   echo
   echo "[QuickBox] Seedbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
