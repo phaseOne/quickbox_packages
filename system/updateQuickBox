@@ -141,6 +141,7 @@ function _updateuserhome() {
     mv deluge /home/"${A1}"/deluge
     cd ..
     mv torrents rtorrent
+    rm -rf torrents
     mkdir -p torrents
     mv deluge torrents/deluge
     mv rtorrent torrents/rtorrent
