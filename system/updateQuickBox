@@ -262,7 +262,7 @@ function _updateplex() {
 #}
 
 function _quickconsole() {
-  [[ ! -f /install/.webconsole.lock ]]; then
+  if [[ ! -f /install/.webconsole.lock ]]; then
     PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
 
 cat >/etc/profile<<EOF
