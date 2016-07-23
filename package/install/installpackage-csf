@@ -2,8 +2,8 @@
 #
 # [Quick Box :: Install Config Server Firewall package]
 #
-# GITHUB REPOS
-# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# QUICKLAB REPOS
+# QuickLab _ packages  :   https://lab.quickbox.io/QuickBox/quickbox_packages
 # LOCAL REPOS
 # Local _ packages   :   ~/QuickBox/packages
 # Author             :   QuickBox.IO
@@ -17,7 +17,7 @@
 #   including (via compiler) GPL-licensed code must also be made available
 #   under the GPL along with build & install instructions.
 #
-OUTTO=/root/quick-box.log
+OUTTO=/root/quickbox.csf-install.log
 HOSTNAME1=$(hostname -s)
 PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
 EMAIL=$(cat /srv/rutorrent/home/db/masteremail.txt)
@@ -47,7 +47,6 @@ function _installCSF() {
              -e "s/#MAXMIND|86400|0|/MAXMIND|86400|100|/" \
              -e "s/#BDE|3600|0|/BDE|3600|100|/" \
              -e "s/#BDEALL|86400|0|/BDEALL|86400|100|/" /etc/csf/csf.blocklists;
-  # modify csf process ignore - ignore nginx, varnish & mysql
   echo >> /etc/csf/csf.pignore;
   echo "[ QuickBox Additions - These are necessary to avoid noisy emails ]" >> /etc/csf/csf.pignore;
   echo "exe:/usr/sbin/rsyslogd" >> /etc/csf/csf.pignore;
