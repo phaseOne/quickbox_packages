@@ -38,7 +38,7 @@ fi
   apt-get update -q -y > /dev/null 2>&1
   apt-get install znc -q -y > /dev/null 2>&1
   touch /install/.znc.lock
-  sudo -u znc crontab -l | echo "*/10 * * * * /usr/local/bin/znc >/dev/null 2>&1" | crontab -u znc - > /dev/null 2>&1
+  sudo -u znc crontab -l | echo -e "*/10 * * * * /usr/bin/znc >/dev/null 2>&1\n@reboot /usr/bin/znc >/dev/null 2>&1" | crontab -u znc - > /dev/null 2>&1
   echo "#### ZNC configuration will now run. Please answer the following prompts ####"
   sleep 5
   sudo -u znc znc --makeconf

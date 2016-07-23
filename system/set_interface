@@ -20,5 +20,5 @@ ADAPT=$(cat /srv/rutorrent/home/db/interface.txt);
 
 sed -i "s/INETFACE/${ADAPT}/g" /srv/rutorrent/home/widgets/stat.php;
 sed -i "s/INETFACE/${ADAPT}/g" /srv/rutorrent/home/widgets/data.php;
-sed -i "s/INETFACE/${ADAPT}/g" /srv/rutorrent/home/widgets/config.php;
+sed -i "s/INETFACE/${ADAPT}/g" /srv/rutorrent/home/widgets/bw_tables.php;
 sed -i "s/INETFACE/${ADAPT}/g" /srv/rutorrent/home/inc/config.php;
