@@ -70,6 +70,7 @@ function _installCSF() {
   echo "exe:/usr/sbin/uuidd" >> /etc/csf/csf.pignore;
   echo "exe:/usr/lib/plexmediaserver/Plex Media Server" >> /etc/csf/csf.pignore;
   echo "exe:/usr/lib/plexmediaserver/Resources/Plex Script Host" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/syncthing" >> /etc/csf/csf.pignore;
   echo "exe:/usr/bin/screen" >> /etc/csf/csf.pignore;
   echo "exe:/usr/bin/irssi" >> /etc/csf/csf.pignore;
   echo "exe:/usr/bin/mono-sgen" >> /etc/csf/csf.pignore;
