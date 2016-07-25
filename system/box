@@ -1,0 +1,212 @@
+#!/bin/bash
+#
+# [Quick Box :: QuickBox Package Manager Batch CLI Installer `box`]
+# `box -h` for commands and info
+#
+# GITHUB REPOS
+# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   QuickBox.IO | liara
+# URL                :   https://plaza.quickbox.io
+#
+# QuickBox Copyright (C) 2016 QuickBox.io
+# Licensed under GNU General Public License v3.0 GPL-3 (in short)
+#
+#   You may copy, distribute and modify the software as long as you track
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
+#   under the GPL along with build & install instructions.
+#
+#################################################################################
+
+function _intro() {
+  whiptail --title "QuickBox Package Manager" --msgbox "Welcome to the QuickBox Package Manger! Using this script you can choose to install and remove the packages contained within our quickbox package repository. Use the arrow keys to navigate, spacebar to toggle the currently selected item and enter to continue." 15 50
+}
+
+function _function() {
+  function=$(whiptail --title "QBPM" --menu "Choose an option:" --ok-button "Continue" --no-cancel 12 50 3 \
+               Install "Packages" \
+               Remove "Packages" \
+               Exit "" 3>&1 1>&2 2>&3)
+
+    if [[ $function == Install ]]; then
+      _install
+    elif [[ $function == Remove ]]; then
+      _remove
+    elif [[ $function == Exit ]]; then
+      exit 0
+    fi
+}
+
+function _install() {
+  installa=()
+  locks=($(find /usr/local/bin/quickbox/package/install -type f -printf "%f\n" | cut -d "-" -f 2 | sort -d))
+  for i in "${locks[@]}"; do
+    app=${i}
+    if [[ $i == autodl ]]; then app=autodlirssi; fi
+    if [[ ! -f /install/.$app.lock ]]; then
+      installa+=("$i" '""')
+    fi
+  done
+	whiptail --title "Install Software" --checklist --noitem --separate-output "Make some choices:" 15 26 7 "${installa[@]}" 2>results
+  readarray packages < results
+  for i in "${packages[@]}"; do
+    echo -n "Installing $i ";
+    bash /usr/local/bin/quickbox/package/install/installpackage-$i
+  done
+  rm results
+  _function
+}
+
+function _remove() {
+removea=()
+locks=($(find /usr/local/bin/quickbox/package/remove -type f -printf "%f\n" | cut -d "-" -f 2 | sort -d))
+for i in "${locks[@]}"; do
+  app=${i}
+  if [[ $i == autodl ]]; then app=autodlirssi; fi
+  if [[ -f /install/.$app.lock ]]; then
+    removea+=("$i" '""')
+  fi
+done
+whiptail --title "Remove Software" --noitem --checklist --separate-output "Make some choices:" 15 26 7 "${removea[@]}" 2>results
+readarray packages < results
+for i in "${packages[@]}"; do
+  echo -n "Removing $i ";
+  bash /usr/local/bin/quickbox/package/remove/removepackage-$i
+done
+rm results
+_function
+}
+
+function _cli() {
+  arg=("$@")
+  packages=("${arg[@]:1}")
+  locks=($(find /install -type f -printf "%f\n" | cut -d "." -f 2 | sort -d))
+  repo=($(find /usr/local/bin/quickbox/package/install -type f -printf "%f\n" | cut -d "-" -f 2))
+  for i in "${packages[@]}"; do
+    app=${i}
+    if [[ $i == autodl ]]; then app=autodlirssi; fi
+    if [[ "${locks[@]}" =~ $app ]]; then
+      echo -n "Package $i already installed"
+    else
+      if [[ "${repo[@]}" =~ $i ]]; then
+        echo -n "Installing $i "
+        bash /usr/local/bin/quickbox/package/install/installpackage-$i
+      else
+        echo -n "Package $i not found"
+      fi
+    fi
+  done
+}
+
+function _clr() {
+  arg=("$@")
+  packages=("${arg[@]:1}")
+  locks=($(find /install -type f -printf "%f\n" | cut -d "." -f 2 | sort -d))
+  for i in "${packages[@]}"; do
+    app=${i}
+    if [[ $i == autodl ]]; then app=autodlirssi; fi
+    if [[ "${locks[@]}" =~ $app ]]; then
+      echo -n "Removing $i "
+      bash /usr/local/bin/quickbox/package/remove/removepackage-$i
+    else
+      echo -n "Package $i not installed"
+    fi
+  done
+}
+
+function _updateqb() {
+  echo -n "Updating QuickBox local repository"
+  cd /root/QuickBox
+  git submodule foreach git reset HEAD --hard
+  git submodule foreach git checkout master
+  git submodule foreach git pull
+  cd -
+}
+function _help() {
+  sgformat="${bold}%-15s${normal}"
+  spacing=$(echo $'\t' | pr -Te15)
+
+  echo -e "Usage: `basename $0` [ install | remove | list | update ] ${bold}pkg${normal}\n"
+  echo -e "Note: Only install and remove functions accept package arguments. List and update must be run without modifiers\n" | fmt --goal=66 --tagged-paragraph
+  echo -e "\n"
+  printf "${sgformat}" "install"
+  echo -e "The install function requies at least one package name as an argument but will accept multiples\n" | fmt --goal=50 | sed -e "2,\$s/^/$spacing/"
+  echo -e "               Example: box install quassel syncthing znc\n" | fmt --goal=50 | sed -e "2,\$s/^/$spacing/"
+  printf "${sgformat}" "remove"
+  echo -e "The remove function requies at least one package name as an argument but will accept multiples\n" | fmt --goal=50 | sed -e "2,\$s/^/$spacing/"
+  echo -e "               Example: box remove quassel syncthing znc\n" | fmt --goal=50 | sed -e "2,\$s/^/$spacing/"
+  printf "${sgformat}" "update"
+  echo -e "The update command will update your local QuickBox repository to the latest version\n" | fmt --goal=50 | sed -e "2,\$s/^/$spacing/"
+  printf "${sgformat}" "list"
+  echo -e "The list command will list packages available to be managed by box\n" | fmt --goal=50 | sed -e "2,\$s/^/$spacing/"
+}
+
+function _list() {
+  repo=($(find /usr/local/bin/quickbox/package/install -type f -printf "%f\n" | cut -d "-" -f 2 | sort -d))
+  for i in "${repo[@]}"; do
+    locale=$(cat /srv/rutorrent/home/inc/localize.php | grep language | cut -d "'" -f 2)
+    app=$i
+    if [[ $i == plexrequests ]]; then app=plex_requests; fi
+    sgformat="${bold}%-15s${normal}"
+    spacing=$(echo $'\t' | pr -Te15)
+    description=$(cat /srv/rutorrent/home/lang/$locale | grep -i -m 1 \\\[\'$app | cut -d "'" -f 4)
+    if [[ -z $description ]]; then description="Description missing";fi
+    printf "${sgformat}" "$i"
+    echo -e "${description}\n" | fmt --goal=50 | sed -e "2,\$s/^/$spacing/"
+
+  done
+}
+
+spinner() {
+    local pid=$1
+    local delay=0.25
+    local spinstr='|/-\'
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        local temp=${spinstr#?}
+        printf " [${bold}${yellow}%c${normal}]  " "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b\b\b"
+    done
+    printf "    \b\b\b\b"
+    echo -ne "${OK}"
+}
+
+normal=$(tput sgr0)
+yellow=$(tput setaf 3)
+bold=$(tput bold)
+if [[ -z $1 ]]; then
+  _intro
+  _function
+  exit 0
+fi
+if [[ "$1" == "-h" ]]; then
+  _help "$0"
+  exit 0
+fi
+if [[ ! $1 =~ ("install"|"list"|"remove"|"update") ]]; then
+  echo "Error: $1 invalid command"
+  exit 0
+fi
+if [[ $1 == update ]]; then
+  _updateqb
+  exit 0
+fi
+if [[ $1 == list ]]; then
+  _list
+  exit 0
+fi
+if [[ -n $1 ]] && [[ -z $2 ]]; then
+  echo "Error: You must choose some packages"
+  exit 0
+fi
+if [[ $1 == install ]]; then
+  _cli "$@" & spinner $!;echo
+  exit 0
+fi
+if [[ $1 == remove ]]; then
+  _clr "$@" & spinner $!;echo
+  exit 0
+fi
