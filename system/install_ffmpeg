@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# [Quick Box :: Install ffmpeg package]
+# [NOTES     :: Installs ffmpeg with x264 and x265 libraries]
+#
+# QUICKLAB REPOS
+# QuickLab _ packages  :   https://lab.quickbox.io/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   QuickBox.IO | JMSolo
+# URL                :   https://plaza.quickbox.io
+#
+# QuickBox Copyright (C) 2016 QuickBox.io
+# Licensed under GNU General Public License v3.0 GPL-3 (in short)
+#
+#   You may copy, distribute and modify the software as long as you track
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
+#   under the GPL along with build & install instructions.
+#
+
+OUTTO="/srv/rutorrent/home/db/ffmpeg.output.log"
+
+    MAXCPUS=$(echo "$(nproc) / 2"|bc)
+    mkdir /root/tmp
+    cd /root/tmp
+    apt -y install cmake
+    if [[ -d /root/tmp/ffmpeg ]]; then rm -rf ffmpeg;fi
+    git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg >>"${OUTTO}" 2>&1
+    git clone git://github.com/yasm/yasm.git ffmpeg/yasm >>"${OUTTO}" 2>&1
+    git clone https://github.com/yixia/x264.git ffmpeg/x264 >>"${OUTTO}" 2>&1
+    git clone https://github.com/videolan/x265.git ffmpeg/x265 >>"${OUTTO}" 2>&1
+    cd ffmpeg/yasm
+    ./autogen.sh >>"${OUTTO}" 2>&1
+    ./configure >>"${OUTTO}" 2>&1
+    make >>"${OUTTO}" 2>&1
+    make install >>"${OUTTO}" 2>&1
+    cd ../x264
+    ./configure --enable-static --enable-shared >>"${OUTTO}" 2>&1
+    make >>"${OUTTO}" 2>&1
+    make install >>"${OUTTO}" 2>&1
+    ldconfig >>"${OUTTO}" 2>&1
+    cd ../x265/build/linux
+    ./make-Makefiles.bash >>"${OUTTO}" 2>&1
+    make >>"${OUTTO}" 2>&1
+    make install >>"${OUTTO}" 2>&1
+    ldconfig >>"${OUTTO}" 2>&1
+    cd /root/tmp/ffmpeg
+    export FC_CONFIG_DIR=/etc/fonts
+    export FC_CONFIG_FILE=/etc/fonts/fonts.conf
+    ./configure --enable-libfreetype --enable-filter=drawtext --enable-fontconfig --disable-asm --enable-libx264 --enable-libx265 --enable-gpl >>"${OUTTO}" 2>&1
+    make -j${MAXCPUS} >>"${OUTTO}" 2>&1
+    make install >>"${OUTTO}" 2>&1
+    cp /usr/local/bin/ffmpeg /usr/bin >>"${OUTTO}" 2>&1
+    cp /usr/local/bin/ffprobe /usr/bin >>"${OUTTO}" 2>&1
+    cd
+    rm -rf /root/tmp/ffmpeg >>"${OUTTO}" 2>&1
