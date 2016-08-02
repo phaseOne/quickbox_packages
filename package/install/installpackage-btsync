@@ -30,7 +30,7 @@ function _installBTSync2() {
   sudo apt-get update >/dev/null 2>&1
 }
 function _installBTSync3() {
-  sudo apt-get install btsync >/dev/null 2>&1
+  sudo apt-get -y -q install btsync >/dev/null 2>&1
 }
 function _installBTSync4() {
   cd && mkdir /home/"${MASTER}"/sync_folder
@@ -39,7 +39,6 @@ function _installBTSync4() {
   sudo usermod -a -G btsync ${MASTER} >/dev/null 2>&1
 }
 function _installBTSync5() {
-  sed -i 's/BTSYNC=no/BTSYNC=yes/g' /home/"${MASTER}"/.startup
   cp -r ${local_setup}templates/btsync/config.json.template /etc/btsync/config.json
   cp -r ${local_setup}templates/btsync/user_config.json.template /etc/btsync/user_config.json
   sudo sed -i "s/BTSGUIP/$BTSYNCIP/g" /etc/btsync/config.json
@@ -47,6 +46,7 @@ function _installBTSync5() {
 }
 function _installBTSync6() {
   touch /install/.btsync.lock
+  systemctl enable btsync >/dev/null 2>&1
   sudo service btsync start
 }
 function _installBTSync7() {

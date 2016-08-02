@@ -59,6 +59,11 @@ function _installDeluge2() {
   sed -i "s/USERNAME/${username}/g" /home/${username}/.config/deluge/hostlist.conf.1.2
   sed -i "s/PASSWD/${passwd}/g" /home/${username}/.config/deluge/hostlist.conf.1.2
   echo "${udb}:10" > /home/${username}/.config/deluge/auth
+  mkdir -p /home/${username}/.config/deluge/plugins
+  if [[ ! -f /home/${username}/.config/deluge/plugins/ltConfig-0.2.5.0-py2.7.egg ]]; then
+    cd /home/${username}/.config/deluge/plugins/
+    wget -q https://github.com/ratanakvlun/deluge-ltconfig/releases/download/v0.2.5.0/ltConfig-0.2.5.0-py2.7.egg
+  fi
 }
 function _installDeluge3() {
   chown -R ${username}.${username} /home/${username}/.config/

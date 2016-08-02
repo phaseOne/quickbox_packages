@@ -21,7 +21,6 @@ function _install() {
 echo "Installing CouchPotato ... " >>"${OUTTO}" 2>&1;
 warning=$(echo -e "[ \e[1;91mWARNING\e[0m ]")
 apt-get -qq -y --force-yes update >/dev/null 2>&1
-apt-get -qq -y --force-yes upgrade >/dev/null 2>&1
 apt-get -qq -y --force-yes install git-core python >/dev/null 2>&1;
 echo >>"${OUTTO}" 2>&1;
 echo >>"${OUTTO}" 2>&1;

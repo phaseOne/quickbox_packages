@@ -17,20 +17,23 @@
 #   including (via compiler) GPL-licensed code must also be made available
 #   under the GPL along with build & install instructions.
 #
+OUTTO=/srv/rutorrent/home/db/output.log
 local_setup=/root/QuickBox/setup/
+
+
 cd /opt
-echo "Cloning PlexPy repository"
+echo "Cloning PlexPy repository" >>"${OUTTO}" 2>&1;
 git clone https://github.com/drzoidberg33/plexpy.git > /dev/null 2>&1
 
-echo "Adding user and setting up PlexPy"
+echo "Adding user and setting up PlexPy" >>"${OUTTO}" 2>&1;
 adduser --system --no-create-home plexpy
 
-echo "Adjusting permissions"
+echo "Adjusting permissions" >>"${OUTTO}" 2>&1;
 chown plexpy:nogroup -R /opt/plexpy
 
 echo "Enabling PlexPy Systemd configuration"
 cp ${local_setup}templates/sysd/plexpy.template /etc/systemd/system/plexpy.service
-systemctl enable plexpy
+systemctl enable plexpy > /dev/null 2>&1
 systemctl start plexpy
 touch /install/.plexpy.lock
 

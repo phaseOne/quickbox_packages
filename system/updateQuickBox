@@ -219,7 +219,7 @@ function _updatedashboard() {
   cd ${rutorrent}
   #if [[ -f ${rutorrent}home/widgets/branding-*.php ]]; then
   if [[ -n $(find /srv/rutorrent/home/db -name "branding-*.php") ]]; then
-    rsync -aP --exclude=disk_*.php --exclude=branding-*.php --exclude=share.php ${local_dashboard}* ${rutorrent}home
+    rsync -aP --exclude=disk_*.php --exclude=branding-l.php --exclude=share.php ${local_dashboard}* ${rutorrent}home
     rm -f /srv/rutorrent/home/lang/*.php
   else
     rsync -aP --exclude=disk_*.php --exclude=share.php ${local_dashboard}* ${rutorrent}home
