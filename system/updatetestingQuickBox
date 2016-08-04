@@ -167,8 +167,7 @@ local_dashboard=/root/QuickBox/dashboard/
 
 btesting=v2.4.0
 
-Reth0=$(ifconfig | grep -m 1 "Link encap" | sed 's/[ \t].*//;/^\(lo\|\)$/d' | awk '{ print $1 '});
-IFACE=$(echo -n "${Reth0}");
+IFACE=$(ip link show | grep -i broadcast | grep UP | cut -d: -f 2 | sed -e 's/ //g');
 A1=$(cat /srv/rutorrent/home/db/master.txt) >> /dev/null 2>&1
 rutorrent=/srv/rutorrent/
 usrbin=/usr/local/bin/
