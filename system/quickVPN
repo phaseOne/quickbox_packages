@@ -179,11 +179,24 @@ EOF
 		clear
 
 a2enmod userdir >/dev/null 2>&1
+#cat >>/etc/apache2/apache2.conf<<'APA'
+#UserDir public_html
+#<Directory /home/*/public_html/>
+#Options -Indexes
+#AllowOverride All
+#</Directory>
+#APA
 cat >>/etc/apache2/apache2.conf<<'APA'
 UserDir public_html
 <Directory /home/*/public_html/>
-Options -Indexes
-AllowOverride All
+Options Indexes FollowSymLinks MultiViews
+AuthType Digest
+AuthName "rutorrent"
+AuthUserFile '/etc/htpasswd'
+Require valid-user
+AllowOverride None
+Order allow,deny
+allow from all
 </Directory>
 APA
 
