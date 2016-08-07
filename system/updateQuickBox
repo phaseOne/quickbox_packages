@@ -354,7 +354,7 @@ echo "Checking if cron services should be uninstalled and taking appropriate act
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
 echo "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
 echo "Checking apache aliases ... " >>"${OUTTO}" 2>&1;_updateapachealias;echo
-echo "Reorganizing home directory of ${A1} ... " >>"${OUTTO}" 2>&1;_updateuserhome;echo
+#echo "Reorganizing home directory of ${A1} ... " >>"${OUTTO}" 2>&1;_updateuserhome;echo
 echo "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent;echo
 echo "Updating all rutorrent plugins ... " >>"${OUTTO}" 2>&1;_updaterutorrent-plugins;echo
 echo "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard;echo
