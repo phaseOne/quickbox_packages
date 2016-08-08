@@ -415,6 +415,9 @@ cat >/home/$USERNAME/public_html/.htaccess<<EOF
 Options -Indexes
 EOF
 	fi
+
+	service apache2 restart
+	
 }
 
 install_openvpn
