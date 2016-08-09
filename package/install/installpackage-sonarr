@@ -53,27 +53,23 @@ function _installSonarr3() {
 
 function _installSonarr4() {
   sudo apt-get install -y nzbdrone >/dev/null 2>&1
-  sleep 5
-  sed -i 's/SONARR=no/SONARR=yes/g' /home/"${username}"/.startup
+  #sed -i 's/SONARR=no/SONARR=yes/g' /home/"${username}"/.startup
   touch /install/.sonarr.lock
 }
 
 function _installSonarr5() {
   sudo chown -R "${username}":"${username}" /opt/NzbDrone
-  sleep 2
 }
 
 function _installSonarr6() {
   cp ${local_setup}templates/sysd/sonarr.template /etc/systemd/system/sonarr@.service
   systemctl enable sonarr@${username} >/dev/null 2>&1
   systemctl start sonarr@${username}
-  sleep 2
 }
 
 
 function _installSonarr9() {
   echo "Sonarr Install Complete!" >>"${OUTTO}" 2>&1;
-  sleep 5
   echo >>"${OUTTO}" 2>&1;
   echo >>"${OUTTO}" 2>&1;
   echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
