@@ -32,7 +32,8 @@ function _installCSF() {
   echo "${green}Installing and Adjusting CSF${normal} (this may take bit) ... "
   apt-get -y install e2fsprogs libio-socket-ssl-perl libcrypt-ssleay-perl \
   libnet-libidn-perl libio-socket-inet6-perl libsocket6-perl >/dev/null 2>&1;
-  wget http://www.configserver.com/free/csf.tgz >/dev/null 2>&1;
+  #wget http://www.configserver.com/free/csf.tgz >/dev/null 2>&1;
+  wget https://download.configserver.com/csf.tgz >/dev/null 2>&1;
   tar -xzf csf.tgz >/dev/null 2>&1;
   ufw disable >>"${OUTTO}" 2>&1;
   service fail2ban stop >>"${OUTTO}" 2>&1;
