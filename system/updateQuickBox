@@ -114,15 +114,38 @@ function _updateapachealias() {
   sed -i "s/USERNAME/${A1}/g" /etc/apache2/sites-enabled/aliases-seedbox.conf
   for i in "${users[@]}"; do
     if [[ ! $i == $A1 ]]; then
-cat <<EOT >> /etc/apache2/sites-enabled/aliases.$i.download.conf
-    <Location "/$i">
+cat >/etc/apache2/sites-enabled/alias.${i}.download.conf<<AS
+Alias /${i}.rtorrent.downloads "/home/${i}/torrents/rtorrent"
+<Directory "/home/${i}/torrents/rtorrent">
+ Options Indexes FollowSymLinks MultiViews
+  AllowOverride None
+        AuthType Digest
+        AuthName "rutorrent"
+        AuthUserFile '/etc/htpasswd'
+        Require user ${i}
+  Order allow,deny
+  Allow from all
+  php_admin_value engine Off
+</Directory>
+Alias /${i}.deluge.downloads "/home/${i}/torrents/deluge"
+<Directory "/home/${i}/torrents/deluge">
+  Options Indexes FollowSymLinks MultiViews
+  AllowOverride None
+        AuthType Digest
+        AuthName "rutorrent"
+        AuthUserFile '/etc/htpasswd'
+        Require user ${i}
+  Order allow,deny
+  Allow from all
+  php_admin_value engine Off
+</Directory>
+<Location "/${i}">
         AuthType Digest
         AuthName "rutorrent"
         AuthUserFile "/etc/htpasswd"
-        Require user $i
-    </Location>
-EOT
-        sed -i "s/valid-user/user $i/g" /etc/apache2/sites-enabled/aliases.$i.download.conf
+    Require user ${i}
+</Location>
+AS
   fi
 done
 
