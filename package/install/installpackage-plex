@@ -28,6 +28,9 @@ function _installPlex2() {
   chown www-data: /etc/apache2/sites-enabled/plex.conf
   a2enmod proxy >/dev/null 2>&1
   sed -i "s/PUBLICIP/${PUBLICIP}/g" /etc/apache2/sites-enabled/plex.conf
+  mkdir /var/lib/plexmediaserver
+  chmod 777 /var/lib/plexmediaserver
+  chown plex.plex /var/lib/plexmediaserver
 }
 
 function _installPlex3() {

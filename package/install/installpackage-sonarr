@@ -53,7 +53,6 @@ function _installSonarr3() {
 
 function _installSonarr4() {
   sudo apt-get install -y nzbdrone >/dev/null 2>&1
-  #sed -i 's/SONARR=no/SONARR=yes/g' /home/"${username}"/.startup
   touch /install/.sonarr.lock
 }
 
