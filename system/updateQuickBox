@@ -361,7 +361,7 @@ local_rutorrent=/root/QuickBox/rutorrent/
 local_rplugins=/root/QuickBox/rtplugins/
 local_dashboard=/root/QuickBox/dashboard/
 
-IFACE=$(ip link show | grep -i broadcast | grep UP | cut -d: -f 2 | sed -e 's/ //g');
+IFACE=$(ip link show|grep -i broadcast|grep -m1 UP|cut -d: -f 2|cut -d@ -f 1|sed -e 's/ //g');
 A1=$(cat /srv/rutorrent/home/db/master.txt) >> /dev/null 2>&1
 rutorrent=/srv/rutorrent/
 usrbin=/usr/local/bin/
