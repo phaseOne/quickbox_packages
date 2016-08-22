@@ -1,1 +1,1 @@
-dev_packages
+QuickBox Application Installer and Removal Packages
