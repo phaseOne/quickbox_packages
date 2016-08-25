@@ -17,7 +17,7 @@
 
 function _setdisk() {
 echo "================================================================================="
-echo "Disk Space MUST be in GB/TB - Do not attempt to add deciamals in space settings,"
+echo "Disk Space MUST be in GB/TB - Do not attempt to add decimals in space settings,"
 echo "Example - Good: 711GB OR 2TB, Example - Bad: 711.5GB OR 2.5TB"
 echo "================================================================================="
 echo
