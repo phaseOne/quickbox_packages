@@ -2,7 +2,7 @@
 #
 # [Quick Box :: EcoSystem Update Script]
 #
-# GitHub:   https://github.com/QuickBox/quickbox_packages
+# QuickLab:   https://lab.quickbox.io/QuickBox/quickbox_packages
 # Author:   QuickBox.io
 # URL:      https://plaza.quickbox.io
 #
@@ -49,7 +49,7 @@ function _askcontinue() {
 }
 
 function _downloadrepos() {
-  git clone --recursive https://github.com/QuickBox/QuickBox QuickBox >> /dev/null 2>&1
+  git clone --recursive https://lab.quickbox.io/QuickBox/QuickBox QuickBox >> /dev/null 2>&1
 }
 
 function _bashrc() {
