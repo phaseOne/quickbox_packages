@@ -36,6 +36,9 @@ DWSALT=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)
 function _installDeluge1() {
   sudo apt-get -y update >/dev/null 2>&1
   sudo apt-get -y install deluged deluge-web >/dev/null 2>&1
+  systemctl stop deluged >/dev/null 2>&1
+  update-rc.d deluged remove >/dev/null 2>&1
+  rm /etc/init.d/deluged >/dev/null 2>&1
 }
 function _installDeluge2() {
   DWP=$(python ${local_packages}system/deluge.Userpass.py ${passwd} ${DWSALT})
@@ -74,9 +77,9 @@ function _installDeluge3() {
   touch /install/.deluge.lock
 }
 function _installDeluge4() {
-  cp "${local_setup}"templates/startup.template /home/"${username}"/.startup
-  sed -i 's/DELUGEWEB_CLIENT=no/DELUGEWEB_CLIENT=yes/g' /home/"${username}"/.startup
-  sed -i 's/DELUGED_CLIENT=no/DELUGED_CLIENT=yes/g' /home/"${username}"/.startup
+  #cp "${local_setup}"templates/startup.template /home/"${username}"/.startup
+  #sed -i 's/DELUGEWEB_CLIENT=no/DELUGEWEB_CLIENT=yes/g' /home/"${username}"/.startup
+  #sed -i 's/DELUGED_CLIENT=no/DELUGED_CLIENT=yes/g' /home/"${username}"/.startup
   cp ${local_setup}templates/sysd/deluged.template /etc/systemd/system/deluged@.service
   cp ${local_setup}templates/sysd/deluge-web.template /etc/systemd/system/deluge-web@.service
   systemctl enable deluged@${username}
