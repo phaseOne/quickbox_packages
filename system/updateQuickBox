@@ -66,6 +66,7 @@ function _downloadrepos() {
 
 function _bashrc() {
   cp ${local_setup}templates/bashrc.template /root/.bashrc
+  cp ${local_setup}templates/profile.template /root/.profile
 }
 
 function _updatequota(){
@@ -342,7 +343,7 @@ function _perms() {
 
 function _fin() {
   service apache2 reload >/dev/null 2>&1
-  source /root/.bashrc >/dev/null 2>&1
+  source ~/.profile
   echo
   echo "[QuickBox] Seedbox & GUI Update Completed ! " >>"${OUTTO}" 2>&1;
   sleep 5
