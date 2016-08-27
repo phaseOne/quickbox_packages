@@ -1,0 +1,69 @@
+#!/bin/bash
+#
+# [Quick Box :: Install sabnzbd]
+#
+# QUICKLAB REPOS
+# QuickLab _ packages  :   https://lab.quickbox.io/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   QuickBox.IO | kclawl
+# URL                :   https://plaza.quickbox.io
+#
+# QuickBox Copyright (C) 2016 QuickBox.io
+# Licensed under GNU General Public License v3.0 GPL-3 (in short)
+#
+#   You may copy, distribute and modify the software as long as you track
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
+#   under the GPL along with build & install instructions.
+
+_sab() {
+  apt-get install python-cheetah >/dev/null 2>&1
+  cd /home/$username/
+  wget -qO SABnzbd.tar.gz http://sourceforge.net/projects/sabnzbdplus/files/latest/
+  tar xf SABnzbd.tar.gz >/dev/null 2>&1
+  mv SABnzbd-* SABnzbd
+  chown $username.$username -R SABnzbd
+  rm SABnzbd.tar.gz
+  touch /install/.sabnzbd.lock
+}
+
+_upstart() {
+cat >/etc/systemd/system/sabnzbd@.service<<EOF
+[Unit]
+Description=sabnzbd
+After=network.target
+
+[Service]
+Type=forking
+KillMode=process
+User=%I
+ExecStart=/usr/bin/screen -f -a -d -m -S sabnzbd python SABnzbd/SABnzbd.py --browser 0 --server ${PUBLICIP}:65080 --https 65443
+ExecStop=/bin/kill -HUP $MAINPID
+WorkingDirectory=/home/%I/
+
+[Install]
+WantedBy=multi-user.target
+
+EOF
+
+}
+
+_sabnzbdcomplete() {
+  echo "SABnzbd Install Complete!" >>"${OUTTO}" 2>&1;
+  sleep 5
+  echo >>"${OUTTO}" 2>&1;
+  echo >>"${OUTTO}" 2>&1;
+  echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
+}
+
+_sabnzbdexit() {
+  exit
+}
+
+username=$(cat /srv/rutorrent/home/db/master.txt)
+PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+_sab
+_upstart
+_sabnzbdcomplete
+_sabnzbdexit
