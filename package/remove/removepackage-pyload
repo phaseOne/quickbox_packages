@@ -19,6 +19,11 @@
 #
 
 function _removepyLoad() {
+  systemctl stop pyload@${MASTER}.service >/dev/null 2>&1
+  systemctl disable pyload@${MASTER}.service >/dev/null 2>&1
+
+  rm /etc/systemd/system/pyload@.service
+
   rm -rf /home/${MASTER}/.pip
   rm -rf  /home/${MASTER}/.pyload
   rm -rf /var/run/pyload
