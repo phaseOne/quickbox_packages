@@ -18,12 +18,12 @@
 #   under the GPL along with build & install instructions.
 
 _sab() {
-  apt-get install python-cheetah >/dev/null 2>&1
-  cd /home/$username/
+  apt-get install -y python-cheetah >/dev/null 2>&1
+  cd /home/${username}/
   wget -qO SABnzbd.tar.gz http://sourceforge.net/projects/sabnzbdplus/files/latest/
   tar xf SABnzbd.tar.gz >/dev/null 2>&1
   mv SABnzbd-* SABnzbd
-  chown $username.$username -R SABnzbd
+  chown ${username}.${username} -R SABnzbd
   rm SABnzbd.tar.gz
   touch /install/.sabnzbd.lock
 }
@@ -49,6 +49,12 @@ EOF
 
 }
 
+_sabnzbdenable() {
+  systemctl daemon-reload >/dev/null 2>&1
+  systemctl enable sabnzbd@${username}.service >/dev/null 2>&1
+  systemctl start sabnzbd@${username}.service >/dev/null 2>&1
+}
+
 _sabnzbdcomplete() {
   echo "SABnzbd Install Complete!" >>"${OUTTO}" 2>&1;
   sleep 5
@@ -63,7 +69,10 @@ _sabnzbdexit() {
 
 username=$(cat /srv/rutorrent/home/db/master.txt)
 PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
-_sab
-_upstart
+OUTTO=/srv/rutorrent/home/db/output.log
+
+echo "Installing sabnzbd ... " >>"${OUTTO}" 2>&1;_sab
+echo "Creating sabnzbd systemd template ... " >>"${OUTTO}" 2>&1;_upstart
+echo "Enabling sabnzbd services ... " >>"${OUTTO}" 2>&1;_sabnzbdenable
 _sabnzbdcomplete
 _sabnzbdexit
