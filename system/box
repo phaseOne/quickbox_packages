@@ -92,8 +92,7 @@ function _cli() {
     else
       if [[ "${repo[@]}" =~ $i ]]; then
         echo -n "Installing $i "
-        script --return -c "/usr/local/bin/quickbox/package/install/installpackage-$i" /dev/null
-        #bash -i /usr/local/bin/quickbox/package/install/installpackage-$i
+        bash /usr/local/bin/quickbox/package/install/installpackage-$i
       else
         echo -n "Package $i not found"
       fi
@@ -110,7 +109,7 @@ function _clr() {
     if [[ $i == autodl ]]; then app=autodlirssi; fi
     if [[ "${locks[@]}" =~ $app ]]; then
       echo -n "Removing $i "
-      bash -i /usr/local/bin/quickbox/package/remove/removepackage-$i
+      bash /usr/local/bin/quickbox/package/remove/removepackage-$i
     else
       echo -n "Package $i not installed"
     fi
