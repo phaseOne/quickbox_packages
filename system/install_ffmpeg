@@ -81,3 +81,4 @@ DISTRO=$(lsb_release -is)
 
 echo -n "${NOTICE}Installing ffmpeg, please hold as this may take some time${NC} ... ";_ffmpeg & spinner $!;echo
 echo -n "${OK}Installation Completed${NC}"
+echo
