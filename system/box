@@ -82,12 +82,11 @@ _function
 function _cli() {
   arg=("$@")
   packages=("${arg[@]:1}")
-  locks=($(find /install -type f -printf "%f\n" | cut -d "." -f 2 | sort -d))
   repo=($(find /usr/local/bin/quickbox/package/install -type f -printf "%f\n" | cut -d "-" -f 2))
   for i in "${packages[@]}"; do
     app=${i}
     if [[ $i == autodl ]]; then app=autodlirssi; fi
-    if [[ "${locks[@]}" =~ $app ]]; then
+    if [[ -f /install/.${app}.lock ]]; then
       echo -n "Package $i already installed"
     else
       if [[ "${repo[@]}" =~ $i ]]; then
@@ -103,11 +102,10 @@ function _cli() {
 function _clr() {
   arg=("$@")
   packages=("${arg[@]:1}")
-  locks=($(find /install -type f -printf "%f\n" | cut -d "." -f 2 | sort -d))
   for i in "${packages[@]}"; do
     app=${i}
     if [[ $i == autodl ]]; then app=autodlirssi; fi
-    if [[ "${locks[@]}" =~ $app ]]; then
+    if [[ -f /install/.$app.lock ]]; then
       echo -n "Removing $i "
       bash /usr/local/bin/quickbox/package/remove/removepackage-$i
     else
