@@ -94,8 +94,6 @@ function _installCSF() {
   echo "exe:/usr/bin/xfce4-session" >> /etc/csf/csf.pignore;
   echo "exe:/usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-1.0" >> /etc/csf/csf.pignore;
   echo "exe:/usr/bin/xscreensaver" >> /etc/csf/csf.pignore;
-  echo "exe:" >> /etc/csf/csf.pignore;
-  echo "exe:" >> /etc/csf/csf.pignore;
   echo "exe:/usr/bin/syncthing" >> /etc/csf/csf.pignore;
   echo "exe:/usr/bin/screen" >> /etc/csf/csf.pignore;
   echo "exe:/usr/bin/irssi" >> /etc/csf/csf.pignore;
