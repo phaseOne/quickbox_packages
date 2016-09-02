@@ -71,6 +71,31 @@ function _installCSF() {
   echo "exe:/usr/sbin/uuidd" >> /etc/csf/csf.pignore;
   echo "exe:/usr/lib/plexmediaserver/Plex Media Server" >> /etc/csf/csf.pignore;
   echo "exe:/usr/lib/plexmediaserver/Resources/Plex Script Host" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/lib/plexmediaserver/Plex Script Host" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/lib/gvfs/gvfsd-trash" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/dbus-launch" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/thunar" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/ssh-agent" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/python2.7" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/sbin/mysqld" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/znc" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/lib/nx/bin/nxagent" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/xfsettingsd" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/lib/x86_64-linux-gnu/xfce4/xfconf/xfconfd" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/xfdesktop" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/xfce4-volumed" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/lib/gvfs/gvfsd" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/xfwm4" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/sbin/openvpn" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/lib/gvfs/gvfs-udisks2-volume-monitor" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/quasselcore" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/lib/gvfs/gvfsd-metadata" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/xfce4-panel" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/xfce4-session" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-1.0" >> /etc/csf/csf.pignore;
+  echo "exe:/usr/bin/xscreensaver" >> /etc/csf/csf.pignore;
+  echo "exe:" >> /etc/csf/csf.pignore;
+  echo "exe:" >> /etc/csf/csf.pignore;
   echo "exe:/usr/bin/syncthing" >> /etc/csf/csf.pignore;
   echo "exe:/usr/bin/screen" >> /etc/csf/csf.pignore;
   echo "exe:/usr/bin/irssi" >> /etc/csf/csf.pignore;
@@ -78,7 +103,7 @@ function _installCSF() {
   echo "exe:/usr/lib/openssh/sftp-server" >> /etc/csf/csf.pignore;
   echo "exe:/usr/bin/shellinaboxd" >> /etc/csf/csf.pignore;
   echo "[ QuickBox Additions - This is the QuickLab IP - needed for pulling updates ]" >> /etc/csf/csf.ignore;
-  echo "163.172.210.243" >> /etc/csf/csf.ignore;
+  echo "45.79.179.250" >> /etc/csf/csf.ignore;
   # import csf conf template - made suitable for non-cpanel environments
   cp ${local_setup}templates/csf.conf.template /etc/csf/csf.conf
   sed -i "s/QBFIREWALLMASTER/${username}/" /etc/csf/csf.conf
