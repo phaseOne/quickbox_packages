@@ -28,8 +28,6 @@ function _installPlex2() {
   chown www-data: /etc/apache2/sites-enabled/plex.conf
   a2enmod proxy >/dev/null 2>&1
   sed -i "s/PUBLICIP/${PUBLICIP}/g" /etc/apache2/sites-enabled/plex.conf
-  mkdir /var/lib/plexmediaserver
-  chmod 777 /var/lib/plexmediaserver
 }
 
 function _installPlex3() {
@@ -46,7 +44,13 @@ function _installPlex5() {
     echo
 }
 function _installPlex6() {
-    chown plex.plex /var/lib/plexmediaserver
+    if [[ ! -d /var/lib/plexmediaserver ]]; then
+      mkdir -p /var/lib/plexmediaserver
+    fi
+    perm=$(stat -c '%U' /var/lib/plexmediaserver/)
+    if [[ $perm == root ]]; then
+      chown -R plex: /var/lib/plexmediaserver
+    fi
     service plexmediaserver restart >/dev/null 2>&1
     touch /install/.plex.lock
     echo
