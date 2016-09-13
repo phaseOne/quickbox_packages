@@ -48,7 +48,7 @@ function _installPlex6() {
       mkdir -p /var/lib/plexmediaserver
     fi
     perm=$(stat -c '%U' /var/lib/plexmediaserver/)
-    if [[ $perm == root ]]; then
+    if [[ ! $perm == plex ]]; then
       chown -R plex: /var/lib/plexmediaserver
     fi
     service plexmediaserver restart >/dev/null 2>&1
