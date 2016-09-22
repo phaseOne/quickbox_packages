@@ -27,6 +27,7 @@ echo >>"${OUTTO}" 2>&1;
 echo "Cloning CouchPotato git ... " >>"${OUTTO}" 2>&1;
 git clone -q https://github.com/CouchPotato/CouchPotatoServer.git /home/${MASTER}/.couchpotato || (echo "GIT failed" && exit 1)
 chown ${MASTER}:${MASTER} -R /home/${MASTER}/.couchpotato
+sed -i "s/url_base.*/url_base = couchpotato\nhost = localhost/g" /home/"${MASTER}"/.couchpotato/settings.conf
 }
 
 function _services(){
@@ -37,6 +38,19 @@ echo "Installing and enabling service ... " >>"${OUTTO}" 2>&1;
 cp ${local_setup}templates/sysd/couchpotato.template /etc/systemd/system/couchpotato@.service
 systemctl enable couchpotato@${MASTER} >/dev/null 2>&1
 systemctl start couchpotato@${MASTER} >/dev/null 2>&1
+
+cat > /etc/apache2/sites-enabled/couchpotato.conf <<EOF
+<Location /couchpotato>
+ProxyPass http://localhost:5050/couchpotato
+ProxyPassReverse http://localhost:5050/couchpotato
+AuthType Digest
+AuthName "rutorrent"
+AuthUserFile '/etc/htpasswd'
+Require user ${MASTER}
+</Location>
+EOF
+chown www-data: /etc/apache2/sites-enabled/couchpotato.conf
+service apache2 restart
 
 touch /install/.couchpotato.lock
 echo >>"${OUTTO}" 2>&1;

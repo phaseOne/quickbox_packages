@@ -28,4 +28,6 @@ if [[ -f /etc/init.d/couchpotato ]]; then
   rm /etc/default/couchpotato
 fi
 rm -rf /home/${MASTER}/.couchpotato
+rm -f /etc/apache2/sites-enabled/couchpotato.conf
+service apache2 restart
 rm /install/.couchpotato.lock

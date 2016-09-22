@@ -24,4 +24,24 @@ EOF
   fi
 }
 
+function _couchpotato() {
+  if [[ ! -f /etc/apache2/sites-enabled/couchpotato.conf ]]; then
+    service couchpotato@${MASTER} stop
+    sed -i "s/url_base.*/url_base = couchpotato\nhost = localhost/g" /home/"${MASTER}"/.couchpotato/settings.conf
+
+    cat > /etc/apache2/sites-enabled/couchpotato.conf <<EOF
+<Location /couchpotato>
+ProxyPass http://localhost:5050/couchpotato
+ProxyPassReverse http://localhost:5050/couchpotato
+AuthType Digest
+AuthName "rutorrent"
+AuthUserFile '/etc/htpasswd'
+Require user ${MASTER}
+</Location>
+EOF
+    chown www-data: /etc/apache2/sites-enabled/couchpotato.conf
+    service apache2 restart
+  fi
+}
 if [[ -f /install/.sickrage.lock ]]; then _sickrage; fi
+if [[ -f /install/.couchpotato.lock ]]; then _couchpotato; fi
