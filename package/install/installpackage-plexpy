@@ -19,6 +19,7 @@
 #
 OUTTO=/srv/rutorrent/home/db/output.log
 local_setup=/root/QuickBox/setup/
+MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 
 
 cd /opt

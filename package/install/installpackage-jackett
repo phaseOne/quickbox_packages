@@ -46,8 +46,8 @@ cp ${local_setup}templates/sysd/jackett.template /etc/systemd/system/jackett@.se
 systemctl enable jackett@${username} >/dev/null 2>&1
 systemctl start jackett@${username}
 systemctl stop jackett@${username}
-sed -i "s/\"AllowExternal.*/\"AllowExternal\": false,/g" /home/"${MASTER}"/.config/Jackett/ServerConfig.json
-sed -i "s/\"BasePathOverride.*/\"BasePathOverride\": jackett/g" /home/"${MASTER}"/.config/Jackett/ServerConfig.json
+sed -i "s/\"AllowExternal.*/\"AllowExternal\": false,/g" /home/"${username}"/.config/Jackett/ServerConfig.json
+sed -i "s/\"BasePathOverride.*/\"BasePathOverride\": jackett/g" /home/"${username}"/.config/Jackett/ServerConfig.json
 
 cat > /etc/apache2/sites-enabled/jackett.conf <<EOF
 <Location /jackett>
@@ -56,7 +56,7 @@ ProxyPassReverse http://localhost:9117/jackett
 AuthType Digest
 AuthName "rutorrent"
 AuthUserFile '/etc/htpasswd'
-Require user ${MASTER}
+Require user ${username}
 </Location>
 EOF
 chown www-data: /etc/apache2/sites-enabled/jackett.conf
