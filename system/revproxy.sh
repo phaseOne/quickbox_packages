@@ -45,6 +45,7 @@ EOF
 }
 
 function _plexpy() {
+  if [[ ! -f /etc/apache2/sites-enabled/plexpy.conf ]]; then
   service plexpy stop
   sed -i "s/http_root.*/http_root = \"plexpy\"/g" /opt/plexpy/config.ini
   sed -i "s/http_host.*/http_host = localhost/g" /opt/plexpy/config.ini
@@ -62,6 +63,23 @@ EOF
   chown www-data: /etc/apache2/sites-enabled/plexpy.conf
   service apache2 restart
   service plexpy restart
+  fi
+}
+
+function _plexrequsets() {
+  if [[ ! -f /etc/apache2/sites-enabled/plexrequests.conf ]]; then
+  cat > /etc/apache2/sites-enabled/plexrequests.conf <<EOF
+<Location /couchpotato>
+ProxyPass http://localhost:3000/plexrequests
+ProxyPassReverse http://localhost:3000/plexrequests
+Require all granted
+</Location>
+EOF
+  chown www-data: /etc/apache2/sites-enabled/plexrequests.conf
+  service apache2 restart
+  fi
 }
 if [[ -f /install/.sickrage.lock ]]; then _sickrage; fi
 if [[ -f /install/.couchpotato.lock ]]; then _couchpotato; fi
+if [[ -f /install/.plexpy.lock ]]; then _plexpy; fi
+if [[ -f /install/.plexrequests.lock ]]; then _plexrequsets; fi

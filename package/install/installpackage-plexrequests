@@ -45,6 +45,15 @@ function _services() {
   systemctl enable plexrequests >/dev/null 2>&1
   systemctl start plexrequests
   touch /install/.plexrequests.lock
+  cat > /etc/apache2/sites-enabled/plexrequests.conf <<EOF
+<Location /couchpotato>
+ProxyPass http://localhost:3000/plexrequests
+ProxyPassReverse http://localhost:3000/plexrequests
+Require all granted
+</Location>
+EOF
+  chown www-data: /etc/apache2/sites-enabled/plexrequests.conf
+  service apache2 restart
 }
 
 spinner() {
