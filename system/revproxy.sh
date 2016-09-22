@@ -186,6 +186,29 @@ EOF
   fi
 }
 
+function _syncthing() {
+  if [[ ! -f /etc/apache2/sites-enabled/syncthing.conf ]]; then
+    systemctl stop syncthing@${MASTER}
+    sed -i 's/<address>0.0.0.0/<address>127.0.0.1/g' /home/${MASTER}/.config/syncthing/config.xml
+    sed -i 's/tls="true"/tls="false"/g' /home/${MASTER}/.config/syncthing/config.xml
+
+    cat > /etc/apache2/sites-enabled/syncthing.conf <<EOF
+<Location /syncthing>
+ProxyPass http://localhost:8384
+ProxyPassReverse http://localhost:8384
+AuthType Digest
+AuthName "rutorrent"
+AuthUserFile '/etc/htpasswd'
+Require user ${MASTER}
+</Location>
+EOF
+    chown www-data: /etc/apache2/sites-enabled/syncthing.conf
+    service apache2 restart
+
+    systemctl start syncthing@${MASTER}
+  fi
+}
+
 local_setup=/root/QuickBox/setup/
 MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 
@@ -196,3 +219,4 @@ if [[ -f /install/.plexrequests.lock ]]; then _plexrequsets; fi
 if [[ -f /install/.sonarr.lock ]]; then _sonarr; fi
 if [[ -f /install/.sickrage.lock ]]; then _sickrage; fi
 if [[ -f /install/.subsonic.lock ]]; then _subsonic; fi
+if [[ -f /install/.syncthing.lock ]]; then _syncthing; fi
