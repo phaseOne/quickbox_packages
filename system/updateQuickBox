@@ -280,7 +280,9 @@ function _updateplex() {
   fi
 
 }
-
+function _updateappsproxy() {
+  bash /usr/local/bin/quickbox/system/revproxy.sh
+}
 #function _updatecronfile() {
   # We'll disable this function unless a new packages
   # is included or startup requires a fix.
@@ -385,6 +387,7 @@ echo "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard;e
 echo "Updating the QuickBox Sudoers template ... " >>"${OUTTO}" 2>&1;_updatesudo;echo
 _updateznc
 _updateplex
+_updateappsproxy
 _quickconsole
 #echo "Updating ${A1}'s .startup cronfile... " >>"${OUTTO}" 2>&1;_updatecronfile;echo
 echo "Adjusting permissions ... " >>"${OUTTO}" 2>&1;_perms;echo
