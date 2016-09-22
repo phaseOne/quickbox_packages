@@ -43,5 +43,25 @@ EOF
     service apache2 restart
   fi
 }
+
+function _plexpy() {
+  service plexpy stop
+  sed -i "s/http_root.*/http_root = \"plexpy\"/g" /opt/plexpy/config.ini
+  sed -i "s/http_host.*/http_host = localhost/g" /opt/plexpy/config.ini
+
+  cat > /etc/apache2/sites-enabled/plexpy.conf <<EOF
+  <Location /plexpy>
+  ProxyPass http://localhost:8181/plexpy
+  ProxyPassReverse http://localhost:8181/plexpy
+  AuthType Digest
+  AuthName "rutorrent"
+  AuthUserFile '/etc/htpasswd'
+  Require user ${MASTER}
+  </Location>
+EOF
+  chown www-data: /etc/apache2/sites-enabled/plexpy.conf
+  service apache2 restart
+  service plexpy restart
+}
 if [[ -f /install/.sickrage.lock ]]; then _sickrage; fi
 if [[ -f /install/.couchpotato.lock ]]; then _couchpotato; fi
