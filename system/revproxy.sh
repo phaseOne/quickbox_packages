@@ -216,7 +216,8 @@ if [[ -f /install/.couchpotato.lock ]]; then _couchpotato; fi
 if [[ -f /install/.jackett.lock ]]; then _jackett; fi
 if [[ -f /install/.plexpy.lock ]]; then _plexpy; fi
 if [[ -f /install/.plexrequests.lock ]]; then _plexrequsets; fi
-if [[ -f /install/.sonarr.lock ]]; then _sonarr; fi
+if [[ -f /install/.sabnzbd.lock ]]; then _sabnzbd; fi
 if [[ -f /install/.sickrage.lock ]]; then _sickrage; fi
+if [[ -f /install/.sonarr.lock ]]; then _sonarr; fi
 if [[ -f /install/.subsonic.lock ]]; then _subsonic; fi
 if [[ -f /install/.syncthing.lock ]]; then _syncthing; fi
