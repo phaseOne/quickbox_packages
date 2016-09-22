@@ -102,6 +102,26 @@ EOF
     service sickrage@${MASTER} start
   fi
 }
+function _sonarr() {
+  if [[ ! -f /etc/apache2/sites-enabled/sonarr.conf ]]; then
+    systemctl stop sonarr@${MASTER}
+    sed -i "s/<UrlBase>.*/<UrlBase>sonarr<\/UrlBase>/g" /home/${MASTER}/.config/NzbDrone/config.xml
+    sed -i "s/<BindAddress>.*/<BindAddress>localhost<\/BindAddress>/g" /home/${MASTER}/.config/NzbDrone/config.xml
+    cat > /etc/apache2/sites-enabled/sonarr.conf <<EOF
+<Location /sonarr>
+ProxyPass http://localhost:8989/sonarr
+ProxyPassReverse http://localhost:8989/sonarr
+AuthType Digest
+AuthName "rutorrent"
+AuthUserFile '/etc/htpasswd'
+Require user ${MASTER}
+</Location>
+EOF
+    chown www-data: /etc/apache2/sites-enabled/sonarr.conf
+    service apache2 restart
+    systemctl start sonarr@${MASTER}
+  fi
+}
 if [[ -f /install/.sickrage.lock ]]; then _sickrage; fi
 if [[ -f /install/.couchpotato.lock ]]; then _couchpotato; fi
 if [[ -f /install/.plexpy.lock ]]; then _plexpy; fi
