@@ -46,7 +46,7 @@ function _services() {
   systemctl start plexrequests
   touch /install/.plexrequests.lock
   cat > /etc/apache2/sites-enabled/plexrequests.conf <<EOF
-<Location /couchpotato>
+<Location /plexrequests>
 ProxyPass http://localhost:3000/plexrequests
 ProxyPassReverse http://localhost:3000/plexrequests
 Require all granted

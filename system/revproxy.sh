@@ -69,7 +69,7 @@ EOF
 function _plexrequsets() {
   if [[ ! -f /etc/apache2/sites-enabled/plexrequests.conf ]]; then
   cat > /etc/apache2/sites-enabled/plexrequests.conf <<EOF
-<Location /couchpotato>
+<Location /plexrequests>
 ProxyPass http://localhost:3000/plexrequests
 ProxyPassReverse http://localhost:3000/plexrequests
 Require all granted
