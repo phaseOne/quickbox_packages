@@ -23,7 +23,7 @@ local_setup=/root/QuickBox/setup/
 function _removeSonarr() {
   systemctl stop sonarr@{username}
   systemctl disable sonarr@{username}
-  sudo apt-get remove nzbdrone >/dev/null 2>&1
+  sudo apt-get remove -y nzbdrone >/dev/null 2>&1
   sudo apt-get autoremove >/dev/null 2>&1
   rm -f /etc/apache2/sites-enabled/sonarr.conf
   if [[ -f /etc/init.d/sonarr ]]; then
