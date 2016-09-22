@@ -21,11 +21,6 @@
 systemctl disable subsonic
 systemctl stop subsonic
 sudo rm /etc/systemd/system/subsonic.service
-if [[ -f /etc/init.d/subsonic ]]; then
-  service subsonic stop
-  sudo rm /etc/init.d/subsonic
-  sudo rm /etc/default/subsonic
-fi
 sudo pkill -f subsonic
 dpkg -r subsonic
 rm -rf /srv/subsonic
