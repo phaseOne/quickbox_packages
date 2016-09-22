@@ -3,4 +3,5 @@ username=$(cat /srv/rutorrent/home/db/master.txt)
 
 rm -rf /home/$username/sabnzbd
 rm /etc/systemd/system/sabnzbd@.service
+rm -f /etc/apache2/sites-enabled/sabnzbd.conf
 rm /install/.sabnzbd.lock

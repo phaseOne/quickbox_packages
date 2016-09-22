@@ -82,6 +82,44 @@ EOF
   fi
 }
 
+function _sabnzbd() {
+  if [[ ! -f /etc/apache2/sites-enabled/sickrage.conf ]]; then
+    systemctl stop sabnzbd@${MASTER}
+    cat >/etc/systemd/system/sabnzbd@.service<<EOF
+[Unit]
+Description=sabnzbd
+After=network.target
+
+[Service]
+Type=forking
+KillMode=process
+User=%I
+ExecStart=/usr/bin/screen -f -a -d -m -S sabnzbd python SABnzbd/SABnzbd.py --browser 0 --server 127.0.0.1:65080 --https 65443
+ExecStop=/bin/kill -HUP $MAINPID
+WorkingDirectory=/home/%I/
+
+[Install]
+WantedBy=multi-user.target
+
+EOF
+
+  cat > /etc/apache2/sites-enabled/sabnzbd.conf <<EOF
+<Location /sabnzbd>
+ProxyPass http://localhost:65080/sabnzbd
+ProxyPassReverse http://localhost:65080/sabnzbd
+AuthType Digest
+AuthName "rutorrent"
+AuthUserFile '/etc/htpasswd'
+Require user ${MASTER}
+</Location>
+EOF
+    chown www-data: /etc/apache2/sites-enabled/sabnzbd.conf
+    service apache2 restart
+    systemctl daemon-reload
+    systemctl start sabnzbd@${MASTER}
+  fi
+}
+
 function _sickrage() {
   if [[ ! -f /etc/apache2/sites-enabled/sickrage.conf ]]; then
     service sickrage@${MASTER} stop
@@ -102,6 +140,7 @@ EOF
     service sickrage@${MASTER} start
   fi
 }
+
 function _sonarr() {
   if [[ ! -f /etc/apache2/sites-enabled/sonarr.conf ]]; then
     systemctl stop sonarr@${MASTER}
@@ -122,7 +161,10 @@ EOF
     systemctl start sonarr@${MASTER}
   fi
 }
-if [[ -f /install/.sickrage.lock ]]; then _sickrage; fi
+
 if [[ -f /install/.couchpotato.lock ]]; then _couchpotato; fi
+if [[ -f /install/.jackett.lock ]]; then _jackett; fi
 if [[ -f /install/.plexpy.lock ]]; then _plexpy; fi
 if [[ -f /install/.plexrequests.lock ]]; then _plexrequsets; fi
+if [[ -f /install/.sonarr.lock ]]; then _sonarr; fi
+if [[ -f /install/.sickrage.lock ]]; then _sickrage; fi

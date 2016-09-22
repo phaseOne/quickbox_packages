@@ -38,7 +38,7 @@ After=network.target
 Type=forking
 KillMode=process
 User=%I
-ExecStart=/usr/bin/screen -f -a -d -m -S sabnzbd python SABnzbd/SABnzbd.py --browser 0 --server ${PUBLICIP}:65080 --https 65443
+ExecStart=/usr/bin/screen -f -a -d -m -S sabnzbd python SABnzbd/SABnzbd.py --browser 0 --server 127.0.0.1:65080 --https 65443
 ExecStop=/bin/kill -HUP $MAINPID
 WorkingDirectory=/home/%I/
 
@@ -46,6 +46,19 @@ WorkingDirectory=/home/%I/
 WantedBy=multi-user.target
 
 EOF
+
+cat > /etc/apache2/sites-enabled/sabnzbd.conf <<EOF
+<Location /sabnzbd>
+ProxyPass http://localhost:65080/sabnzbd
+ProxyPassReverse http://localhost:65080/sabnzbd
+AuthType Digest
+AuthName "rutorrent"
+AuthUserFile '/etc/htpasswd'
+Require user ${username}
+</Location>
+EOF
+chown www-data: /etc/apache2/sites-enabled/sabnzbd.conf
+service apache2 restart
 
 }
 
