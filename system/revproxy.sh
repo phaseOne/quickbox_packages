@@ -3,30 +3,10 @@
 
 MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 
-function _sickrage() {
-  if [[ ! -f /etc/apache2/sites-enabled/sickrage.conf ]]; then
-    service sickrage@${MASTER} stop
-    sed -i "s/web_root.*/web_root = \"sickrage\"/g" /home/"${MASTER}"/.sickrage/config.ini
-    sed -i "s/web_host.*/web_host = localhost/g" /home/"${MASTER}"/.sickrage/config.ini
-    cat > /etc/apache2/sites-enabled/sickrage.conf <<EOF
-<Location /sickrage>
-  ProxyPass http://localhost:8081/sickrage
-  ProxyPassReverse http://localhost:8081/sickrage
-  AuthType Digest
-  AuthName "rutorrent"
-  AuthUserFile '/etc/htpasswd'
-  Require user ${MASTER}
-</Location>
-EOF
-    chown www-data: /etc/apache2/sites-enabled/sickrage.conf
-    service apache2 restart
-    service sickrage@${MASTER} start
-  fi
-}
-
 function _couchpotato() {
   if [[ ! -f /etc/apache2/sites-enabled/couchpotato.conf ]]; then
     service couchpotato@${MASTER} stop
+    sed -i "/host = .*/d" /home/"${MASTER}"/.couchpotato/settings.conf
     sed -i "s/url_base.*/url_base = couchpotato\nhost = localhost/g" /home/"${MASTER}"/.couchpotato/settings.conf
 
     cat > /etc/apache2/sites-enabled/couchpotato.conf <<EOF
@@ -41,6 +21,28 @@ Require user ${MASTER}
 EOF
     chown www-data: /etc/apache2/sites-enabled/couchpotato.conf
     service apache2 restart
+  fi
+}
+
+function _jackett() {
+  if [[ ! -f /etc/apache2/sites-enabled/jackett.conf ]]; then
+    systemctl stop jackett@${MASTER}
+    sed -i "s/\"AllowExternal.*/\"AllowExternal\": false,/g" /home/"${MASTER}"/.config/Jackett/ServerConfig.json
+    sed -i "s/\"BasePathOverride.*/\"BasePathOverride\": \"\/jackett\"/g" /home/"${MASTER}"/.config/Jackett/ServerConfig.json
+
+cat > /etc/apache2/sites-enabled/jackett.conf <<EOF
+<Location /jackett>
+ProxyPass http://localhost:9117/jackett
+ProxyPassReverse http://localhost:9117/jackett
+AuthType Digest
+AuthName "rutorrent"
+AuthUserFile '/etc/htpasswd'
+Require user ${MASTER}
+</Location>
+EOF
+    chown www-data: /etc/apache2/sites-enabled/jackett.conf
+    service apache2 restart
+    service jackett@${MASTER} start
   fi
 }
 
@@ -77,6 +79,27 @@ Require all granted
 EOF
   chown www-data: /etc/apache2/sites-enabled/plexrequests.conf
   service apache2 restart
+  fi
+}
+
+function _sickrage() {
+  if [[ ! -f /etc/apache2/sites-enabled/sickrage.conf ]]; then
+    service sickrage@${MASTER} stop
+    sed -i "s/web_root.*/web_root = \"sickrage\"/g" /home/"${MASTER}"/.sickrage/config.ini
+    sed -i "s/web_host.*/web_host = localhost/g" /home/"${MASTER}"/.sickrage/config.ini
+    cat > /etc/apache2/sites-enabled/sickrage.conf <<EOF
+<Location /sickrage>
+  ProxyPass http://localhost:8081/sickrage
+  ProxyPassReverse http://localhost:8081/sickrage
+  AuthType Digest
+  AuthName "rutorrent"
+  AuthUserFile '/etc/htpasswd'
+  Require user ${MASTER}
+</Location>
+EOF
+    chown www-data: /etc/apache2/sites-enabled/sickrage.conf
+    service apache2 restart
+    service sickrage@${MASTER} start
   fi
 }
 if [[ -f /install/.sickrage.lock ]]; then _sickrage; fi

@@ -45,6 +45,24 @@ touch /install/.jackett.lock
 cp ${local_setup}templates/sysd/jackett.template /etc/systemd/system/jackett@.service
 systemctl enable jackett@${username} >/dev/null 2>&1
 systemctl start jackett@${username}
+systemctl stop jackett@${username}
+sed -i "s/\"AllowExternal.*/\"AllowExternal\": false,/g" /home/"${MASTER}"/.config/Jackett/ServerConfig.json
+sed -i "s/\"BasePathOverride.*/\"BasePathOverride\": jackett/g" /home/"${MASTER}"/.config/Jackett/ServerConfig.json
+
+cat > /etc/apache2/sites-enabled/jackett.conf <<EOF
+<Location /jackett>
+ProxyPass http://localhost:9117/jackett
+ProxyPassReverse http://localhost:9117/jackett
+AuthType Digest
+AuthName "rutorrent"
+AuthUserFile '/etc/htpasswd'
+Require user ${MASTER}
+</Location>
+EOF
+chown www-data: /etc/apache2/sites-enabled/jackett.conf
+service apache2 restart
+service jackett@liara start
+
 
 echo >>"${OUTTO}" 2>&1;
 echo >>"${OUTTO}" 2>&1;
