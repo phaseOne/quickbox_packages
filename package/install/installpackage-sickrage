@@ -27,12 +27,26 @@ function _installSickRage1() {
 function _installSickRage2() {
   touch /install/.sickrage.lock
   chown "${MASTER}":"${MASTER}" -R /home/"${MASTER}"/.sickrage
+  sed -i "s/web_root.*/web_root = \"sickrage\"/g" /home/"${MASTER}"/.sickrage/config.ini
+  sed -i "s/web_host.*/web_host = localhost/g" /home/"${MASTER}"/.sickrage/config.ini
+
 }
 function _installSickRage3() {
   cp ${local_setup}templates/sysd/sickrage.template /etc/systemd/system/sickrage@.service
   systemctl enable sickrage@${MASTER} > /dev/null 2>&1
   systemctl start sickrage@${MASTER} > /dev/null 2>&1
-
+  cat > /etc/apache2/sites-enabled/sickrage.conf <<EOF
+<Location /sickrage>
+  ProxyPass http://localhost:8081/sickrage
+  ProxyPassReverse http://localhost:8081/sickrage
+  AuthType Digest
+  AuthName "rutorrent"
+  AuthUserFile '/etc/htpasswd'
+  Require user ${MASTER}
+</Location>
+EOF
+  chown www-data: /etc/apache2/sites-enabled/sickrage.conf
+  service apache2 restart
 }
 
 
