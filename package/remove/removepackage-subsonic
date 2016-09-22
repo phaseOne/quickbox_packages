@@ -27,5 +27,5 @@ rm -rf /srv/subsonic
 rm -rf /var/subsonic
 rm -rf /usr/share/subsonic
 rm /usr/bin/subsonic
-
+rm -f /etc/apache2/sites-enabled/subsonic.conf
 rm -f /install/.subsonic.lock
