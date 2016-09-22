@@ -27,9 +27,10 @@ if [[ -f /etc/init.d/subsonic ]]; then
   sudo rm /etc/default/subsonic
 fi
 sudo pkill -f subsonic
-sudo rm -rf /srv/subsonic
-sudo rm -rf /var/subsonic
-sudo rm -rf /usr/share/subsonic
-sudo rm /usr/bin/subsonic
+dpkg -r subsonic
+rm -rf /srv/subsonic
+rm -rf /var/subsonic
+rm -rf /usr/share/subsonic
+rm /usr/bin/subsonic
 
-sudo rm /install/.subsonic.lock
+rm -f /install/.subsonic.lock

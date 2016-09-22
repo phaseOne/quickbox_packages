@@ -1,8 +1,6 @@
 #!/bin/bash
 # Update installed apps to new reverse proxy configurations
 
-MASTER=$(cat /srv/rutorrent/home/db/master.txt)
-
 function _couchpotato() {
   if [[ ! -f /etc/apache2/sites-enabled/couchpotato.conf ]]; then
     service couchpotato@${MASTER} stop
@@ -162,9 +160,39 @@ EOF
   fi
 }
 
+function _subsonic() {
+  if [[ ! -f /etc/apache2/sites-enabled/subsonic.conf ]]; then
+    cp -f ${local_setup}templates/subsonic/subsonic.sh.template /usr/share/subsonic/subsonic.sh
+    cp ${local_setup}templates/sysd/subsonic.template /etc/systemd/system/subsonic.service
+    sed -i "s/MASTER/${MASTER}/g" /etc/systemd/system/subsonic.service
+    mkdir /srv/subsonic
+    chown ${MASTER}: /srv/subsonic
+    systemctl enable subsonic.service >/dev/null 2>&1
+    systemctl start subsonic.service >/dev/null 2>&1
+
+    cat > /etc/apache2/sites-enabled/subsonic.conf <<EOF
+<Location /subsonic>
+ProxyPass http://localhost:4040
+ProxyPassReverse http://localhost:4040
+AuthType Digest
+AuthName "rutorrent"
+AuthUserFile '/etc/htpasswd'
+Require user ${MASTER}
+</Location>
+EOF
+    chown www-data: /etc/apache2/sites-enabled/subsonic.conf
+    service apache2 restart
+    service subsonic restart
+  fi
+}
+
+local_setup=/root/QuickBox/setup/
+MASTER=$(cat /srv/rutorrent/home/db/master.txt)
+
 if [[ -f /install/.couchpotato.lock ]]; then _couchpotato; fi
 if [[ -f /install/.jackett.lock ]]; then _jackett; fi
 if [[ -f /install/.plexpy.lock ]]; then _plexpy; fi
 if [[ -f /install/.plexrequests.lock ]]; then _plexrequsets; fi
 if [[ -f /install/.sonarr.lock ]]; then _sonarr; fi
 if [[ -f /install/.sickrage.lock ]]; then _sickrage; fi
+if [[ -f /install/.subsonic.lock ]]; then _subsonic; fi
