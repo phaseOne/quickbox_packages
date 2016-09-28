@@ -143,16 +143,15 @@ function _sonarr() {
   if [[ ! -f /etc/apache2/sites-enabled/sonarr.conf ]]; then
     systemctl stop sonarr@${MASTER}
     sed -i "s/<UrlBase>.*/<UrlBase>sonarr<\/UrlBase>/g" /home/${MASTER}/.config/NzbDrone/config.xml
-    #sed -i "s/<BindAddress>.*/<BindAddress>localhost<\/BindAddress>/g" /home/${MASTER}/.config/NzbDrone/config.xml
+    sed -i "s/<BindAddress>.*/<BindAddress>127.0.0.1<\/BindAddress>/g" /home/${MASTER}/.config/NzbDrone/config.xml
     cat > /etc/apache2/sites-enabled/sonarr.conf <<EOF
 <Location /sonarr>
 ProxyPass http://localhost:8989/sonarr
 ProxyPassReverse http://localhost:8989/sonarr
-#AuthType Digest
-#AuthName "rutorrent"
-#AuthUserFile '/etc/htpasswd'
-#Require user ${MASTER}
-Require all granted
+AuthType Digest
+AuthName "rutorrent"
+AuthUserFile '/etc/htpasswd'
+Require user ${MASTER}
 </Location>
 EOF
     chown www-data: /etc/apache2/sites-enabled/sonarr.conf
