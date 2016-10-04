@@ -61,7 +61,7 @@ Require user ${username}
 EOF
 chown www-data: /etc/apache2/sites-enabled/jackett.conf
 service apache2 restart
-service jackett@liara start
+service jackett@${username} start
 
 
 echo >>"${OUTTO}" 2>&1;
