@@ -52,7 +52,7 @@ Require user ${MASTER}
 </Location>
 EOF
 chown www-data: /etc/apache2/sites-enabled/couchpotato.conf
-service apache2 restart
+service apache2 reload
 systemctl start couchpotato@${MASTER} >/dev/null 2>&1
 
 touch /install/.couchpotato.lock

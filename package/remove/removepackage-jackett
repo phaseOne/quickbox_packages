@@ -7,7 +7,7 @@ rm /install/.jackett.lock
   systemctl disable jackett@${username}
   rm /etc/systemd/system/jackett@.service
   rm -f /etc/apache2/sites-enabled/jackett.conf
-  service apache2 restart
+  service apache2 reload
 if [[ -f /etc/init.d/jackett ]]; then
   rm /etc/init.d/jackett
   update-rc.d -f jackett remove

@@ -78,7 +78,7 @@ Require user ${username}
 </Location>
 EOF
   chown www-data: /etc/apache2/sites-enabled/sonarr.conf
-  service apache2 restart
+  service apache2 reload
   systemctl start sonarr@${username}
 }
 

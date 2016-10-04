@@ -29,5 +29,5 @@ if [[ -f /etc/init.d/couchpotato ]]; then
 fi
 rm -rf /home/${MASTER}/.couchpotato
 rm -f /etc/apache2/sites-enabled/couchpotato.conf
-service apache2 restart
+service apache2 reload
 rm /install/.couchpotato.lock

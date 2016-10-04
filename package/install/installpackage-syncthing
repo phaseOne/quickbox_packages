@@ -45,7 +45,7 @@ Require user ${MASTER}
 </Location>
 EOF
 chown www-data: /etc/apache2/sites-enabled/syncthing.conf
-service apache2 restart
+service apache2 reload
 
 touch /install/.syncthing.lock
 echo "Syncthing installation complete!" >>"${OUTTO}" 2>&1;

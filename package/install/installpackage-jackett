@@ -60,7 +60,7 @@ Require user ${username}
 </Location>
 EOF
 chown www-data: /etc/apache2/sites-enabled/jackett.conf
-service apache2 restart
+service apache2 reload
 service jackett@${username} start
 
 

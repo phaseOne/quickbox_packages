@@ -53,7 +53,7 @@ function _services() {
 #</Location>
 #EOF
 #  chown www-data: /etc/apache2/sites-enabled/plexrequests.conf
-#  service apache2 restart
+#  service apache2 reload
 }
 
 spinner() {

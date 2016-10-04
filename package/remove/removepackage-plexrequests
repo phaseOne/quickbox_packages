@@ -3,6 +3,6 @@ systemctl disable plexrequests
 systemctl stop plexrequests
 rm /etc/systemd/system/plexrequests.service
 rm -f /etc/apache2/sites-enabled/plexrequests.conf
-service apache2 restart
+service apache2 reload
 rm -rf /opt/plexrequests
 rm /install/.plexrequests.lock

@@ -61,7 +61,7 @@ Require user ${MASTER}
 </Location>
 EOF
 chown www-data: /etc/apache2/sites-enabled/subsonic.conf
-service apache2 restart
+service apache2 reload
 service subsonic restart
 
 echo "Subsonic Install Complete!" >>"${OUTTO}" 2>&1;

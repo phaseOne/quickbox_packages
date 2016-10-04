@@ -18,7 +18,7 @@ Require user ${MASTER}
 </Location>
 EOF
     chown www-data: /etc/apache2/sites-enabled/couchpotato.conf
-    service apache2 restart
+    service apache2 reload
   fi
 }
 
@@ -39,7 +39,7 @@ Require user ${MASTER}
 </Location>
 EOF
     chown www-data: /etc/apache2/sites-enabled/jackett.conf
-    service apache2 restart
+    service apache2 reload
     service jackett@${MASTER} start
   fi
 }
@@ -61,7 +61,7 @@ function _plexpy() {
   </Location>
 EOF
   chown www-data: /etc/apache2/sites-enabled/plexpy.conf
-  service apache2 restart
+  service apache2 reload
   service plexpy restart
   fi
 }
@@ -76,7 +76,7 @@ Require all granted
 </Location>
 EOF
   chown www-data: /etc/apache2/sites-enabled/plexrequests.conf
-  service apache2 restart
+  service apache2 reload
   fi
 }
 
@@ -112,7 +112,7 @@ Require user ${MASTER}
 </Location>
 EOF
     chown www-data: /etc/apache2/sites-enabled/sabnzbd.conf
-    service apache2 restart
+    service apache2 reload
     systemctl daemon-reload
     systemctl start sabnzbd@${MASTER}
   fi
@@ -134,7 +134,7 @@ function _sickrage() {
 </Location>
 EOF
     chown www-data: /etc/apache2/sites-enabled/sickrage.conf
-    service apache2 restart
+    service apache2 reload
     service sickrage@${MASTER} start
   fi
 }
@@ -155,7 +155,7 @@ Require user ${MASTER}
 </Location>
 EOF
     chown www-data: /etc/apache2/sites-enabled/sonarr.conf
-    service apache2 restart
+    service apache2 reload
     systemctl start sonarr@${MASTER}
   fi
 }
@@ -181,7 +181,7 @@ Require user ${MASTER}
 </Location>
 EOF
     chown www-data: /etc/apache2/sites-enabled/subsonic.conf
-    service apache2 restart
+    service apache2 reload
     service subsonic restart
   fi
 }
@@ -203,7 +203,7 @@ Require user ${MASTER}
 </Location>
 EOF
     chown www-data: /etc/apache2/sites-enabled/syncthing.conf
-    service apache2 restart
+    service apache2 reload
 
     systemctl start syncthing@${MASTER}
   fi

@@ -44,7 +44,7 @@ Require user ${MASTER}
 </Location>
 EOF
 chown www-data: /etc/apache2/sites-enabled/plexpy.conf
-service apache2 restart
+service apache2 reload
 
 echo "Enabling PlexPy Systemd configuration"
 cp ${local_setup}templates/sysd/plexpy.template /etc/systemd/system/plexpy.service

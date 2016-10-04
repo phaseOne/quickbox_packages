@@ -49,7 +49,7 @@ function _installSickRage3() {
 </Location>
 EOF
   chown www-data: /etc/apache2/sites-enabled/sickrage.conf
-  service apache2 restart
+  service apache2 reload
   systemctl start sickrage@${MASTER} > /dev/null 2>&1
 
 }

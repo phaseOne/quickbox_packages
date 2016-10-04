@@ -58,7 +58,7 @@ Require user ${username}
 </Location>
 EOF
 chown www-data: /etc/apache2/sites-enabled/sabnzbd.conf
-service apache2 restart
+service apache2 reload
 
 }
 
