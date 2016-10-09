@@ -45,6 +45,7 @@ touch /install/.jackett.lock
 cp ${local_setup}templates/sysd/jackett.template /etc/systemd/system/jackett@.service
 systemctl enable jackett@${username} >/dev/null 2>&1
 systemctl start jackett@${username}
+sleep 5
 systemctl stop jackett@${username}
 sed -i "s/\"AllowExternal.*/\"AllowExternal\": false,/g" /home/"${username}"/.config/Jackett/ServerConfig.json
 sed -i "s/\"BasePathOverride.*/\"BasePathOverride\": \"\/jackett\"/g" /home/"${username}"/.config/Jackett/ServerConfig.json
