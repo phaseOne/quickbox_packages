@@ -17,25 +17,29 @@
 #   including (via compiler) GPL-licensed code must also be made available
 #   under the GPL along with build & install instructions.
 #
+OUTTO="/srv/rutorrent/home/db/output.log"
+HOSTNAME1=$(hostname -s)
+PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+local_setup=/root/QuickBox/setup/
 
-function _installPlex1() {
+echo "Setting up hostname for plex ... "
     echo -ne "ServerName ${HOSTNAME1}" | sudo tee /etc/apache2/conf-available/fqdn.conf >/dev/null 2>&1
     sudo a2enconf fqdn >> /dev/null 2>&1
     echo
-}
-function _installPlex2() {
+
+echo "Setting up plex apache configuration ... "
   cp ${local_setup}templates/plex.conf.template /etc/apache2/sites-enabled/plex.conf
   chown www-data: /etc/apache2/sites-enabled/plex.conf
   a2enmod proxy >/dev/null 2>&1
   sed -i "s/PUBLICIP/${PUBLICIP}/g" /etc/apache2/sites-enabled/plex.conf
 }
 
-function _installPlex3() {
+echo "Installing plex keys and sources ... "
     wget -O - http://shell.ninthgate.se/packages/shell.ninthgate.se.gpg.key | apt-key add -
     echo "deb http://shell.ninthgate.se/packages/debian jessie main" > /etc/apt/sources.list.d/plexmediaserver.list
     echo
-}
-function _installPlex4() {
+
+echo "Updating system ... "
     apt-get -y update >/dev/null 2>&1
     echo
 }
@@ -49,14 +53,13 @@ function _installPlex6() {
     fi
     perm=$(stat -c '%U' /var/lib/plexmediaserver/)
     if [[ ! $perm == plex ]]; then
-      chown -R plex: /var/lib/plexmediaserver
+      chown -R plex:plex /var/lib/plexmediaserver
     fi
     service plexmediaserver restart >/dev/null 2>&1
     touch /install/.plex.lock
     echo
-}
-function _installPlex7() {
-    echo "Plex Install Complete!" >>"${OUTTO}" 2>&1;
+
+echo "Plex Install Complete!" >>"${OUTTO}" 2>&1;
     sleep 5
     echo >>"${OUTTO}" 2>&1;
     echo >>"${OUTTO}" 2>&1;
@@ -65,19 +68,3 @@ function _installPlex7() {
 }
 function _installPlex8() {
     exit
-}
-
-
-OUTTO="/srv/rutorrent/home/db/output.log"
-HOSTNAME1=$(hostname -s)
-PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
-local_setup=/root/QuickBox/setup/
-
-echo "Setting up hostname for plex ... " >>"${OUTTO}" 2>&1;_installPlex1
-echo "Setting up plex apache configuration ... " >>"${OUTTO}" 2>&1;_installPlex2
-echo "Installing plex keys and sources ... " >>"${OUTTO}" 2>&1;_installPlex3
-echo "Updating system ... " >>"${OUTTO}" 2>&1;_installPlex4
-echo "Installing plex ... " >>"${OUTTO}" 2>&1;_installPlex5
-echo "Starting plex ... " >>"${OUTTO}" 2>&1;_installPlex6
-_installPlex7
-_installPlex8
