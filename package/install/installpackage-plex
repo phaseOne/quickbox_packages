@@ -32,7 +32,7 @@ echo "Setting up plex apache configuration ... "
   chown www-data: /etc/apache2/sites-enabled/plex.conf
   a2enmod proxy >/dev/null 2>&1
   sed -i "s/PUBLICIP/${PUBLICIP}/g" /etc/apache2/sites-enabled/plex.conf
-}
+
 
 echo "Installing plex keys and sources ... "
     wget -O - http://shell.ninthgate.se/packages/shell.ninthgate.se.gpg.key | apt-key add -
@@ -42,12 +42,10 @@ echo "Installing plex keys and sources ... "
 echo "Updating system ... "
     apt-get -y update >/dev/null 2>&1
     echo
-}
-function _installPlex5() {
+
     DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical apt-get -q -y -o -f "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" install plexmediaserver >/dev/null 2>&1
     echo
-}
-function _installPlex6() {
+
     if [[ ! -d /var/lib/plexmediaserver ]]; then
       mkdir -p /var/lib/plexmediaserver
     fi
@@ -65,6 +63,5 @@ echo "Plex Install Complete!" >>"${OUTTO}" 2>&1;
     echo >>"${OUTTO}" 2>&1;
     echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
     service apache2 reload >/dev/null 2>&1
-}
-function _installPlex8() {
+
     exit
