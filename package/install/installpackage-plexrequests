@@ -35,6 +35,7 @@ function _install() {
   curl -sL https://git.io/vKEJz | grep release | grep zip | cut -d "\"" -f 2 | sed -e 's/\/tidusjar/https:\/\/github.com\/tidusjar/g' | xargs wget --quiet -O PlexRequests.zip >/dev/null 2>&1
   unzip PlexRequests.zip >/dev/null 2>&1
   mv Release plexrequests
+  rm PlexRequests.zip
   chown -R ${user}: plexrequests
 }
 
