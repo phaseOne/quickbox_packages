@@ -20,7 +20,7 @@
 
 function _removePlex() {
   dpkg -r plexmediaserver >/dev/null 2>&1
-  sudo apt-get purge plexmediaserver
+  sudo apt-get purge plexmediaserver >/dev/null 2>&1
   rm -rf /var/lib/plexmediaserver
   rm -rf /usr/lib/plexmediaserver
   rm /etc/init/plexmediaserver.conf
@@ -30,7 +30,7 @@ function _removePlex() {
   rm /etc/apache2/sites-enabled/plex.conf
   rm /srv/rutorrent/home/.plex
   rm /install/.plex.lock
-  sudo userdel plex
+  sudo userdel plex >/dev/null 2>&1
   pkill -f plex
 }
 
