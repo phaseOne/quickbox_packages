@@ -56,13 +56,10 @@ release=$(lsb_release -cs)
 ok=$(echo -e "[ \e[0;32mDONE\e[00m ]")
 echo -n "Installing Xfce4 ... " >>"${OUTTO}" 2>&1;apt-get install -qq -y xfce4 >/dev/null 2>&1
 echo >>"${OUTTO}" 2>&1;
-echo >>"${OUTTO}" 2>&1;
 echo -n "Installing x2go repositories ... " >>"${OUTTO}" 2>&1; _x2gorepo
-echo >>"${OUTTO}" 2>&1;
 echo >>"${OUTTO}" 2>&1;
 echo -n "Installing X2go ... " >>"${OUTTO}" 2>&1; _x2go
 touch /install/.x2go.lock
-echo >>"${OUTTO}" 2>&1;
 echo >>"${OUTTO}" 2>&1;
 echo "X2go Install Complete!" >>"${OUTTO}" 2>&1;
 sleep 5
