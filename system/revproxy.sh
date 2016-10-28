@@ -161,9 +161,11 @@ EOF
 }
 
 function _subsonic() {
+  baseurl=$(cat /usr/share/subsonic/subsonic.sh | grep -i -m1 context | cut -d= -f 2)
+  if [[ $baseurl == \/ ]]; then rm -f /etc/apache2/sites-enabled/subsonic.conf; fi
   if [[ ! -f /etc/apache2/sites-enabled/subsonic.conf ]]; then
     cp -f ${local_setup}templates/subsonic/subsonic.sh.template /usr/share/subsonic/subsonic.sh
-    cp ${local_setup}templates/sysd/subsonic.template /etc/systemd/system/subsonic.service
+    cp -f ${local_setup}templates/sysd/subsonic.template /etc/systemd/system/subsonic.service
     sed -i "s/MASTER/${MASTER}/g" /etc/systemd/system/subsonic.service
     mkdir /srv/subsonic
     chown ${MASTER}: /srv/subsonic
@@ -172,8 +174,8 @@ function _subsonic() {
 
     cat > /etc/apache2/sites-enabled/subsonic.conf <<EOF
 <Location /subsonic>
-ProxyPass http://localhost:4040
-ProxyPassReverse http://localhost:4040
+ProxyPass http://localhost:4040/subsonic
+ProxyPassReverse http://localhost:4040/subsonic
 AuthType Digest
 AuthName "rutorrent"
 AuthUserFile '/etc/htpasswd'

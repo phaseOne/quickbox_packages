@@ -18,14 +18,11 @@
 #   under the GPL along with build & install instructions.
 #
 
-systemctl disable subsonic
-systemctl stop subsonic
-sudo rm /etc/systemd/system/subsonic.service
-sudo pkill -f subsonic
 dpkg -r subsonic
+rm /etc/systemd/system/subsonic.service
 rm -rf /srv/subsonic
 rm -rf /var/subsonic
 rm -rf /usr/share/subsonic
-rm /usr/bin/subsonic
 rm -f /etc/apache2/sites-enabled/subsonic.conf
 rm -f /install/.subsonic.lock
+service apache2 reload

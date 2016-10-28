@@ -52,8 +52,8 @@ systemctl start subsonic.service >/dev/null 2>&1
 
 cat > /etc/apache2/sites-enabled/subsonic.conf <<EOF
 <Location /subsonic>
-ProxyPass http://localhost:4040
-ProxyPassReverse http://localhost:4040
+ProxyPass http://localhost:4040/subsonic
+ProxyPassReverse http://localhost:4040/subsonic
 AuthType Digest
 AuthName "rutorrent"
 AuthUserFile '/etc/htpasswd'
