@@ -52,7 +52,7 @@ function _install() {
 	whiptail --title "Install Software" --checklist --noitem --separate-output "Make some choices:" 15 26 7 "${installa[@]}" 2>results
   readarray packages < results
   for i in "${packages[@]}"; do
-    echo -n "Installing $i ";
+    echo -e "Installing $i ";
     bash /usr/local/bin/quickbox/package/install/installpackage-$i
   done
   rm results
@@ -72,7 +72,7 @@ done
 whiptail --title "Remove Software" --noitem --checklist --separate-output "Make some choices:" 15 26 7 "${removea[@]}" 2>results
 readarray packages < results
 for i in "${packages[@]}"; do
-  echo -n "Removing $i ";
+  echo -e "Removing $i ";
   bash /usr/local/bin/quickbox/package/remove/removepackage-$i
 done
 rm results
@@ -87,13 +87,13 @@ function _cli() {
     app=${i}
     if [[ $i == autodl ]]; then app=autodlirssi; fi
     if [[ -f /install/.${app}.lock ]]; then
-      echo -n "Package $i already installed"
+      echo -e "Package $i already installed"
     else
       if [[ "${repo[@]}" =~ $i ]]; then
-        echo -n "Installing $i "
+        echo -e "Installing $i "
         bash /usr/local/bin/quickbox/package/install/installpackage-$i
       else
-        echo -n "Package $i not found"
+        echo -e "Package $i not found"
       fi
     fi
   done
@@ -106,16 +106,16 @@ function _clr() {
     app=${i}
     if [[ $i == autodl ]]; then app=autodlirssi; fi
     if [[ -f /install/.$app.lock ]]; then
-      echo -n "Removing $i "
+      echo -e "Removing $i "
       bash /usr/local/bin/quickbox/package/remove/removepackage-$i
     else
-      echo -n "Package $i not installed"
+      echo -e "Package $i not installed"
     fi
   done
 }
 
 function _updateqb() {
-  echo -n "Updating QuickBox local repository"
+  echo -e "Updating QuickBox local repository"
   cd /root/QuickBox
   git submodule foreach git reset HEAD --hard
   git submodule foreach git checkout master
@@ -159,21 +159,6 @@ function _list() {
     echo -e "${description}\n" | fmt --goal=50 | sed -e "2,\$s/^/$spacing/"
 
   done
-}
-
-spinner() {
-    local pid=$1
-    local delay=0.25
-    local spinstr='|/-\'
-    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
-        local temp=${spinstr#?}
-        printf " [${bold}${yellow}%c${normal}]  " "$spinstr"
-        local spinstr=$temp${spinstr%"$temp"}
-        sleep $delay
-        printf "\b\b\b\b\b\b"
-    done
-    printf "    \b\b\b\b"
-    echo -ne "${OK}"
 }
 
 normal=$(tput sgr0)
