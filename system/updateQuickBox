@@ -162,24 +162,6 @@ done
   service apache2 reload  >> /dev/null 2>&1
 }
 
-function _updateuserhome() {
-  cd /home/"${A1}"/torrents
-  if [[ -d rtorrent ]]; then
-    cd
-  else
-    mv deluge /home/"${A1}"/deluge
-    cd ..
-    mv torrents rtorrent
-    rm -rf torrents
-    mkdir -p torrents
-    mv deluge torrents/deluge
-    mv rtorrent torrents/rtorrent
-    sed -i "s/directory = \/home\/${A1}\/torrents\//directory = \/home\/${A1}\/torrents\/rtorrent/g" /home/"${A1}"/.rtorrent.rc
-    chown -R ${A1}:${A1} /home/${A1}
-  fi
-  systemctl restart rtorrent@"${A1}".service
-}
-
 function _updaterutorrent() {
   cd /srv
   rsync -aP ${local_rutorrent}* rutorrent
@@ -259,36 +241,9 @@ function _updatesudo() {
   awk -v username="${A1}" '/^root/ && !x {print username    " ALL=(ALL:ALL) NOPASSWD: ALL"; x=1} 1' /etc/sudoers > /tmp/sudoers;mv /tmp/sudoers /etc
 }
 
-function _updateplex() {
-  OUTTO="/srv/rutorrent/home/db/output.log"
-  HOSTNAME1=$(hostname -s)
-  PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
-  local_setup=/root/QuickBox/setup/
-  if [[ -f /etc/init.d/plexmediaserver ]]; then
-    mv /etc/init.d/plexmediaserver /etc/init.d/plexmediaserver.BAK
-    cp ${local_setup}templates/sysd/plexmediaserver.template /lib/systemd/system/plexmediaserver.service
-
-    wget -O - http://shell.ninthgate.se/packages/shell.ninthgate.se.gpg.key | apt-key add -
-    echo "deb http://shell.ninthgate.se/packages/debian jessie main" > /etc/apt/sources.list.d/plexmediaserver.list
-    apt-get -y update >/dev/null 2>&1
-
-    systemctl daemon-reload >/dev/null 2>&1
-    update-rc.d plexmediaserver remove
-    service plexmediaserver stop
-    systemctl enable plexmediaserver.service >/dev/null 2>&1
-    systemctl stop plexmediaserver.service >/dev/null 2>&1
-    systemctl start plexmediaserver.service >/dev/null 2>&1
-  fi
-
-}
 function _updateappsproxy() {
   bash /usr/local/bin/quickbox/system/revproxy.sh
 }
-#function _updatecronfile() {
-  # We'll disable this function unless a new packages
-  # is included or startup requires a fix.
-  #cp ${local_setup}templates/startup.template /home/"${A1}"/.startup
-#}
 
 function _quickconsole() {
   if [[ ! -f /install/.webconsole.lock ]]; then
@@ -358,6 +313,59 @@ function _fin() {
   exit
 }
 
+################################################################################
+#    BEGIN RETIRED FUNCTION
+################################################################################
+function _updateuserhome() {
+  cd /home/"${A1}"/torrents
+  if [[ -d rtorrent ]]; then
+    cd
+  else
+    mv deluge /home/"${A1}"/deluge
+    cd ..
+    mv torrents rtorrent
+    rm -rf torrents
+    mkdir -p torrents
+    mv deluge torrents/deluge
+    mv rtorrent torrents/rtorrent
+    sed -i "s/directory = \/home\/${A1}\/torrents\//directory = \/home\/${A1}\/torrents\/rtorrent/g" /home/"${A1}"/.rtorrent.rc
+    chown -R ${A1}:${A1} /home/${A1}
+  fi
+  systemctl restart rtorrent@"${A1}".service
+}
+
+function _updateplex() {
+  OUTTO="/srv/rutorrent/home/db/output.log"
+  HOSTNAME1=$(hostname -s)
+  PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+  local_setup=/root/QuickBox/setup/
+  if [[ -f /etc/init.d/plexmediaserver ]]; then
+    mv /etc/init.d/plexmediaserver /etc/init.d/plexmediaserver.BAK
+    cp ${local_setup}templates/sysd/plexmediaserver.template /lib/systemd/system/plexmediaserver.service
+
+    wget -O - http://shell.ninthgate.se/packages/shell.ninthgate.se.gpg.key | apt-key add -
+    echo "deb http://shell.ninthgate.se/packages/debian jessie main" > /etc/apt/sources.list.d/plexmediaserver.list
+    apt-get -y update >/dev/null 2>&1
+
+    systemctl daemon-reload >/dev/null 2>&1
+    update-rc.d plexmediaserver remove
+    service plexmediaserver stop
+    systemctl enable plexmediaserver.service >/dev/null 2>&1
+    systemctl stop plexmediaserver.service >/dev/null 2>&1
+    systemctl start plexmediaserver.service >/dev/null 2>&1
+  fi
+
+}
+
+function _updatecronfile() {
+  # We'll disable this function unless a new packages
+  # is included or startup requires a fix.
+  cp ${local_setup}templates/startup.template /home/"${A1}"/.startup
+}
+################################################################################
+#    END RETIRED FUNCTION
+################################################################################
+
 
 local_setup=/root/QuickBox/setup/
 local_packages=/root/QuickBox/packages/
@@ -387,7 +395,7 @@ echo "Updating all rutorrent plugins ... " >>"${OUTTO}" 2>&1;_updaterutorrent-pl
 echo "Updating the QuickBox Dashboard ... " >>"${OUTTO}" 2>&1;_updatedashboard;echo
 echo "Updating the QuickBox Sudoers template ... " >>"${OUTTO}" 2>&1;_updatesudo;echo
 _updateznc
-_updateplex
+#_updateplex
 _updateappsproxy
 _quickconsole
 #echo "Updating ${A1}'s .startup cronfile... " >>"${OUTTO}" 2>&1;_updatecronfile;echo
