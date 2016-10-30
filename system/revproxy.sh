@@ -22,6 +22,34 @@ EOF
   fi
 }
 
+function _emby() {
+  if [[ ! -f /etc/apache2/sites-enabled/emby.conf ]]; then
+    service emby-server stop
+
+    cat > /etc/apache2/sites-enabled/emby.conf <<EOF
+<Location /emby>
+Satisfy Any
+order deny,allow
+deny from all
+allow from all
+ProxyPass http://localhost:8096/emby
+ProxyPassReverse http://localhost:8096/emby
+</Location>
+
+<Location /embyws>
+Satisfy Any
+order deny,allow
+deny from all
+allow from all
+ProxyPass ws://localhost:8096/embyws
+ProxyPassReverse ws://localhost:8096/embyws
+</Location>
+EOF
+    chown www-data: /etc/apache2/sites-enabled/emby.conf
+    service apache2 reload
+  fi
+}
+
 function _jackett() {
   if [[ ! -f /etc/apache2/sites-enabled/jackett.conf ]]; then
     systemctl stop jackett@${MASTER}
@@ -215,6 +243,7 @@ local_setup=/root/QuickBox/setup/
 MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 
 if [[ -f /install/.couchpotato.lock ]]; then _couchpotato; fi
+if [[ -f /install/.emby.lock ]]; then _emby; fi
 if [[ -f /install/.jackett.lock ]]; then _jackett; fi
 if [[ -f /install/.plexpy.lock ]]; then _plexpy; fi
 #if [[ -f /install/.plexrequests.lock ]]; then _plexrequsets; fi
