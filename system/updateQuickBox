@@ -150,13 +150,14 @@ AS
   fi
 done
 
-  if [[ -f /install/.plex.lock ]] && [[ -s /etc/apache2/sites-enabled/plex.conf ]]; then
-    PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
-    cp ${local_setup}templates/plex.conf.template /etc/apache2/sites-enabled/plex.conf
-    chown www-data: /etc/apache2/sites-enabled/plex.conf
-    a2enmod proxy >/dev/null 2>&1
-    sed -i "s/PUBLICIP/${PUBLICIP}/g" /etc/apache2/sites-enabled/plex.conf
-  fi
+
+  #if [[ -f /install/.plex.lock ]] && [[ -s /etc/apache2/sites-enabled/plex.conf ]]; then
+  #  PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+  #  cp ${local_setup}templates/plex.conf.template /etc/apache2/sites-enabled/plex.conf
+  #  chown www-data: /etc/apache2/sites-enabled/plex.conf
+  #  a2enmod proxy >/dev/null 2>&1
+  #  sed -i "s/PUBLICIP/${PUBLICIP}/g" /etc/apache2/sites-enabled/plex.conf
+  #fi
 
   service apache2 reload  >> /dev/null 2>&1
 }
