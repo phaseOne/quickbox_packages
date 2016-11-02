@@ -72,8 +72,8 @@ function _ffmpeg() {
     ./configure --enable-libfreetype --enable-filter=drawtext --enable-fontconfig --disable-asm --enable-libx264 --enable-gpl >>"${OUTTO}" 2>&1
     make -j${MAXCPUS} >>"${OUTTO}" 2>&1
     make install >>"${OUTTO}" 2>&1
-    cp /usr/local/bin/ffmpeg /usr/bin >>"${OUTTO}" 2>&1
-    cp /usr/local/bin/ffprobe /usr/bin >>"${OUTTO}" 2>&1
+    yes | cp -rf /usr/local/bin/ffmpeg /usr/bin >>"${OUTTO}" 2>&1
+    yes | cp -rf /usr/local/bin/ffprobe /usr/bin >>"${OUTTO}" 2>&1
     rm -rf /root/tmp/ffmpeg >>"${OUTTO}" 2>&1
   fi
 }
