@@ -45,8 +45,8 @@ sed -i "s/urlBase.*/urlBase\": \"\/nzbhydra\",/g"  /home/"${MASTER}"/.nzbhydra/s
 
 cat > /etc/apache2/sites-enabled/nzbhydra.conf <<EOF
 <Location /nzbhydra>
-ProxyPass http://localhost:5075/nzbhydra/
-ProxyPassReverse http://localhost:5075/nzbhydra/
+ProxyPass http://localhost:5075/nzbhydra
+ProxyPassReverse http://localhost:5075/nzbhydra
 AuthType Digest
 AuthName "rutorrent"
 AuthUserFile '/etc/htpasswd'
