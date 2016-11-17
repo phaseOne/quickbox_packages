@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# [Quick Box :: Install rclone]
+#
+# GITHUB REPOS
+# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   QuickBox.IO | liara
+# URL                :   https://plaza.quickbox.io
+#
+# QuickBox Copyright (C) 2016 QuickBox.io
+# Licensed under GNU General Public License v3.0 GPL-3 (in short)
+#
+#   You may copy, distribute and modify the software as long as you track
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
+#   under the GPL along with build & install instructions.
+
+local_setup=/root/QuickBox/setup/
+OUTTO=/srv/rutorrent/home/db/output.log
+MASTER=$(cat /srv/rutorrent/home/db/master.txt)
+
+echo "Downloading rclone ... " >>"${OUTTO}" 2>&1;
+curl -S  -O http://downloads.rclone.org/rclone-current-linux-amd64.zip
+unzip rclone-current-linux-amd64.zip
+
+echo "Installing rclone ... " >>"${OUTTO}" 2>&1;
+cd rclone-*-linux-amd64
+cp rclone /usr/sbin/
+chown root:root /usr/sbin/rclone
+chmod 755 /usr/sbin/rclone
+
+
+touch /install/.rclone.lock
+echo "rclone installation complete!" >>"${OUTTO}" 2>&1;
+echo >>"${OUTTO}" 2>&1;
+echo >>"${OUTTO}" 2>&1;
+echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
