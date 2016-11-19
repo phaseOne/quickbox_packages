@@ -6,7 +6,7 @@
 # GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
 # LOCAL REPOS
 # Local _ packages   :   ~/QuickBox/packages
-# Author             :   QuickBox.IO | liara
+# Author             :   DedSec
 # URL                :   https://plaza.quickbox.io
 #
 # QuickBox Copyright (C) 2016 QuickBox.io
@@ -21,15 +21,15 @@ local_setup=/root/QuickBox/setup/
 OUTTO=/srv/rutorrent/home/db/output.log
 MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 
-echo "Downloading rclone ... " >>"${OUTTO}" 2>&1;
-curl -S  -O http://downloads.rclone.org/rclone-current-linux-amd64.zip
-unzip rclone-current-linux-amd64.zip
+echo "Downloading rclone and go"${OUTTO}" 2>&1;
+apt-get install golang
+echo "GOPATH=$HOME/go" >> ~/.bashrc
+echo "export GOPATH" >> ~/.bashrc
+echo "PATH=\$PATH:\$GOPATH/bin # Add GOPATH/bin to PATH for scripting" >> ~/.bashrc
+
 
 echo "Installing rclone ... " >>"${OUTTO}" 2>&1;
-cd rclone-*-linux-amd64
-cp rclone /usr/sbin/
-chown root:root /usr/sbin/rclone
-chmod 755 /usr/sbin/rclone
+go get -u -v github.com/ncw/rclone
 
 
 touch /install/.rclone.lock
