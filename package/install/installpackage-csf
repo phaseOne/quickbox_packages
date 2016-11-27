@@ -38,7 +38,7 @@ function _installCSF() {
   ufw disable >>"${OUTTO}" 2>&1;
   service fail2ban stop >>"${OUTTO}" 2>&1;
   apt-get -y remove fail2ban >>"${OUTTO}" 2>&1;
-  apt-get autoremove >>"${OUTTO}" 2>&1;
+  apt-get -y autoremove >>"${OUTTO}" 2>&1;
   cd csf
   sh install.sh >>"${OUTTO}" 2>&1;
   perl /usr/local/csf/bin/csftest.pl >>"${OUTTO}" 2>&1;
