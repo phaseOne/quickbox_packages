@@ -32,9 +32,7 @@ rm -f /etc/apache2/sites-enabled/nzbhydra.conf
 service apache2 reload
 rm /install/.nzbhydra.lock
   echo -n "Verifying nzbhydra removal from /home/$MASTER."
-  echo -n "Config files not removed. To remove run the following command: rm -rf /home/$MASTER/.nzbhydra"
   echo ""
-  ls -al
   echo ""
   echo ""
   echo "NZBhydra Uninstall Complete. You may reinstall at any time by running [installpackage-nzbhydra]."
