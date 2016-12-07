@@ -33,6 +33,6 @@ service apache2 reload
 rm /install/.nzbhydra.lock
   echo -n "Verifying nzbhydra removal from /home/$MASTER."
   echo ""
+  echo "NZBhydra Uninstall Complete. App data is not remove. To remove run the following command: rm -rf /home/$MASTER/.nzbhyra."
   echo ""
-  echo ""
-  echo "NZBhydra Uninstall Complete. You may reinstall at any time by running [installpackage-nzbhydra]."
+  echo "You may reinstall at any time by running [installpackage-nzbhydra]."
