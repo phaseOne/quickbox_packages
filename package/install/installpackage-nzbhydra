@@ -26,9 +26,7 @@ echo >>"${OUTTO}" 2>&1;
 echo >>"${OUTTO}" 2>&1;
 echo "Cloning NZBHydra git ... " >>"${OUTTO}" 2>&1;
 git clone -q https://github.com/theotherp/nzbhydra.git /home/${MASTER}/nzbhydra || (echo "GIT failed" && exit 1)
-mkdir /home/${MASTER}/.nzbhydra
 chown ${MASTER}:${MASTER} -R /home/${MASTER}/nzbhydra
-chown ${MASTER}:${MASTER} -R /home/${MASTER}/.nzbhydra
 }
 
 function _services(){
@@ -42,7 +40,7 @@ systemctl start nzbhydra@${MASTER} >/dev/null 2>&1
 sleep 60
 systemctl stop nzbhydra@${MASTER} >/dev/null 2>&1
 
-sed -i "s/urlBase.*/urlBase\": \"\/nzbhydra\",/g"  /home/"${MASTER}"/.nzbhydra/settings.cfg
+sed -i "s/urlBase.*/urlBase\": \"\/nzbhydra\",/g"  /home/"${MASTER}"/nzbhydra/settings.cfg
 
 cat > /etc/apache2/sites-enabled/nzbhydra.conf <<EOF
 <Location /nzbhydra>
