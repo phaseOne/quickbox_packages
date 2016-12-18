@@ -1,2 +1,70 @@
 #!/bin/bash
-rm -f /usr/sbin/rclone
+#
+# [Quick Box :: Unistall rclone]
+#
+# GITHUB REPOS
+# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   DedSec
+# URL                :   https://plaza.quickbox.io
+#
+# QuickBox Copyright (C) 2016 QuickBox.io
+# Licensed under GNU General Public License v3.0 GPL-3 (in short)
+#
+#   You may copy, distribute and modify the software as long as you track
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
+#   under the GPL along with build & install instructions.
+
+local_setup=/root/QuickBox/setup/
+OUTTO=/srv/rutorrent/home/db/output.log
+MASTER=$(cat /srv/rutorrent/home/db/master.txt)
+
+echo "Removing rclone ... " >>"${OUTTO}" 2>&1;
+
+HEIGHT=15
+WIDTH=60
+CHOICE_HEIGHT=7
+BACKTITLE=" Script by DedSec"
+TITLE="rclone Quickbox Package Uninstaller"
+MENU="Choose one of the following options:"
+
+OPTIONS=(1 "Unistall Rclone x86"
+         2 "Uinstall Rclone x64"
+         3 "Exit")
+
+CHOICE=$(dialog --clear \
+                --backtitle "$BACKTITLE" \
+                --title "$TITLE" \
+                --menu "$MENU" \
+                $HEIGHT $WIDTH $CHOICE_HEIGHT \
+                "${OPTIONS[@]}" \
+                2>&1 >/dev/tty)
+
+clear
+case $CHOICE in
+        1)
+            echo "Uninstalling rclone ..."
+            rm -f  /usr/sbin/rclone
+	    apt-get -y purge golang 1.7
+            ;;
+        2)
+            echo "Uninstalling rclone ..."
+            rm -f /usr/sbin/rclone
+	    apt-get -y purge golang 1.7
+            ;;
+        3)
+            echo "Exiting the Installer"
+            exit
+            ;;
+esac
+
+echo "Uinstalling Rclone ... " >>"${OUTTO}" 2>&1;
+
+
+rm -f /install/.rclone.lock
+echo "Rclone Uninstall complete!" >>"${OUTTO}" 2>&1;
+echo >>"${OUTTO}" 2>&1;
+echo >>"${OUTTO}" 2>&1;
+echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
