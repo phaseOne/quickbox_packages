@@ -1,0 +1,87 @@
+#!/bin/bash
+#
+# [Quick Box :: Install rclone]
+#
+# GITHUB REPOS
+# GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
+# LOCAL REPOS
+# Local _ packages   :   ~/QuickBox/packages
+# Author             :   DedSec
+# URL                :   https://plaza.quickbox.io
+#
+# QuickBox Copyright (C) 2016 QuickBox.io
+# Licensed under GNU General Public License v3.0 GPL-3 (in short)
+#
+#   You may copy, distribute and modify the software as long as you track
+#   changes/dates in source files. Any modifications to our software
+#   including (via compiler) GPL-licensed code must also be made available
+#   under the GPL along with build & install instructions.
+
+local_setup=/root/QuickBox/setup/
+OUTTO=/srv/rutorrent/home/db/output.log
+MASTER=$(cat /srv/rutorrent/home/db/master.txt)
+
+
+HEIGHT=15
+WIDTH=60
+CHOICE_HEIGHT=7
+BACKTITLE="Script by DedSec"
+TITLE="rclone Quickbox Package Installer"
+MENU="Choose one of the following options:"
+
+OPTIONS=(1 "Install rclone for x86"
+         2 "Install rclone for x64"
+         3 "Cancel Install")
+
+CHOICE=$(dialog --clear \
+                --backtitle "$BACKTITLE" \
+                --title "$TITLE" \
+                --menu "$MENU" \
+                $HEIGHT $WIDTH $CHOICE_HEIGHT \
+                "${OPTIONS[@]}" \
+                2>&1 >/dev/tty)
+
+clear
+case $CHOICE in
+        1)
+            echo "Setting up Rclone ..."
+            sudo add-apt-repository -y ppa:jonathonf/golang
+	    sudo apt-get update
+	    sudo apt-get -y install golang-1.7
+	    export GOROOT=/usr/local/go
+	    export GOPATH=$HOME/
+	    export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+ 	    go get -u -v github.com/ncw/rclone; cp ~/bin/rclone /usr/sbin/ ; sudo chown root:root /usr/sbin/rclone; sudo chmod 755 /usr/sbin/rclone; service ssh restart
+            ;;
+        2)
+            echo "Setting up Rclone ... "
+            sudo add-apt-repository -y ppa:jonathonf/golang
+            sudo apt-get update
+            sudo apt-get -y install golang-1.7
+            export GOROOT=/usr/local/go
+            export GOPATH=$HOME/
+            export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+            go get -u -v github.com/ncw/rclone; cp ~/bin/rclone /usr/sbin/ ; sudo chown root:root /usr/sbin/rclone; sudo chmod 755 /usr/sbin/rclone; service ssh restart
+            ;;
+        3)
+            echo "Exiting the installer"
+            exit
+            ;;
+esac
+
+echo "Downloading rclone ... " >>"${OUTTO}" 2>&1;
+#rm -rf /usr/local/go
+#wget https://storage.googleapis.com/golang/go1.7.4.linux-amd64.tar.gz
+#tar -xvf go1.7.4.linux-amd64.tar.gz
+#rm -rf go1.7.4.linux-amd64.tar.gz
+#sudo mv go /usr/local
+#mv go /usr/local
+
+echo "Installing rclone ... " >>"${OUTTO}" 2>&1;
+
+
+touch /install/.rclone.lock
+echo "rclone installation complete!" >>"${OUTTO}" 2>&1;
+echo >>"${OUTTO}" 2>&1;
+echo >>"${OUTTO}" 2>&1;
+echo "Close this dialog box to refresh your browser" >>"${OUTTO}" 2>&1;
