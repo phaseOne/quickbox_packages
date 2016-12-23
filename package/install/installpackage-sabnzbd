@@ -20,9 +20,10 @@
 _sab() {
   apt-get install -y python-cheetah >/dev/null 2>&1
   cd /home/${username}/
-  wget -qO SABnzbd.tar.gz https://github.com/sabnzbd/sabnzbd/releases/download/1.1.1/SABnzbd-1.1.1-src.tar.gz
-  tar xf SABnzbd.tar.gz >/dev/null 2>&1
-  mv SABnzbd-* SABnzbd
+  #wget -qO SABnzbd.tar.gz https://github.com/sabnzbd/sabnzbd/releases/download/1.1.1/SABnzbd-1.1.1-src.tar.gz
+  #tar xf SABnzbd.tar.gz >/dev/null 2>&1
+  #mv SABnzbd-* SABnzbd
+  git clone https://github.com/sabnzbd/sabnzbd.git /home/${username}/SABnzbd
   chown ${username}.${username} -R SABnzbd
   rm SABnzbd.tar.gz
   pip install http://www.golug.it/pub/yenc/yenc-0.4.0.tar.gz
