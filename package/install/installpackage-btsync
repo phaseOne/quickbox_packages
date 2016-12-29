@@ -23,14 +23,17 @@ OUTTO=/srv/rutorrent/home/db/output.log
 local_setup=/root/QuickBox/setup/
 
 function _installBTSync1() {
-  sudo sh -c 'echo "deb http://linux-packages.getsync.com/btsync/deb btsync non-free" > /etc/apt/sources.list.d/btsync.list'
-  wget -qO - http://linux-packages.getsync.com/btsync/key.asc | sudo apt-key add - >/dev/null 2>&1
+  #sudo sh -c 'echo "deb http://linux-packages.getsync.com/btsync/deb btsync non-free" > /etc/apt/sources.list.d/btsync.list'
+  #wget -qO - http://linux-packages.getsync.com/btsync/key.asc | sudo apt-key add - >/dev/null 2>&1
+  sudo sh -c 'echo "deb http://linux-packages.resilio.com/resilio-sync/deb resilio-sync non-free" > /etc/apt/sources.list.d/btsync.list'
+  wget -qO - https://linux-packages.resilio.com/resilio-sync/key.asc | sudo apt-key add - >/dev/null 2>&1
 }
 function _installBTSync2() {
   sudo apt-get update >/dev/null 2>&1
 }
 function _installBTSync3() {
-  sudo apt-get -y -q install btsync >/dev/null 2>&1
+  #sudo apt-get -y -q install btsync >/dev/null 2>&1
+  sudo apt-get install resilio-sync >/dev/null 2>&1
 }
 function _installBTSync4() {
   cd && mkdir /home/"${MASTER}"/sync_folder
@@ -46,8 +49,8 @@ function _installBTSync5() {
 }
 function _installBTSync6() {
   touch /install/.btsync.lock
-  systemctl enable btsync >/dev/null 2>&1
-  sudo service btsync start
+  systemctl enable resilio-sync >/dev/null 2>&1
+  sudo service resilio-sync start
 }
 function _installBTSync7() {
   echo "BTSync Install Complete!" >>"${OUTTO}" 2>&1;
