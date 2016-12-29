@@ -38,9 +38,10 @@ function _installBTSync3() {
 }
 function _installBTSync4() {
   cd && mkdir /home/"${MASTER}"/sync_folder
-  sudo chown ${MASTER}:btsync /home/${MASTER}/sync_folder
+  sudo chown ${MASTER}:rslsync /home/${MASTER}/sync_folder
   sudo chmod 2775 /home/${MASTER}/sync_folder
-  sudo usermod -a -G btsync ${MASTER} >/dev/null 2>&1
+  sudo chown ${MASTER}:rslsync -R /home/${MASTER}/.config/resilio-sync
+  sudo usermod -a -G rslsync ${MASTER} >/dev/null 2>&1
 }
 function _installBTSync5() {
   cp -r ${local_setup}templates/btsync/config.json.template /etc/resilio-sync/config.json
