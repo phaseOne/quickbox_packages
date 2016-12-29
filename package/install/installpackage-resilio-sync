@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# [Quick Box :: Install BTSync package]
+# [Quick Box :: Install Resilio Sync (BTSync) package]
 #
 # GITHUB REPOS
 # GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
@@ -42,10 +42,10 @@ function _installBTSync4() {
   sudo usermod -a -G btsync ${MASTER} >/dev/null 2>&1
 }
 function _installBTSync5() {
-  cp -r ${local_setup}templates/btsync/config.json.template /etc/btsync/config.json
-  cp -r ${local_setup}templates/btsync/user_config.json.template /etc/btsync/user_config.json
-  sudo sed -i "s/BTSGUIP/$BTSYNCIP/g" /etc/btsync/config.json
-  sudo sed -i "s/BTSGUIP/$BTSYNCIP/g" /etc/btsync/user_config.json
+  cp -r ${local_setup}templates/btsync/config.json.template /etc/resilio-sync/config.json
+  cp -r ${local_setup}templates/btsync/user_config.json.template /etc/resilio-sync/user_config.json
+  sudo sed -i "s/BTSGUIP/$BTSYNCIP/g" /etc/resilio-sync/config.json
+  sudo sed -i "s/BTSGUIP/$BTSYNCIP/g" /etc/resilio-sync/user_config.json
 }
 function _installBTSync6() {
   touch /install/.btsync.lock

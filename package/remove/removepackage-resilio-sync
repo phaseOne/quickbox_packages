@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# [Quick Box :: Remove BTSync package]
+# [Quick Box :: Remove Resilio Sync (BTSync) package]
 #
 # GITHUB REPOS
 # GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
@@ -21,8 +21,8 @@ MASTER=$(cat /etc/apache2/master.txt)
 OUTTO="/root/quick-box.log"
 
 function _removeBTSync() {
-  sudo service btsync stop
-  sudo apt-get -y remove --purge btsync* >>"${OUTTO}" 2>&1
+  sudo service resilio-sync stop
+  sudo apt-get -y remove --purge resilio-sync* >>"${OUTTO}" 2>&1
   rm -rf /home/${MASTER}/sync_folder
   rm /install/.btsync.lock
   sudo service apache2 reload
