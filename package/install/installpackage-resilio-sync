@@ -33,6 +33,7 @@ function _installBTSync2() {
 }
 function _installBTSync3() {
   #sudo apt-get -y -q install btsync >/dev/null 2>&1
+  cd && mkdir -p /home/"${MASTER}"/.config/resilio-sync/storage/
   sudo apt-get install resilio-sync >/dev/null 2>&1
 }
 function _installBTSync4() {
