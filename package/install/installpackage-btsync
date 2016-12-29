@@ -48,11 +48,13 @@ function _installBTSync5() {
   cp -r ${local_setup}templates/btsync/user_config.json.template /etc/resilio-sync/user_config.json
   sudo sed -i "s/BTSGUIP/$BTSYNCIP/g" /etc/resilio-sync/config.json
   sudo sed -i "s/BTSGUIP/$BTSYNCIP/g" /etc/resilio-sync/user_config.json
+  cp /var/run/resilio-sync/sync.pid /home/${MASTER}/.config/resilio-sync/sync.pid
 }
 function _installBTSync6() {
   touch /install/.btsync.lock
   systemctl enable resilio-sync >/dev/null 2>&1
-  sudo service resilio-sync start
+  systemctl start resilio-sync >/dev/null 2>&1
+  systemctl restart resilio-sync >/dev/null 2>&1
 }
 function _installBTSync7() {
   echo "BTSync Install Complete!" >>"${OUTTO}" 2>&1;
