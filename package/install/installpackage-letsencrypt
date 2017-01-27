@@ -6,7 +6,7 @@
 # GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
 # LOCAL REPOS
 # Local _ packages   :   ~/QuickBox/packages
-# Author             :   Neilpang | installer build QuickBox.IO
+# Author             :   Neilpang | adaptive build QuickBox.IO
 # URL                :   https://plaza.quickbox.io
 #
 # QuickBox Copyright (C) 2016 QuickBox.io
@@ -25,9 +25,35 @@ git clone https://github.com/Neilpang/acme.sh.git acme.sh-master
 cd /root/acme.sh-master
 
 echo -ne "Please enter an administrator email: " ; read EMAIL
-./acme.sh --install --accountconf /etc/apache2/ssl/site/leqb.conf --accountkey /etc/apache2/ssl/site/leqb.key --accountemail "$EMAIL"
-
 echo -ne "Please enter a valid domain: " ; read DOMAIN
-./acme.sh --issue --standalone --keypath /etc/apache2/ssl/certs/$DOMAIN-ssl.key --fullchainpath /etc/apache2/ssl/certs/$DOMAIN-ssl.pem --reloadcmd "systemctl restart apache2" -d $DOMAIN
+
+./acme.sh --install --accountconf /etc/apache2/ssl/site/$DOMAIN.conf --accountkey /etc/apache2/ssl/site/$DOMAIN.key --accountemail "$EMAIL"
+./acme.sh --issue --standalone --keypath /etc/apache2/ssl/certs/$DOMAIN-ssl.key --fullchainpath /etc/apache2/ssl/certs/$DOMAIN-ssl.pem -d $DOMAIN
+
+cat > /etc/apache2/sites-enabled/$DOMAIN-ssl.conf <<EOF
+<VirtualHost *:443>
+Options +Indexes +MultiViews +FollowSymLinks
+SSLEngine on
+        DocumentRoot "/srv/rutorrent/home"
+        <Directory "/srv/rutorrent/home/">
+                Options +Indexes +FollowSymLinks +MultiViews
+                AllowOverride All AuthConfig
+                Order allow,deny
+                Allow from all
+        AuthType Digest
+        AuthName "REALM"
+        AuthUserFile 'HTPASSWD'
+        Require valid-user
+        </Directory>
+        SSLEngine on
+        SSLProtocol all -SSLv2
+        SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
+        SSLCertificateFile /etc/apache2/ssl/certs/$DOMAIN-ssl.pem
+        SSLCertificateKeyFile /etc/apache2/ssl/certs/$DOMAIN-ssl.key
+        SetEnvIf User-Agent ".*MSIE.*" \
+                 nokeepalive ssl-unclean-shutdown \
+                 downgrade-1.0 force-response-1.0
+</Virtualhost>
+EOF
 
 service apache2 restart
