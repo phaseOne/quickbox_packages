@@ -31,29 +31,23 @@ echo -ne "Please enter a valid domain: " ; read DOMAIN
 ./acme.sh --issue --standalone --keypath /etc/apache2/ssl/certs/$DOMAIN-ssl.key --fullchainpath /etc/apache2/ssl/certs/$DOMAIN-ssl.pem -d $DOMAIN
 
 cat > /etc/apache2/sites-enabled/$DOMAIN-ssl.conf <<EOF
+<IfModule mod_ssl.c>
 <VirtualHost *:443>
-Options +Indexes +MultiViews +FollowSymLinks
-SSLEngine on
-        DocumentRoot "/srv/rutorrent/home"
-        <Directory "/srv/rutorrent/home/">
-                Options +Indexes +FollowSymLinks +MultiViews
-                AllowOverride All AuthConfig
-                Order allow,deny
-                Allow from all
-        AuthType Digest
-        AuthName "REALM"
-        AuthUserFile 'HTPASSWD'
-        Require valid-user
-        </Directory>
-        SSLEngine on
-        SSLProtocol all -SSLv2
-        SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
-        SSLCertificateFile /etc/apache2/ssl/certs/$DOMAIN-ssl.pem
-        SSLCertificateKeyFile /etc/apache2/ssl/certs/$DOMAIN-ssl.key
-        SetEnvIf User-Agent ".*MSIE.*" \
-                 nokeepalive ssl-unclean-shutdown \
-                 downgrade-1.0 force-response-1.0
-</Virtualhost>
+
+	ServerAdmin webmaster@localhost
+	DocumentRoot /srv/rutorrent/home/
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+  SSLCertificateFile /etc/apache2/ssl/certs/$DOMAIN-ssl.pem
+  SSLCertificateKeyFile /etc/apache2/ssl/certs/$DOMAIN-ssl.key
+  SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
+  ServerName $DOMAIN
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+</IfModule>
 EOF
 
 service apache2 restart
