@@ -35,7 +35,7 @@ function _installautodl() {
     done
     for u in "${users[@]}"; do
       IRSSI_PASS=$(_string)
-      IRSSI_PORT=$(shuf -i 2000-61000 -n 1)
+      IRSSI_PORT=$(shuf -i 20000-61000 -n 1)
       mkdir -p "/home/${u}/.irssi/scripts/autorun/" >>"${OUTTO}" 2>&1
       cd "/home/${u}/.irssi/scripts/"
       wget -qO autodl-irssi.zip https://github.com/autodl-community/autodl-irssi/releases/download/community-v1.60/autodl-irssi-community-v1.60.zip >/dev/null 2>&1
