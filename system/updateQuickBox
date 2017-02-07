@@ -241,7 +241,7 @@ function _updatedashboard() {
 # function to update club-QuickBox ruTorrent Theme
 function _updaterttheme() {
   THEME=club-QuickBox
-  cd ${rutorrent}/theme/themes
+  cd ${rutorrent}theme/themes
   if [ ! -d "$THEME" ]; then
     git clone https://github.com/QuickBox/club-QuickBox.git club-QuickBox >/dev/null 2>&1
     chown -R www-data: club-QuickBox
@@ -250,6 +250,7 @@ function _updaterttheme() {
     git checkout master
     git pull
   fi
+  cd
 
 }
 
