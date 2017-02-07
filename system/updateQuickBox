@@ -247,6 +247,7 @@ function _updaterttheme() {
     chown -R www-data: club-QuickBox
   else
     cd $THEME
+    git checkout master
     git pull
   fi
 
