@@ -48,10 +48,15 @@ echo "Updating system ... "
     if [[ ! -d /var/lib/plexmediaserver ]]; then
       mkdir -p /var/lib/plexmediaserver
     fi
+    if [[ ! -d /var/lib/plexmediaserver/Library/Application\ Support/ ]]; then
+      mkdir /var/lib/plexmediaserver/Library/Application\ Support/
+    fi
     perm=$(stat -c '%U' /var/lib/plexmediaserver/)
     if [[ ! $perm == plex ]]; then
       chown -R plex:plex /var/lib/plexmediaserver
     fi
+    cp ${local_setup}templates/sysd/plexmediaserver.template /etc/systemd/system/plexmediaserver.service >/dev/null 2>&1
+    systemctl daemon-reload >/dev/null 2>&1
     service plexmediaserver restart >/dev/null 2>&1
     touch /install/.plex.lock
     echo
