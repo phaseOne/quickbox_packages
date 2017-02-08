@@ -55,6 +55,11 @@ echo "Updating system ... "
     if [[ ! $perm == plex ]]; then
       chown -R plex:plex /var/lib/plexmediaserver
     fi
+    perm=$(stat -c '%U' /usr/lib/plexmediaserver)
+    if [[ ! $perm == plex ]]; then
+      chown -R plex: /usr/lib/plexmediaserver
+    fi
+
     cp ${local_setup}templates/sysd/plexmediaserver.template /etc/systemd/system/plexmediaserver.service >/dev/null 2>&1
     systemctl daemon-reload >/dev/null 2>&1
     service plexmediaserver restart >/dev/null 2>&1
