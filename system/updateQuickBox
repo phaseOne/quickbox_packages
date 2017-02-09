@@ -107,6 +107,21 @@ function _updateskel() {
   rsync -aP ${local_setup}templates/skel/. /etc/skel/
 }
 
+function _updatemktorrent() {
+  if [[ ! -f /usr/local/bin/mktorrent ]]; then
+    if [[ -d /root/tmp ]]; then rm -r tmp;fi
+    mkdir /root/tmp && cd /root/tmp
+    mktorrent_version=1.1
+    wget --quiet https://github.com/Rudde/mktorrent/archive/v$mktorrent_version.zip -O mktorrent.zip  >>"${OUTTO}" 2>&1
+    unzip -o mktorrent.zip >>"${OUTTO}" 2>&1
+    cd mktorrent-1.1
+    make >>"${OUTTO}" 2>&1
+    make install >>"${OUTTO}" 2>&1
+    cd ..
+    rm -rf mktorrent-1.1 && rm -f mktorrent.zip
+  fi
+}
+
 function _updateapachealias() {
   users=($(cat /etc/htpasswd | cut -d ":" -f 1))
   cd /etc/apache2/sites-enabled
@@ -408,6 +423,7 @@ echo "Checking locks and adding if necessary ... " >>"${OUTTO}" 2>&1;_checklocks
 echo "Checking if cron services should be uninstalled and taking appropriate action ... " >>"${OUTTO}" 2>&1;_updated;echo
 echo "Updating QuickBox System Commands & Packages ... " >>"${OUTTO}" 2>&1;_updatesyscommands;echo
 echo "Updating the useradd skeleton directories ... " >>"${OUTTO}" 2>&1;_updateskel;echo
+echo "Updating mktorrent if necessary ... " >>"${OUTTO}" 2>&1;_updatemktorrent;echo
 echo "Checking apache aliases ... " >>"${OUTTO}" 2>&1;_updateapachealias;echo
 #echo "Reorganizing home directory of ${A1} ... " >>"${OUTTO}" 2>&1;_updateuserhome;echo
 echo "Updating the rutorrent directory ... " >>"${OUTTO}" 2>&1;_updaterutorrent;echo
