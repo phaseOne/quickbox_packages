@@ -179,6 +179,7 @@ _bashrc
 echo -n "Updating QuickBox System Commands & Packages ... ";_updatesyscommands;echo
 echo -n "Updating the useradd skeleton directories ... ";_updateskel;echo
 echo -n "Looking for install directory for .lock files ... ";_installdir;echo
+echo -n "Updating mktorrent if necessary ... ";_updatemktorrent;echo
 echo -n "Updating the rutorrent directory ... ";_updaterutorrent;echo
 echo -n "Updating the QuickBox Dashboard ... ";_updatedashboard;echo
 echo -n "Setting up and updating Master DB files ... ";_updatemasterdb;echo
