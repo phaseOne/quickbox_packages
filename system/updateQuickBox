@@ -66,9 +66,9 @@ function _downloadrepos() {
   elif [[ -f /srv/rutorrent/home/db/.defaulted.lock ]]; then
     #statements [[ -f /srv/rutorrent/home/db/.defaulted.lock ]]; then
   echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
-  cd ${local_themes}defaulted && git checkout master
-  git pull >>"${OUTTO}" 2>&1;
-  else
+    cd ${local_themes}defaulted && git checkout master
+    git pull >>"${OUTTO}" 2>&1;
+  elif [[ ! -f /srv/rutorrent/home/db/*.lock ]]; then
   echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
     cd ${local_dashboard} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
@@ -255,18 +255,18 @@ function _updatedashboard() {
   cd ${rutorrent}
   if [[ -f /srv/rutorrent/home/db/.smoked.lock ]]; then
     if [[ -n $(find /srv/rutorrent/home/db -name "branding-*.php") ]]; then
-      rsync -aP --exclude=disk_*.php --exclude=branding-l.php --exclude=share.php --exclude=custom.menu.php --exclude=url.override.php --exclude=custom.css ${local_themes}* ${rutorrent}home
+      rsync -aP --exclude=disk_*.php --exclude=branding-l.php --exclude=share.php --exclude=custom.menu.php --exclude=url.override.php --exclude=custom.css ${local_themes}smoked/* ${rutorrent}home
       rm -f /srv/rutorrent/home/lang/*.php
     else
-      rsync -aP --exclude=disk_*.php --exclude=share.php --exclude=custom.menu.php --exclude=url.override.php --exclude=custom.css ${local_themes}* ${rutorrent}home
+      rsync -aP --exclude=disk_*.php --exclude=share.php --exclude=custom.menu.php --exclude=url.override.php --exclude=custom.css ${local_themes}smoked/* ${rutorrent}home
       rm -f /srv/rutorrent/home/lang/*.php
     fi
   elif [[ -f /srv/rutorrent/home/db/.defaulted.lock ]]; then
     if [[ -n $(find /srv/rutorrent/home/db -name "branding-*.php") ]]; then
-      rsync -aP --exclude=disk_*.php --exclude=branding-l.php --exclude=share.php --exclude=custom.menu.php --exclude=url.override.php --exclude=custom.css ${local_themes}* ${rutorrent}home
+      rsync -aP --exclude=disk_*.php --exclude=branding-l.php --exclude=share.php --exclude=custom.menu.php --exclude=url.override.php --exclude=custom.css ${local_themes}defaulted/* ${rutorrent}home
       rm -f /srv/rutorrent/home/lang/*.php
     else
-      rsync -aP --exclude=disk_*.php --exclude=share.php --exclude=custom.menu.php --exclude=url.override.php --exclude=custom.css ${local_themes}* ${rutorrent}home
+      rsync -aP --exclude=disk_*.php --exclude=share.php --exclude=custom.menu.php --exclude=url.override.php --exclude=custom.css ${local_themes}defaulted/* ${rutorrent}home
         rm -f /srv/rutorrent/home/lang/*.php
     fi
   else
