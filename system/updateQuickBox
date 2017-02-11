@@ -59,7 +59,7 @@ function _downloadrepos() {
   echo -n "quickbox_packages           :: " >>"${OUTTO}" 2>&1;
     cd ${local_packages} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
-  if [[ ! -f /srv/rutorrent/home/db/.smoked.lock ]]; then
+  if [[ -f /srv/rutorrent/home/db/.smoked.lock ]]; then
   echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
     cd ${local_themes_smoked} && git checkout smoked
     git pull >>"${OUTTO}" 2>&1;
