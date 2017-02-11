@@ -61,17 +61,13 @@ function _downloadrepos() {
     git pull >>"${OUTTO}" 2>&1;
   if [[ -f /srv/rutorrent/home/db/.smoked.lock ]]; then
   echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
-    cd ${local_themes} && git init
-    git remote add -t \* -f origin https://github.com/QuickBox/quickbox_themes.git
-    git fetch --all
-    git pull origin smoked >>"${OUTTO}" 2>&1;
+    cd ${local_themes}smoked && git checkout master
+    git pull >>"${OUTTO}" 2>&1;
   elif [[ -f /srv/rutorrent/home/db/.defaulted.lock ]]; then
     #statements [[ -f /srv/rutorrent/home/db/.defaulted.lock ]]; then
   echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
-    cd ${local_themes} && git init
-    git remote add -t \* -f origin https://github.com/QuickBox/quickbox_themes.git
-    git fetch --all
-    git pull origin defaulted >>"${OUTTO}" 2>&1;
+  cd ${local_themes}defaulted && git checkout master
+  git pull >>"${OUTTO}" 2>&1;
   else
   echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
     cd ${local_dashboard} && git checkout master
