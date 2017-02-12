@@ -22,7 +22,6 @@ username=$(cat /srv/rutorrent/home/db/master.txt)
 local_setup=/root/QuickBox/setup/
 jackettver=$(wget -q https://github.com/Jackett/Jackett/releases/latest -O - | grep -E \/tag\/ | awk -F "[><]" '{print $3}')
 echo >>"${OUTTO}" 2>&1;
-echo >>"${OUTTO}" 2>&1;
 echo "Installing Jackett ... " >>"${OUTTO}" 2>&1;
 
 if [[ ! -f /etc/apt/sources.list.d/mono-xamarin.list ]]; then
@@ -32,13 +31,13 @@ if [[ ! -f /etc/apt/sources.list.d/mono-xamarin.list ]]; then
   echo "deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main" | tee -a /etc/apt/sources.list.d/mono-xamarin.list >/dev/null 2>&1
 fi
 
-apt update -y -q >/dev/null 2>&1
-apt install -y -q mono-devel >/dev/null 2>&1
+apt update -y >/dev/null 2>&1
+apt install -y mono-devel >/dev/null 2>&1
 
 cd /home/$username
 wget -q https://github.com/Jackett/Jackett/releases/download/$jackettver/Jackett.Binaries.Mono.tar.gz
 tar -xvzf Jackett.Binaries.Mono.tar.gz > /dev/null 2>&1
-rm Jackett.Binaries.Mono.tar.gz
+rm -f Jackett.Binaries.Mono.tar.gz
 chown ${username}.${username} -R Jackett
 touch /install/.jackett.lock
 
