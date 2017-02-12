@@ -76,7 +76,7 @@ OUTTO=/srv/rutorrent/home/db/output.log
 local_setup=/root/QuickBox/setup/
 user=$(cat /srv/rutorrent/home/db/master.txt)
 
-echo "Updating dependencies ... " > ${OUTTO} 2>&1
+echo "Updating dependencies (this could take a bit) ... " > ${OUTTO} 2>&1
 echo -en "\rUpdating dependencies ... ";_depends
 echo "Installing Plex Requests ... " >> ${OUTTO} 2>&1
 echo -en "\rInstalling Plex Requests ... ";_install
