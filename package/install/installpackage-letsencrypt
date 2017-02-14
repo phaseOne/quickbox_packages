@@ -6,10 +6,10 @@
 # GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
 # LOCAL REPOS
 # Local _ packages   :   ~/QuickBox/packages
-# Author             :   Neilpang | adaptive build QuickBox.IO
+# Author             :   Neilpang | adaptive build QuickBox.IO ~JMSolo
 # URL                :   https://plaza.quickbox.io
 #
-# QuickBox Copyright (C) 2016 QuickBox.io
+# QuickBox Copyright (C) 2017 QuickBox.io
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
 #
 #   You may copy, distribute and modify the software as long as you track
@@ -30,24 +30,7 @@ echo -ne "Please enter a valid domain: " ; read DOMAIN
 ./acme.sh --install --accountconf /etc/apache2/ssl/site/$DOMAIN.conf --accountkey /etc/apache2/ssl/site/$DOMAIN.key --accountemail "$EMAIL"
 ./acme.sh --issue --standalone --keypath /etc/apache2/ssl/certs/$DOMAIN-ssl.key --fullchainpath /etc/apache2/ssl/certs/$DOMAIN-ssl.pem -d $DOMAIN
 
-cat > /etc/apache2/sites-enabled/$DOMAIN-ssl.conf <<EOF
-<IfModule mod_ssl.c>
-<VirtualHost *:443>
-
-	ServerAdmin webmaster@localhost
-	DocumentRoot /srv/rutorrent/home/
-
-	ErrorLog ${APACHE_LOG_DIR}/error.log
-	CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-  SSLCertificateFile /etc/apache2/ssl/certs/$DOMAIN-ssl.pem
-  SSLCertificateKeyFile /etc/apache2/ssl/certs/$DOMAIN-ssl.key
-  SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
-  ServerName $DOMAIN
-</VirtualHost>
-
-# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
-</IfModule>
-EOF
+sed -i -e "s/SSLCertificateFile \/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/SSLCertificateFile \/etc\/apache2\/ssl\/certs\/$DOMAIN-ssl.pem/g" /etc/apache2/sites-enabled/default-ssl.conf
+sed -i -e "s/SSLCertificateKeyFile \/etc\/ssl\/private\/ssl-cert-snakeoil.key/SSLCertificateKeyFile \/etc\/apache2\/ssl\/certs\/$DOMAIN-ssl.key/g" /etc/apache2/sites-enabled/default-ssl.conf
 
 service apache2 restart
