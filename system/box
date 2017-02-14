@@ -185,6 +185,7 @@ if [[ $1 == upgrade ]]; then
   _updateqb
   echo "Upgrading QuickBox ... This may take a moment"
   bash /root/QuickBox/packages/system/updateQuickBox
+  printf "" > /srv/rutorrent/home/db/output.log
   exit 0
 fi
 if [[ $1 == list ]]; then
