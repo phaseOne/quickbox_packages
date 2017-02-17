@@ -119,8 +119,10 @@ function _updateqb() {
   if [[ ! -f /install/.developer.lock ]]; then
     if [[ -d /root/QuickBox ]]; then
       cd /root/
-      cp -aRf QuickBox /etc/
       rm -rf QuickBox
+
+      git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
+
       cd /etc/QuickBox
       git submodule foreach git reset HEAD --hard
       git submodule foreach git checkout master
@@ -136,17 +138,19 @@ function _updateqb() {
   else
     if [[ -d /root/QuickBox ]]; then
       cd /root/
-      cp -aRf QuickBox /etc/
       rm -rf QuickBox
+
+      git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox /etc/QuickBox
+
       cd /etc/QuickBox
       git submodule foreach git reset HEAD --hard
-      git submodule foreach git checkout developement
+      git submodule foreach git checkout development
       git submodule foreach git pull
       cd -
     else
       cd /etc/QuickBox
       git submodule foreach git reset HEAD --hard
-      git submodule foreach git checkout developement
+      git submodule foreach git checkout development
       git submodule foreach git pull
     fi
   fi
@@ -216,23 +220,23 @@ if [[ $1 == upgrade ]]; then
   echo "Upgrading QuickBox ... This may take a moment"
   if [[ ! -f /install/.developer.lock ]]; then
     if [[ -d /root/QuickBox ]]; then
-      cp -aRf /root/QuickBox /etc/
       rm -rf /root/QuickBox
       bash /etc/QuickBox/packages/system/updateQuickBox
+      git clone --recursive https://github.com/QuickBox/QuickBox /etc/QuickBox
     else
       bash /etc/QuickBox/packages/system/updateQuickBox
     fi
   else
     if [[ -d /root/QuickBox ]]; then
-      cp -aRf /root/QuickBox /etc/
       rm -rf /root/QuickBox
       bash /etc/QuickBox/packages/system/updateQuickBox
+      git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox /etc/QuickBox
     else
       bash /etc/QuickBox/packages/system/updateQuickBox
     fi
   fi
 
-  printf "" > /srv/rutorrent/home/db/output.log
+  #printf "" > /srv/rutorrent/home/db/output.log
   exit 0
 fi
 if [[ $1 == list ]]; then
