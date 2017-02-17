@@ -149,9 +149,9 @@ function _updateqb() {
       git submodule foreach git checkout developement
       git submodule foreach git pull
     fi
-
   fi
 }
+
 function _help() {
   sgformat="${bold}%-15s${normal}"
   spacing=$(echo $'\t' | pr -Te15)
