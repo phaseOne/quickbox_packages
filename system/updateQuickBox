@@ -3,9 +3,9 @@
 # [Quick Box :: EcoSystem Update Script]
 #
 # QuickLab:   https://github.com/QuickBox/quickbox_packages
-# Local   :   ~/QuickBox/packages
+# Local   :   /etc/QuickBox/packages
 # Author  :   QuickBox.io
-# URL     :   https://plaza.quickbox.io
+# URL     :   https://quickbox.io
 #
 # QuickBox Copyright (C) 2017 QuickBox.io
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
@@ -33,18 +33,35 @@ function _logcheck() {
 }
 
 function _directorycheck() {
-if [[ -d /root/QuickBox ]]; then
-  cd /root
-  find -type d -name "quickbox_*" -exec rm -rf {} \;
+if [[ ! -f /install/.developer.lock ]]; then
+  if [[ -d /root/QuickBox ]]; then
+    cd /root
+    find -type d -name "quickbox_*" -exec rm -rf {} \;
+    cp -aRf QuickBox /etc/
+    rm -rf /root/QuickBox
+  else
+    cd /etc
+    git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
+  fi
 else
-  cd /root
-  git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
+  if [[ -d /root/QuickBox ]]; then
+    cd /root
+    find -type d -name "quickbox_*" -exec rm -rf {} \;
+    cp -aRf QuickBox /etc/
+    rm -rf /root/QuickBox
+    cd /usr/local/bin/quickbox && git checkout development
+    git pull
+  else
+    cd /etc
+    git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox QuickBox
+  fi
 fi
 }
 
 function _downloadrepos() {
+if [[ ! -f /install/.developer.lock ]]; then
   echo >>"${OUTTO}" 2>&1;
-  cd /root/QuickBox
+  cd /etc/QuickBox
   git pull >>"${OUTTO}" 2>&1;
   echo
   echo -n "quickbox_setup              :: " >>"${OUTTO}" 2>&1;
@@ -59,23 +76,68 @@ function _downloadrepos() {
   echo -n "quickbox_packages           :: " >>"${OUTTO}" 2>&1;
     cd ${local_packages} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
+
   if [[ -f /srv/rutorrent/home/db/.smoked.lock ]]; then
-  echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
-    cd ${local_themes}smoked && git checkout master
-    git pull >>"${OUTTO}" 2>&1;
+    echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
+      cd ${local_themes}smoked && git checkout master
+      git pull >>"${OUTTO}" 2>&1;
   elif [[ -f /srv/rutorrent/home/db/.defaulted.lock ]]; then
     #statements [[ -f /srv/rutorrent/home/db/.defaulted.lock ]]; then
-  echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
-    cd ${local_themes}defaulted && git checkout master
-    git pull >>"${OUTTO}" 2>&1;
+    echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
+      cd ${local_themes}defaulted && git checkout master
+      git pull >>"${OUTTO}" 2>&1;
   elif [[ ! -f /srv/rutorrent/home/db/*.lock ]]; then
-  echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
-    cd ${local_dashboard} && git checkout master
-    git pull >>"${OUTTO}" 2>&1;
+    echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
+      cd ${local_dashboard} && git checkout master
+      git pull >>"${OUTTO}" 2>&1;
   fi
+
   echo -n "club-QuickBox               :: " >>"${OUTTO}" 2>&1;
     cd ${local_rtheme} && git checkout master
     git pull >>"${OUTTO}" 2>&1;
+
+
+else
+
+
+  echo >>"${OUTTO}" 2>&1;
+  cd /etc/QuickBox
+  git checkout development
+  git pull >>"${OUTTO}" 2>&1;
+  echo
+
+  echo -n "quickbox_setup              :: " >>"${OUTTO}" 2>&1;
+    cd ${local_setup} && git checkout development
+    git pull >>"${OUTTO}" 2>&1;
+  echo -n "quickbox_rutorrent          :: " >>"${OUTTO}" 2>&1;
+    cd ${local_rutorrent} && git checkout development
+    git pull >>"${OUTTO}" 2>&1;
+  echo -n "quickbox_rutorrent-plugins  :: " >>"${OUTTO}" 2>&1;
+    cd ${local_rplugins} && git checkout development
+    git pull >>"${OUTTO}" 2>&1;
+  echo -n "quickbox_packages           :: " >>"${OUTTO}" 2>&1;
+    cd ${local_packages} && git checkout development
+    git pull >>"${OUTTO}" 2>&1;
+
+  if [[ -f /srv/rutorrent/home/db/.smoked.lock ]]; then
+    echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
+    cd ${local_themes}smoked && git checkout development
+    git pull >>"${OUTTO}" 2>&1;
+  elif [[ -f /srv/rutorrent/home/db/.defaulted.lock ]]; then
+    #statements [[ -f /srv/rutorrent/home/db/.defaulted.lock ]]; then
+    echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
+      cd ${local_themes}defaulted && git checkout development
+      git pull >>"${OUTTO}" 2>&1;
+  elif [[ ! -f /srv/rutorrent/home/db/*.lock ]]; then
+    echo -n "quickbox_dashboard          :: " >>"${OUTTO}" 2>&1;
+      cd ${local_dashboard} && git checkout development
+      git pull >>"${OUTTO}" 2>&1;
+  fi
+
+  echo -n "club-QuickBox               :: " >>"${OUTTO}" 2>&1;
+    cd ${local_rtheme} && git checkout development
+    git pull >>"${OUTTO}" 2>&1;
+fi
 }
 
 function _bashrc() {
@@ -400,7 +462,7 @@ function _updateplex() {
   OUTTO="/srv/rutorrent/home/db/output.log"
   HOSTNAME1=$(hostname -s)
   PUBLICIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
-  local_setup=/root/QuickBox/setup/
+  local_setup=/etc/QuickBox/setup/
   if [[ -f /etc/init.d/plexmediaserver ]]; then
     mv /etc/init.d/plexmediaserver /etc/init.d/plexmediaserver.BAK
     cp ${local_setup}templates/sysd/plexmediaserver.template /lib/systemd/system/plexmediaserver.service
@@ -429,13 +491,13 @@ function _updatecronfile() {
 ################################################################################
 
 
-local_setup=/root/QuickBox/setup/
-local_packages=/root/QuickBox/packages/
-local_rutorrent=/root/QuickBox/rutorrent/
-local_rplugins=/root/QuickBox/rtplugins/
-local_dashboard=/root/QuickBox/dashboard/
-local_themes=/root/QuickBox/themes/
-local_rtheme=/root/QuickBox/rttheme/
+local_setup=/etc/QuickBox/setup/
+local_packages=/etc/QuickBox/packages/
+local_rutorrent=/etc/QuickBox/rutorrent/
+local_rplugins=/etc/QuickBox/rtplugins/
+local_dashboard=/etc/QuickBox/dashboard/
+local_themes=/etc/QuickBox/themes/
+local_rtheme=/etc/QuickBox/rttheme/
 
 IFACE=$(ip link show|grep -i broadcast|grep -m1 UP|cut -d: -f 2|cut -d@ -f 1|sed -e 's/ //g');
 A1=$(cat /srv/rutorrent/home/db/master.txt) >> /dev/null 2>&1
