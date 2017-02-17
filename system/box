@@ -6,9 +6,9 @@
 # GITHUB REPOS
 # GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
 # LOCAL REPOS
-# Local _ packages   :   /etc/QuickBox/packages
+# Local _ packages   :   ~/QuickBox/packages
 # Author             :   QuickBox.IO | liara
-# URL                :   https://quickbox.io
+# URL                :   https://plaza.quickbox.io
 #
 # QuickBox Copyright (C) 2017 QuickBox.io
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
@@ -116,11 +116,41 @@ function _clr() {
 
 function _updateqb() {
   echo -e "Updating QuickBox local repository"
-  cd /etc/QuickBox
-  git submodule foreach git reset HEAD --hard
-  git submodule foreach git checkout master
-  git submodule foreach git pull
-  cd -
+  if [[ ! -f /install/.developer.lock ]]; then
+    if [[ -d /root/QuickBox ]]; then
+      cd /root/
+      cp -aRf QuickBox /etc/
+      rm -rf QuickBox
+      cd /etc/QuickBox
+      git submodule foreach git reset HEAD --hard
+      git submodule foreach git checkout master
+      git submodule foreach git pull
+      cd -
+    else
+      cd /etc/QuickBox
+      git submodule foreach git reset HEAD --hard
+      git submodule foreach git checkout master
+      git submodule foreach git pull
+      cd -
+    fi
+  else
+    if [[ -d /root/QuickBox ]]; then
+      cd /root/
+      cp -aRf QuickBox /etc/
+      rm -rf QuickBox
+      cd /etc/QuickBox
+      git submodule foreach git reset HEAD --hard
+      git submodule foreach git checkout developement
+      git submodule foreach git pull
+      cd -
+    else
+      cd /etc/QuickBox
+      git submodule foreach git reset HEAD --hard
+      git submodule foreach git checkout developement
+      git submodule foreach git pull
+    fi
+
+  fi
 }
 function _help() {
   sgformat="${bold}%-15s${normal}"
@@ -184,7 +214,24 @@ fi
 if [[ $1 == upgrade ]]; then
   _updateqb
   echo "Upgrading QuickBox ... This may take a moment"
-  bash /etc/QuickBox/packages/system/updateQuickBox
+  if [[ ! -f /install/.developer.lock ]]; then
+    if [[ -d /root/QuickBox ]]; then
+      cp -aRf /root/QuickBox /etc/
+      rm -rf /root/QuickBox
+      bash /etc/QuickBox/packages/system/updateQuickBox
+    else
+      bash /etc/QuickBox/packages/system/updateQuickBox
+    fi
+  else
+    if [[ -d /root/QuickBox ]]; then
+      cp -aRf /root/QuickBox /etc/
+      rm -rf /root/QuickBox
+      bash /etc/QuickBox/packages/system/updateQuickBox
+    else
+      bash /etc/QuickBox/packages/system/updateQuickBox
+    fi
+  fi
+
   printf "" > /srv/rutorrent/home/db/output.log
   exit 0
 fi
