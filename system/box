@@ -6,9 +6,9 @@
 # GITHUB REPOS
 # GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
 # LOCAL REPOS
-# Local _ packages   :   ~/QuickBox/packages
+# Local _ packages   :   /etc/QuickBox/packages
 # Author             :   QuickBox.IO | liara
-# URL                :   https://plaza.quickbox.io
+# URL                :   https://quickbox.io
 #
 # QuickBox Copyright (C) 2017 QuickBox.io
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
@@ -116,7 +116,7 @@ function _clr() {
 
 function _updateqb() {
   echo -e "Updating QuickBox local repository"
-  cd /root/QuickBox
+  cd /etc/QuickBox
   git submodule foreach git reset HEAD --hard
   git submodule foreach git checkout master
   git submodule foreach git pull
@@ -184,7 +184,7 @@ fi
 if [[ $1 == upgrade ]]; then
   _updateqb
   echo "Upgrading QuickBox ... This may take a moment"
-  bash /root/QuickBox/packages/system/updateQuickBox
+  bash /etc/QuickBox/packages/system/updateQuickBox
   printf "" > /srv/rutorrent/home/db/output.log
   exit 0
 fi

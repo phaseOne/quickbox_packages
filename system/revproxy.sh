@@ -239,7 +239,7 @@ EOF
   fi
 }
 
-local_setup=/root/QuickBox/setup/
+local_setup=/etc/QuickBox/setup/
 MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 
 if [[ -f /install/.couchpotato.lock ]]; then _couchpotato; fi
