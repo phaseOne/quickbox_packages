@@ -37,8 +37,9 @@ if [[ ! -f /install/.developer.lock ]]; then
   if [[ -d /root/QuickBox ]]; then
     cd /root
     find -type d -name "quickbox_*" -exec rm -rf {} \;
-    cp -aRf QuickBox /etc/
     rm -rf /root/QuickBox
+    cd /etc
+    git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
   else
     cd /etc
     git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
@@ -47,10 +48,9 @@ else
   if [[ -d /root/QuickBox ]]; then
     cd /root
     find -type d -name "quickbox_*" -exec rm -rf {} \;
-    cp -aRf QuickBox /etc/
     rm -rf /root/QuickBox
-    cd /usr/local/bin/quickbox && git checkout development
-    git pull
+    cd /etc
+    git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
   else
     cd /etc
     git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox QuickBox
