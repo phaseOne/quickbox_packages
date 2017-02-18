@@ -6,10 +6,10 @@
 # GitHub _ packages  :   https://github.com/QuickBox/quickbox_packages
 # GitHub _ plugins   :   https://github.com/QuickBox/quickbox_rutorrent-plugins
 # LOCAL REPOS
-# Local _ packages   :   ~/QuickBox/packages
-# Local _ plugins    :   ~/QuickBox/rtplugins
+# Local _ packages   :   /etc/QuickBox/packages
+# Local _ plugins    :   /etc/QuickBox/rtplugins
 # Author             :   QuickBox.IO | JMSolo
-# URL                :   https://plaza.quickbox.io
+# URL                :   https://quickbox.io
 #
 # QuickBox Copyright (C) 2017 QuickBox.io
 # Licensed under GNU General Public License v3.0 GPL-3 (in short)
