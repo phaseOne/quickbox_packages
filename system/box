@@ -117,7 +117,7 @@ function _clr() {
 function _updateqb() {
   echo -e "Updating QuickBox local repository"
   if [[ ! -f /install/.developer.lock ]]; then
-    if [[ -d /root/QuickBox ]]; then
+    if [[ -d /etc/QuickBox ]]; then
       cd /root/
       rm -rf QuickBox
 
@@ -136,7 +136,7 @@ function _updateqb() {
       cd -
     fi
   else
-    if [[ -d /root/QuickBox ]]; then
+    if [[ -d /etc/QuickBox ]]; then
       cd /root/
       rm -rf QuickBox
 
@@ -219,16 +219,16 @@ if [[ $1 == upgrade ]]; then
   _updateqb
   echo "Upgrading QuickBox ... This may take a moment"
   if [[ ! -f /install/.developer.lock ]]; then
-    if [[ -d /root/QuickBox ]]; then
-      rm -rf /root/QuickBox
+    if [[ -d /etc/QuickBox ]]; then
+      rm -rf /etc/QuickBox
       bash /etc/QuickBox/packages/system/updateQuickBox
       git clone --recursive https://github.com/QuickBox/QuickBox /etc/QuickBox
     else
       bash /etc/QuickBox/packages/system/updateQuickBox
     fi
   else
-    if [[ -d /root/QuickBox ]]; then
-      rm -rf /root/QuickBox
+    if [[ -d /etc/QuickBox ]]; then
+      rm -rf /etc/QuickBox
       bash /etc/QuickBox/packages/system/updateQuickBox
       git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox /etc/QuickBox
     else

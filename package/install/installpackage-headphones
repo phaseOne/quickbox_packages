@@ -26,7 +26,7 @@ GREEN='\e[92m'
 OUTTO=/srv/rutorrent/home/db/output.log
 USERNAME=$(cat /srv/rutorrent/home/db/master.txt)
 PASSWD=$(cat /root/$USERNAME.info | cut -d ":" -f 3 | cut -d "@" -f 1)
-local_setup=/root/QuickBox/setup/
+local_setup=/etc/QuickBox/setup/
 
 
 APPNAME='headphones'

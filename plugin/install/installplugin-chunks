@@ -29,7 +29,7 @@ function _installplugin-chunks() {
   sleep 5
 
   echo "Installing $PLUGIN plugin ... " >>"${OUTTO}" 2>&1;
-  PLUGINVAULT="/root/QuickBox/rtplugins/"; cd "${rutorrent}plugins"
+  PLUGINVAULT="/etc/QuickBox/rtplugins/"; cd "${rutorrent}plugins"
   PLUGIN="$PLUGIN"
     for i in $PLUGIN; do
       cp -R "${PLUGINVAULT}$i" .

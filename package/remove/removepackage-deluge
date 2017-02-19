@@ -19,7 +19,7 @@
 #
 username=$(cat /etc/apache2/master.txt)
 OUTTO="/root/quick-box.log"
-local_setup=/root/QuickBox/setup/
+local_setup=/etc/QuickBox/setup/
 
 function _removeDeluge() {
   killall deluged

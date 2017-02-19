@@ -70,7 +70,7 @@ echo "systemd installation complete! "
 echo "Reboot recommended ... "
 }
 
-local_setup=/root/QuickBox/setup/
+local_setup=/etc/QuickBox/setup/
 users=($(cat /etc/htpasswd | cut -d ":" -f 1))
 master=($(cat /srv/rutorrent/home/db/master.txt))
 _removecron

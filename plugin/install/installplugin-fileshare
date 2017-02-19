@@ -20,13 +20,13 @@
 #   under the GPL along with build & install instructions.
 #
 OUTTO=/srv/rutorrent/home/db/output.log
-local_setup=/root/QuickBox/setup/
+local_setup=/etc/QuickBox/setup/
 
 function _installplugin-fileshare() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
   echo "Accessing fileshare in the plugin vault ... " >>"${OUTTO}" 2>&1;
-  PLUGINVAULT="/root/QuickBox/rtplugins/"; cd "${rutorrent}plugins"
+  PLUGINVAULT="/etc/QuickBox/rtplugins/"; cd "${rutorrent}plugins"
   sleep 5
 
   echo "Installing fileshare plugin ... " >>"${OUTTO}" 2>&1;
