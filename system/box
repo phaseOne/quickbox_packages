@@ -219,16 +219,16 @@ if [[ $1 == upgrade ]]; then
   _updateqb
   echo "Upgrading QuickBox ... This may take a moment"
   if [[ ! -f /install/.developer.lock ]]; then
-    if [[ -d /etc/QuickBox ]]; then
-      rm -rf /etc/QuickBox
+    if [[ -d /root/QuickBox ]]; then
+      rm -rf /root/QuickBox
       bash /etc/QuickBox/packages/system/updateQuickBox
       git clone --recursive https://github.com/QuickBox/QuickBox /etc/QuickBox
     else
       bash /etc/QuickBox/packages/system/updateQuickBox
     fi
   else
-    if [[ -d /etc/QuickBox ]]; then
-      rm -rf /etc/QuickBox
+    if [[ -d /root/QuickBox ]]; then
+      rm -rf /root/QuickBox
       bash /etc/QuickBox/packages/system/updateQuickBox
       git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox /etc/QuickBox
     else
