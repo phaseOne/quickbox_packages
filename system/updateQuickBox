@@ -41,7 +41,7 @@ if [[ ! -f /install/.developer.lock ]]; then
     rm -rf /root/QuickBox
   else
     cd /etc
-    git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
+    #git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
   fi
 else
   if [[ -d /root/QuickBox ]]; then
@@ -53,7 +53,7 @@ else
     git pull
   else
     cd /etc
-    git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox QuickBox
+    #git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox QuickBox
   fi
 fi
 }
