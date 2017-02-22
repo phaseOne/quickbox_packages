@@ -21,7 +21,7 @@ MASTER=$(cat /srv/rutorrent/home/db/master.txt)
 IRSSIIP=$(curl -s http://ipecho.net/plain || curl -s http://ifconfig.me/ip ; echo)
 
 OUTTO="/root/quick-box.log"
-local_setup=/root/QuickBox/setup/
+local_setup=/etc/QuickBox/setup/
 
 
 function _installautodl() {

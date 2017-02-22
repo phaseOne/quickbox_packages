@@ -117,7 +117,7 @@ function _clr() {
 function _updateqb() {
   echo -e "Updating QuickBox local repository"
   if [[ ! -f /install/.developer.lock ]]; then
-    if [[ -d /root/QuickBox ]]; then
+    if [[ -d /etc/QuickBox ]]; then
       cd /root/
       rm -rf QuickBox
 
@@ -136,7 +136,7 @@ function _updateqb() {
       cd -
     fi
   else
-    if [[ -d /root/QuickBox ]]; then
+    if [[ -d /etc/QuickBox ]]; then
       cd /root/
       rm -rf QuickBox
 

@@ -24,7 +24,7 @@ OUTTO=/srv/rutorrent/home/db/output.log
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
   echo "Accessing autodl-irssi in the plugin vault ... " >>"${OUTTO}" 2>&1;
-  PLUGINVAULT="/root/QuickBox/rtplugins/"; cd "${rutorrent}plugins"
+  PLUGINVAULT="/etc/QuickBox/rtplugins/"; cd "${rutorrent}plugins"
   sleep 5
 
   echo "Installing autodl-irssi plugin ... " >>"${OUTTO}" 2>&1;

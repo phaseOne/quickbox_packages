@@ -28,7 +28,7 @@ function _string() { perl -le 'print map {(a..z,A..Z,0..9)[rand 62] } 0..pop' 15
 #################################################################################
 
 function _logcheck() {
-  OUTTO=/root/quickbox.update.$PPID.log
+  OUTTO=/etc/QuickBox.update.$PPID.log
 }
 
 # check if root function (2)
@@ -154,11 +154,11 @@ function _fin() {
 
 clear
 
-local_setup=/root/QuickBox/setup/
-local_packages=/root/QuickBox/packages/
-local_rutorrent=/root/QuickBox/rutorrent/
-local_rplugins=/root/QuickBox/rtplugins/
-local_dashboard=/root/QuickBox/dashboard/
+local_setup=/etc/QuickBox/setup/
+local_packages=/etc/QuickBox/packages/
+local_rutorrent=/etc/QuickBox/rutorrent/
+local_rplugins=/etc/QuickBox/rtplugins/
+local_dashboard=/etc/QuickBox/dashboard/
 
 IFACE=$(ip link show|grep -i broadcast|grep -m1 UP|cut -d: -f 2|cut -d@ -f 1|sed -e 's/ //g');
 M1=$(cat /etc/apache2/master.txt) >> /dev/null 2>&1
@@ -171,7 +171,7 @@ echo ""
 echo "${bold}${magenta}    QuickBox will now upgrade, this will only take${normal}"
 echo "${bold}${magenta}    a few short seconds to complete.${normal}"
 echo ""
-echo -n "Sending update output to /root/quickbox.update.${cyan}$PPID${normal}.log ... ";_logcheck;echo
+echo -n "Sending update output to /etc/QuickBox.update.${cyan}$PPID${normal}.log ... ";_logcheck;echo
 _checkroot
 _askcontinue
 echo -n "Pulling QuickBox Ecosystem ... ";_downloadrepos;echo

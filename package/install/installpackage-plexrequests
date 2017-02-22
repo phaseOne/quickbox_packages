@@ -73,7 +73,7 @@ spinner() {
 }
 
 OUTTO=/srv/rutorrent/home/db/output.log
-local_setup=/root/QuickBox/setup/
+local_setup=/etc/QuickBox/setup/
 user=$(cat /srv/rutorrent/home/db/master.txt)
 
 echo "Updating dependencies (this could take a bit) ... " > ${OUTTO} 2>&1

@@ -47,7 +47,7 @@ function _installQuassel2() {
   exit
 }
 
-local_setup=/root/QuickBox/setup/
+local_setup=/etc/QuickBox/setup/
 OUTTO=/srv/rutorrent/home/db/output.log
 distribution=$(lsb_release -is)
 IP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')

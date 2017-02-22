@@ -25,7 +25,7 @@ function _installplugin-throttle() {
   username=$(whoami);
   rutorrent="/srv/rutorrent/";
   echo "Accessing throttle in the plugin vault ... " >>"${OUTTO}" 2>&1;
-  PLUGINVAULT="/root/QuickBox/rtplugins/"; cd "${rutorrent}plugins"
+  PLUGINVAULT="/etc/QuickBox/rtplugins/"; cd "${rutorrent}plugins"
   sleep 5
 
   echo "Installing throttle plugin ... " >>"${OUTTO}" 2>&1;
