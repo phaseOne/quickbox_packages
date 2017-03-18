@@ -20,62 +20,42 @@
 local_setup=/etc/QuickBox/setup/
 OUTTO=/srv/rutorrent/home/db/output.log
 MASTER=$(cat /srv/rutorrent/home/db/master.txt)
-
-
-HEIGHT=15
-WIDTH=60
-CHOICE_HEIGHT=7
-BACKTITLE="Script by DedSec"
-TITLE="rclone Quickbox Package Installer"
-MENU="Choose one of the following options:"
-
-OPTIONS=(1 "Install rclone for x86"
-         2 "Install rclone for x64"
-         3 "Cancel Install")
-
-CHOICE=$(dialog --clear \
-                --backtitle "$BACKTITLE" \
-                --title "$TITLE" \
-                --menu "$MENU" \
-                $HEIGHT $WIDTH $CHOICE_HEIGHT \
-                "${OPTIONS[@]}" \
-                2>&1 >/dev/tty)
-
-clear
-case $CHOICE in
-        1)
-            echo "Setting up Rclone ..."
-            sudo add-apt-repository -y ppa:jonathonf/golang
-	    sudo apt-get update
-	    sudo apt-get -y install golang-1.7
-	    export GOROOT=/usr/local/go
-	    export GOPATH=$HOME/
-	    export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
- 	    go get -u -v github.com/ncw/rclone; cp ~/bin/rclone /usr/sbin/ ; sudo chown root:root /usr/sbin/rclone; sudo chmod 755 /usr/sbin/rclone; service ssh restart
-            ;;
-        2)
-            echo "Setting up Rclone ... "
-            sudo add-apt-repository -y ppa:jonathonf/golang
-            sudo apt-get update
-            sudo apt-get -y install golang-1.7
-            export GOROOT=/usr/local/go
-            export GOPATH=$HOME/
-            export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
-            go get -u -v github.com/ncw/rclone; cp ~/bin/rclone /usr/sbin/ ; sudo chown root:root /usr/sbin/rclone; sudo chmod 755 /usr/sbin/rclone; service ssh restart
-            ;;
-        3)
-            echo "Exiting the installer"
-            exit
-            ;;
-esac
+arch=$(arch)
 
 echo "Downloading rclone ... " >>"${OUTTO}" 2>&1;
-#rm -rf /usr/local/go
-#wget https://storage.googleapis.com/golang/go1.7.4.linux-amd64.tar.gz
-#tar -xvf go1.7.4.linux-amd64.tar.gz
-#rm -rf go1.7.4.linux-amd64.tar.gz
-#sudo mv go /usr/local
-#mv go /usr/local
+
+if [[ $arch == x86_64 ]]; then
+  current=$(curl -s -N http://rclone.org/downloads/ | grep -m1 linux-amd64 | cut -d\" -f2)
+  cd /tmp
+  wget $current
+  unzip rclone-*
+  cd rclone-*
+  cp rclone /usr/sbin/
+  chown root:root /usr/sbin/rclone
+  chmod 755 /usr/sbin/rclone
+  ln -s /usr/sbin/rclone /usr/bin/rclone
+  sudo mkdir -p /usr/local/share/man/man1
+  sudo cp rclone.1 /usr/local/share/man/man1/
+  sudo mandb
+  cd /tmp
+  rm -rf rclone-*
+fi
+if [[ $arch == i386 ]]; then
+  current=$(curl -s -N http://rclone.org/downloads/ | grep -m1 linux-386 | cut -d\" -f2)
+  cd /tmp
+  wget $current
+  unzip rclone-*
+  cd rclone-*
+  cp rclone /usr/sbin/
+  chown root:root /usr/sbin/rclone
+  chmod 755 /usr/sbin/rclone
+  ln -s /usr/sbin/rclone /usr/bin/rclone
+  sudo mkdir -p /usr/local/share/man/man1
+  sudo cp rclone.1 /usr/local/share/man/man1/
+  sudo mandb
+  cd /tmp
+  rm -rf rclone-*
+fi
 
 echo "Installing rclone ... " >>"${OUTTO}" 2>&1;
 
