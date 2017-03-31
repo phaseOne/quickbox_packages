@@ -184,7 +184,7 @@ function _list() {
   for i in "${repo[@]}"; do
     locale=$(cat /srv/rutorrent/home/inc/localize.php | grep language | cut -d "'" -f 2)
     app=$i
-    if [[ $i == plexrequests ]]; then app=plex_requests; fi
+    if [[ $i == ombi ]]; then app=ombi; fi
     sgformat="${bold}%-15s${normal}"
     spacing=$(echo $'\t' | pr -Te15)
     description=$(cat /srv/rutorrent/home/lang/$locale | grep -i -m 1 \\\[\'$app | cut -d= -f2 | sed "s/ '//g" | sed "s/';//g" | sed "s/\\\'/'/g")
