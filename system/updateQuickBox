@@ -33,29 +33,25 @@ function _logcheck() {
 }
 
 function _directorycheck() {
-if [[ ! -f /install/.developer.lock ]]; then
-  if [[ -d /root/QuickBox ]]; then
-    cd /root
-    find -type d -name "quickbox_*" -exec rm -rf {} \;
-    git clone --recursive https://github.com/QuickBox/QuickBox /etc/QuickBox
-    rm -rf /root/QuickBox
+  if [[ ! -f /install/.developer.lock ]]; then
+    if [[ -d /etc/QuickBox ]]; then
+      cd /etc/QuickBox
+      git submodule foreach git checkout master
+      git submodule foreach git reset --hard origin/master
+      git submodule foreach git pull
+    else
+      git clone --recursive https://github.com/QuickBox/QuickBox /etc/QuickBox
+    fi
   else
-    cd /etc
-    #git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
+    if [[ -d /etc/QuickBox ]]; then
+      cd /etc/QuickBox
+      git submodule foreach git checkout development
+      git submodule foreach git reset --hard origin/development
+      git submodule foreach git pull
+    else
+      git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox /etc/QuickBox
+    fi
   fi
-else
-  if [[ -d /root/QuickBox ]]; then
-    cd /root
-    find -type d -name "quickbox_*" -exec rm -rf {} \;
-    git clone --recursive https://github.com/QuickBox/QuickBox /etc/QuickBox
-    rm -rf /root/QuickBox
-    cd /usr/local/bin/quickbox && git checkout development
-    git pull
-  else
-    cd /etc
-    #git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox QuickBox
-  fi
-fi
 }
 
 function _downloadrepos() {
