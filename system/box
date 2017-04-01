@@ -118,40 +118,21 @@ function _updateqb() {
   echo -e "Updating QuickBox local repository"
   if [[ ! -f /install/.developer.lock ]]; then
     if [[ -d /etc/QuickBox ]]; then
-      cd /root/
-      rm -rf QuickBox
-
-      git clone --recursive https://github.com/QuickBox/QuickBox QuickBox
-
       cd /etc/QuickBox
-      git submodule foreach git reset HEAD --hard
       git submodule foreach git checkout master
+      git submodule foreach git reset --hard origin/master
       git submodule foreach git pull
-      cd -
     else
-      cd /etc/QuickBox
-      git submodule foreach git reset HEAD --hard
-      git submodule foreach git checkout master
-      git submodule foreach git pull
-      cd -
+      git clone --recursive https://github.com/QuickBox/QuickBox /etc/QuickBox
     fi
   else
     if [[ -d /etc/QuickBox ]]; then
-      cd /root/
-      rm -rf QuickBox
-
-      git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox /etc/QuickBox
-
       cd /etc/QuickBox
-      git submodule foreach git reset HEAD --hard
       git submodule foreach git checkout development
+      git submodule foreach git reset --hard origin/development
       git submodule foreach git pull
-      cd -
     else
-      cd /etc/QuickBox
-      git submodule foreach git reset HEAD --hard
-      git submodule foreach git checkout development
-      git submodule foreach git pull
+      git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox /etc/QuickBox
     fi
   fi
 }
@@ -216,26 +197,24 @@ if [[ $1 == update ]]; then
   exit 0
 fi
 if [[ $1 == upgrade ]]; then
+    # Update QuickBox local repository before upgrade
   _updateqb
   echo "Upgrading QuickBox ... This may take a moment"
   if [[ ! -f /install/.developer.lock ]]; then
-    if [[ -d /root/QuickBox ]]; then
-      rm -rf /root/QuickBox
+    if [[ -d /etc/QuickBox ]]; then
       bash /etc/QuickBox/packages/system/updateQuickBox
-      git clone --recursive https://github.com/QuickBox/QuickBox /etc/QuickBox
     else
+      git clone --recursive https://github.com/QuickBox/QuickBox /etc/QuickBox
       bash /etc/QuickBox/packages/system/updateQuickBox
     fi
   else
-    if [[ -d /root/QuickBox ]]; then
-      rm -rf /root/QuickBox
+    if [[ -d /etc/QuickBox ]]; then
       bash /etc/QuickBox/packages/system/updateQuickBox
-      git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox /etc/QuickBox
     else
+      git clone --recursive --branch "development" https://github.com/QuickBox/QuickBox /etc/QuickBox
       bash /etc/QuickBox/packages/system/updateQuickBox
     fi
   fi
-
   #printf "" > /srv/rutorrent/home/db/output.log
   exit 0
 fi
