@@ -94,16 +94,16 @@ EOF
   fi
 }
 
-function _plexrequsets() {
-  if [[ ! -f /etc/apache2/sites-enabled/plexrequests.conf ]]; then
-  cat > /etc/apache2/sites-enabled/plexrequests.conf <<EOF
-<Location /plexrequests>
-ProxyPass http://localhost:3000/plexrequests
-ProxyPassReverse http://localhost:3000/plexrequests
+function _ombi() {
+  if [[ ! -f /etc/apache2/sites-enabled/ombi.conf ]]; then
+  cat > /etc/apache2/sites-enabled/ombi.conf <<EOF
+<Location /ombi>
+ProxyPass http://localhost:3000/ombi
+ProxyPassReverse http://localhost:3000/ombi
 Require all granted
 </Location>
 EOF
-  chown www-data: /etc/apache2/sites-enabled/plexrequests.conf
+  chown www-data: /etc/apache2/sites-enabled/ombi.conf
   service apache2 reload
   fi
 }
@@ -246,7 +246,7 @@ if [[ -f /install/.couchpotato.lock ]]; then _couchpotato; fi
 if [[ -f /install/.emby.lock ]]; then _emby; fi
 if [[ -f /install/.jackett.lock ]]; then _jackett; fi
 if [[ -f /install/.plexpy.lock ]]; then _plexpy; fi
-#if [[ -f /install/.plexrequests.lock ]]; then _plexrequsets; fi
+#if [[ -f /install/.ombi.lock ]]; then _ombi; fi
 if [[ -f /install/.sabnzbd.lock ]]; then _sabnzbd; fi
 if [[ -f /install/.sickrage.lock ]]; then _sickrage; fi
 if [[ -f /install/.sonarr.lock ]]; then _sonarr; fi
