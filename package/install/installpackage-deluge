@@ -69,7 +69,7 @@ function _installDeluge2() {
   fi
 }
 function _installDeluge3() {
-  chown -R ${username}.${username} /home/${username}/.config/
+  chown -R ${username}: /home/${username}/.config/
   mkdir /home/${username}/dwatch
   chown ${username}: /home/${username}/dwatch
   mkdir -p /home/${username}/torrents/deluge
